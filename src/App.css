@@ -43,41 +43,42 @@
 }
 
 .gridBox{
-height: 50vh;
-width: 70vw;
-margin: auto;
- row-gap: 0;
- 
-
+  height: 50vh;
+  width: 90vw;
+  margin: auto;
+   row-gap: 0;
+  }
   
-}
-.onebox{
-   /* height: 100px; 
-  width: 100px; */
-  margin: 0; 
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid red;
-}
-
-.innerBox{
-  margin: 2%;
-  width: 80%;
-  border: 1px solid rgb(39, 39, 10);
-}
-.upperbtn{
-margin-left:20% ;
-  height:15%;
-  width: 80%;
-}
-.sidebtn{
+  .onebox{
+     /* height: 100px; 
+    width: 100px; */
+    margin: 0; 
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid red;
+  }
   
-  width: 15%;
-  height: 100%;
-}
-.sidelastbtn{
-  width: 15%;
-  margin-top: 20%;
-  height:80% ;
-}
+  .innerBox{
+    margin: 2%;
+    width: 80%;
+    border: 1px solid rgb(39, 39, 10);
+  }
+  
+  .upperbtn{
+    margin-left:20% ;
+    height:15%;
+    width: 80%;
+  }
+  
+  .sidebtn{ 
+    width: 15%;
+    height: 80%;
+  }
+  
+  .sidelastbtn{
+    width: 15%;
+    /* margin-top: 20%; */
+    margin:0;
+    height:80% ;
+  }
