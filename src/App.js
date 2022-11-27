@@ -13,25 +13,20 @@ function App() {
  const [row,setRow]=useState(0)
  const [col,setCol]=useState(0)
  const [Box,setBox]=useState([])
-//  const [allAreClicked,setAllAreClicked]=useState(false)
  const [horizontalButtons,setHorizontalButtons]=useState([])
  const [verticalButtons,setVerticalButtons]=useState([])
  const [squaresColors,setSquareColors]=useState([])
 
-  const makeBox=(e)=>{
-    setBox([])
-    setSelect(e.target.value)
-  }
+  // const makeBox=(e)=>{
+  //   setBox([])
+  //   setSelect(e.target.value)
+  // }
 
 useEffect(()=>{
   
-  let rc=sel.split("*").map(Number)
-  
- setCol(rc[1])
- setRow(rc[0])
+ setCol(sel.split("*").map(Number)[1])
+ setRow(sel.split("*").map(Number)[0])
 
- 
-console.log("rc",rc,"r","c",row,col)
 },[sel])
 
 
@@ -55,16 +50,21 @@ useEffect(()=>{
   setHorizontalButtons(horizontal)
   setVerticalButtons(vertical)
   setSquareColors(squares)
-  console.log(squaresColors)
   setBox(arr)
-  console.log(Box)
-},[row,col])
+  // let rc=sel.split("*").map(Number)
+  // console.log("rc",rc,"r","c",row,col)
+},[sel,row,col])
+
+// useEffect(()=>{
+//   console.log(squaresColors)
+//   console.log(Box)
+// },[squaresColors,Box])
 
 const areAllClicked=(id,type)=>{
   //type:'vertical' or 'horizontal'
   // id : key of buttons
   //put square formed function in dotsAndDashes.java
-  console.log('Inside areAllClicked')
+  // console.log('Inside areAllClicked')
   if(type==='horizontal'){
     if(Math.floor(id/col)===0){
       if(horizontalButtons[id].isClicked && horizontalButtons[id+col].isClicked && verticalButtons[id].isClicked && verticalButtons[id+1].isClicked){
@@ -115,7 +115,7 @@ const areAllClicked=(id,type)=>{
 }
 
 const setClick=(id,type)=>{
-  console.log('Inside setClick')
+  // console.log('Inside setClick')
   if(type==='horizontal'){
     let temp=[...horizontalButtons]
     temp[id].isClicked=true
@@ -137,7 +137,9 @@ const GridStyle={
 }
   return (
     <div className="App">
-     <select onChange={makeBox} >
+     <select onChange={(e)=>{setBox([]);
+    setSelect(e.target.value)
+     }} >
       <option>select size here</option>
 <option value="2*3">2 x 3</option>
 <option value="3*4">3 x 4</option>
@@ -173,9 +175,8 @@ Box.map((item)=>
         <button className='sidebtn' key={item} onClick={()=>{setClick(item,'vertical');areAllClicked(item,'vertical')}}></button>
         {/* <Sidebtn key={item} clicked={setClick} areAllClicked={areAllClicked}/> */}
 
-        <div className='innerBox' style={{backgroundColor:'yellow'}}>hi{item}</div>
+        <div className='innerBox' style={{backgroundColor:squaresColors[item-Math.floor(item/(col+1))].allClicked?'yellow':'lightgrey'}}>hi{item}</div>
         {/* <InnerBox areAllClicked={squaresColors[item].allClicked} key={item}/> */}
-        {/* style={{backgroundColor:squaresColors[item].allClicked?'yellow':'grey'}} */}
       </div>
     </div>
 )
