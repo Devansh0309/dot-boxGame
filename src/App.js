@@ -1,6 +1,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
+import NAVBAR from './Navbar/Navbar';
 // import InnerBox from './InnerBox';
 // import Sidebtn from './Sidebtn';
 // import SideLastbtn from './SideLastbtn';
@@ -9,6 +10,10 @@ import './App.css';
 
 
 function App() {
+
+
+
+
   const[sel,setSelect]=useState('Select size here')
  const [row,setRow]=useState(0)
  const [col,setCol]=useState(0)
@@ -200,6 +205,10 @@ const GridStyle={
 }
   return (
     <div className="App">
+      {/* //navbar start from here */}
+      <NAVBAR/>
+       {/* //navbar end  here */}
+
      <select onChange={(e)=>{setBox([]);
       setSelect(e.target.value);
       setNumberOfSquares(0)
