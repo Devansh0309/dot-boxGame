@@ -8,7 +8,7 @@ import './App.css';
 
 
 
-function App() {
+function AppCopy() {
   const[sel,setSelect]=useState('Select size here')
  const [row,setRow]=useState(0)
  const [col,setCol]=useState(0)
@@ -257,4 +257,4 @@ const GridStyle={
     </div>
   );
 }
-export default App;
+export default AppCopy;
