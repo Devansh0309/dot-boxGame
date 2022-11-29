@@ -163,8 +163,21 @@ const areAllClicked=(id,type,player)=>{
   }
   else{
     if(Math.floor(id/(col+1))===0){//first column upper btn id provided
-
-
+      if(horizontalButtons[id-Math.floor(id/(col+1))].isClicked && horizontalButtons[id-Math.floor(id/(col+1))+col].isClicked && verticalButtons[id].isClicked && verticalButtons[id+1].isClicked){
+        let temp=[...squaresColors]
+        temp[id-Math.floor(id/(col+1))].allClicked=true
+        if(player==='1'){
+          setPlayer1Score(player1Score+1)
+        }
+        else{
+          setPlayer2Score(player2Score+1)
+        }
+        setSquareColors(temp)
+        setNumberOfSquares(numberOfSquares+1)
+      }
+      else{
+        setPlayer(player==='1'?'2':'1')
+      }
     }
     else if(Math.floor(id/(col+1))===col){//last column lower btn id provided
 
