@@ -53,7 +53,7 @@ useEffect(()=>{
     horizontal.push({key:i,type:'horizontal',isClicked:false})
   }
   for(let i=0;i<row*col+row;i++){
-    vertical.push({key:i,type:'vertical',isClicked:true})
+    vertical.push({key:i,type:'vertical',isClicked:false})
   }
   for(let i=0;i<row*col;i++){
     squares.push({allClicked:false})
@@ -168,8 +168,21 @@ const areAllClicked=(id,type,player)=>{
   }
   else{
     if(Math.floor(id/(col+1))===0){//first column upper btn id provided
-
-
+      if(horizontalButtons[id-Math.floor(id/(col+1))].isClicked && horizontalButtons[id-Math.floor(id/(col+1))+col].isClicked && verticalButtons[id].isClicked && verticalButtons[id+1].isClicked){
+        let temp=[...squaresColors]
+        temp[id-Math.floor(id/(col+1))].allClicked=true
+        if(player==='1'){
+          setPlayer1Score(player1Score+1)
+        }
+        else{
+          setPlayer2Score(player2Score+1)
+        }
+        setSquareColors(temp)
+        setNumberOfSquares(numberOfSquares+1)
+      }
+      else{
+        setPlayer(player==='1'?'2':'1')
+      }
     }
     else if(Math.floor(id/(col+1))===col){//last column lower btn id provided
 
@@ -255,15 +268,16 @@ const GridStyle={
     </div>
     )
     }
-    </div>:
+    </div>
+    :
     sel!='Select size here'?
     <div style={{margin:'auto'}}>
       Player{player1Score>player2Score?'1':player1Score===player2Score?'s Tied and no one':'2'} won!
       </div>:''
   }
-    
-    {/* Idea for rendering square color on click of all neighbouring buttons: Create react components for four buttons surrounding innerbox or square which is to be colored and pass 'isClicked' prop to Button component i.e. <Button isClicked={}/> and from Button Component pass result of isClicked to a function in App.js whose result of allButtons clicked is passed as a prop to innerBox React component and then if allButtons clicked is true then change color of innerBox from innerBox react component there itself  */}
+     {/* Idea for rendering square color on click of all neighbouring buttons: Create react components for four buttons surrounding innerbox or square which is to be colored and pass 'isClicked' prop to Button component i.e. <Button isClicked={}/> and from Button Component pass result of isClicked to a function in App.js whose result of allButtons clicked is passed as a prop to innerBox React component and then if allButtons clicked is true then change color of innerBox from innerBox react component there itself  */}
     </div>
+    
   );
 }
 export default App;
