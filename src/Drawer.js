@@ -67,7 +67,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
-function Navbar({setSelect}) {
+function LeftDrawer({setSelect}) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -84,10 +84,10 @@ function Navbar({setSelect}) {
     if(title==='New Game'){
         setSelect('Select size here')
     }
-    else if(title=='Exit'){
+    else if(title==='Exit'){
         window.close()
     }
-    else if(title=='Options'){
+    else if(title==='Options'){
         alert('Open options dialog')
     }
     else{
@@ -171,4 +171,4 @@ function Navbar({setSelect}) {
     </Box>
   );
 }
-export default Navbar;
+export default LeftDrawer;

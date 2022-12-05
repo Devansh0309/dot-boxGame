@@ -1,7 +1,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
-import Navbar from './Drawer';
+import LeftDrawer from './Drawer';
 
 
 
@@ -212,7 +212,7 @@ const setClick=(id,type)=>{
 
   return (
     <>
-    <Navbar setSelect={setSelect}/>
+    <LeftDrawer setSelect={setSelect}/>
     <div className="App">
       {/* {console.log(sel)} */}
      <select onChange={(e)=>{
