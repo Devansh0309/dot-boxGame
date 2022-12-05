@@ -1,6 +1,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
+import Navbar from './Navbar';
 // import InnerBox from './InnerBox';
 // import Sidebtn from './Sidebtn';
 // import SideLastbtn from './SideLastbtn';
@@ -23,10 +24,11 @@ function App() {
  const [player,setPlayer]=useState('1')
 
 
-  // const makeBox=(e)=>{
-  //   setBox([])
-  //   setSelect(e.target.value)
-  // }
+  const makeBox=(e)=>{
+    setBox([])
+    setSelect(e.target.value)
+    // setNumberOfSquares(0)
+  }
 
 useEffect(()=>{
   
@@ -70,10 +72,13 @@ useEffect(()=>{
 //   console.log(Box)
 // },[squaresColors,Box])
 
-// useEffect(()=>{
-//   // console.log(numberOfSquares)
-//   console.log('Player1 Score:'+ player1Score,'Player2 Score:'+ player2Score)
-// },[numberOfSquares])
+useEffect(()=>{
+  // console.log(numberOfSquares)
+  // console.log('Player1 Score:'+ player1Score,'Player2 Score:'+ player2Score)
+  setSelect('Select size here')
+  setNumberOfSquares(0)
+  alert(`Player${player1Score>player2Score?'1':player1Score===player2Score?'s Tied and no one':'2'} won!`)
+},[numberOfSquares===row*col])
 
 const areAllClicked=(id,type,player)=>{
   //type:'vertical' or 'horizontal'
@@ -209,12 +214,15 @@ const setClick=(id,type)=>{
 }
 
   return (
+    <>
+    <Navbar setSelect={setSelect}/>
     <div className="App">
       {/* {console.log(sel)} */}
-     <select onChange={(e)=>{setBox([]);
-      setSelect(e.target.value);
-      setNumberOfSquares(0)
-     }}>
+     <select onChange={(e)=>{
+      // setBox([]);
+      // setSelect(e.target.value);
+     makeBox(e)
+     }} value={sel}>
       <option>Select size here</option>
       <option value="2*3">2 x 3</option>
       <option value="3*4">3 x 4</option>
@@ -268,13 +276,12 @@ gridTemplateRows:`repeat(${row+1},calc(600px/${col+1}))`}}
   )
   }
   </div>
-  <span style={{display:'inline-block'}}>hello</span>
+  <div style={{display:'inline-block'}}>Player1: {player1Score} Player2: {player2Score}</div>
   </>
   )
   :
   sel!=='Select size here'?
     <div style={{margin:'auto'}}>
-      {/* {setSelect('Select size here')} */}
       Player{player1Score>player2Score?'1':player1Score===player2Score?'s Tied and no one':'2'} won!
     </div>
   :''
@@ -290,6 +297,7 @@ gridTemplateRows:`repeat(${row+1},calc(600px/${col+1}))`}}
      } */}
      {/* Idea for rendering square color on click of all neighbouring buttons: Create react components for four buttons surrounding innerbox or square which is to be colored and pass 'isClicked' prop to Button component i.e. <Button isClicked={}/> and from Button Component pass result of isClicked to a function in App.js whose result of allButtons clicked is passed as a prop to innerBox React component and then if allButtons clicked is true then change color of innerBox from innerBox react component there itself  */}
     </div>
+    </>
     
   );
 }
