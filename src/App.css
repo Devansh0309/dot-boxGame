@@ -1,84 +1,52 @@
 .App {
   text-align: center;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-
-.sm{
-  border: 1px solid yellow;
-}
-
 .gridBox{
-  height: 50vh;
-  width: 90vw;
-  margin: auto;
-   row-gap: 0;
+  height: 600px;
+  width: 600px;
+  margin: auto auto;
+  gap: 0;
   }
   
   .onebox{
-     /* height: 100px; 
-    width: 100px; */
+     /* height: 50px; 
+    width: 50px; */
     margin: 0; 
     padding: 0;
     display: flex;
     flex-direction: column;
-    border: 1px solid red;
+    /* border: 1px solid red; */
+    /* aspect-ratio: 1; */
+  }
+  .twobox{
+    margin: 0; 
+    padding: 0;
+    /* border: 1px solid red; */
   }
   
   .innerBox{
-    margin: 2%;
+    /* margin: 2%; */
     width: 80%;
-    border: 1px solid rgb(39, 39, 10);
+    /* border: 1px solid rgb(39, 39, 10); */
   }
   
   .upperbtn{
-    margin-left:20% ;
-    height:15%;
+    /* margin-left:20% ; */
+    height:100%;
+    width: 80%;
+  }
+  .lowerbtn{
+    height:20%;
     width: 80%;
   }
   
   .sidebtn{ 
-    width: 15%;
-    height: 80%;
+    width: 20%;
+    height: 100%;
   }
   
   .sidelastbtn{
-    width: 15%;
-    /* margin-top: 20%; */
-    margin:0;
+    width: 20%;
+    /* margin-top:20%; */
     height:80% ;
   }
