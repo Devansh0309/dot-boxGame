@@ -1,11 +1,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
-import Navbar from './Navbar';
-// import InnerBox from './InnerBox';
-// import Sidebtn from './Sidebtn';
-// import SideLastbtn from './SideLastbtn';
-// import Upperbtn from './Upperbtn';
+import Navbar from './Drawer';
+
 
 
 
