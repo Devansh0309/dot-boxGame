@@ -402,8 +402,8 @@ const setClick=(id,type)=>{
         
 
         <div className='innerBox' style={{backgroundColor:squaresColors[item-Math.floor(item/(col+1))].squarecolor}}>
-          {(squaresColors[item-Math.floor(item/(col+1))].squarecolor==="green"?"P1":null)||
-          (squaresColors[item-Math.floor(item/(col+1))].squarecolor==="red"?"P2":null)}</div>
+          {(squaresColors[item-Math.floor(item/(col+1))].squarecolor==="green"?"Player-1":null)||
+          (squaresColors[item-Math.floor(item/(col+1))].squarecolor==="red"?"Player-2":null)}</div>
         
       </div>
       </div>
