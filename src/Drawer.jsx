@@ -125,8 +125,8 @@ function LeftDrawer({setSelect}) {
           
 <Typography component="div"
  sx={{alignItems:"right",display:"flex",gap:"20px"}}>      
-<Typography sx={{ display: { xs: 'none', sm: 'block'  } }} className="Navbartxt" variant="h6" noWrap component="div">New 𝕲ame</Typography>
-<Typography sx={{ display: { xs: 'none', sm: 'block' } }} className="Navbartxt" variant="h6" noWrap component="div">About 𝕲ame</Typography>
+<Typography sx={{ display: { xs: 'none', sm: 'block'  } }} className="Navbartxt" variant="h6" noWrap component="div" title='New Game' onClick={(e)=>{handleNavClicks(e.target.title)}}>New 𝕲ame</Typography>
+<Typography sx={{ display: { xs: 'none', sm: 'block' } }} className="Navbartxt" variant="h6" noWrap component="div" title='How to play?' onClick={(e)=>{handleNavClicks(e.target.title)}}>About 𝕲ame</Typography>
 </Typography>
 
 

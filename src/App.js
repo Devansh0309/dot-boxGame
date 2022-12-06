@@ -72,7 +72,8 @@ useEffect(()=>{
 useEffect(()=>{
   setSelect('Select size here')
   setNumberOfSquares(0)
-  alert(`Player${player1Score>player2Score?'1':player1Score===player2Score?'s Tied and no one':'2'} won!`)
+  // alert(`Player${player1Score>player2Score?'1':player1Score===player2Score?'s Tied and no one':'2'} won!`)
+  
 },[numberOfSquares>0 && numberOfSquares===row*col])
 
 const areAllClicked=(id,type,player)=>{
