@@ -1,7 +1,7 @@
+
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
 import LeftDrawer from './Drawer';
-import NAVBAR from './Navbar/Navbar';
 
 
 
@@ -47,7 +47,7 @@ useEffect(()=>{
     horizontal.push({key:i,type:'horizontal',isClicked:false})
   }
   for(let i=0;i<row*col+row;i++){
-    vertical.push({key:i,type:'vertical',isClicked:true})
+    vertical.push({key:i,type:'vertical',isClicked:false})
   }
   for(let i=0;i<row*col;i++){
     squares.push({allClicked:false})
@@ -70,12 +70,10 @@ useEffect(()=>{
 // },[squaresColors,Box])
 
 useEffect(()=>{
-  // console.log(numberOfSquares)
-  // console.log('Player1 Score:'+ player1Score,'Player2 Score:'+ player2Score)
   setSelect('Select size here')
   setNumberOfSquares(0)
   alert(`Player${player1Score>player2Score?'1':player1Score===player2Score?'s Tied and no one':'2'} won!`)
-},[numberOfSquares===row*col])
+},[numberOfSquares>0 && numberOfSquares===row*col])
 
 const areAllClicked=(id,type,player)=>{
   //type:'vertical' or 'horizontal'
@@ -164,7 +162,7 @@ const areAllClicked=(id,type,player)=>{
     }
   }
   else{
-    if(Math.floor(id/(col+1))===0){//first column upper btn id provided
+    if(id%(col+1)===0){//first column left vertical btn id provided
       if(horizontalButtons[id-Math.floor(id/(col+1))].isClicked && horizontalButtons[id-Math.floor(id/(col+1))+col].isClicked && verticalButtons[id].isClicked && verticalButtons[id+1].isClicked){
         let temp=[...squaresColors]
         temp[id-Math.floor(id/(col+1))].allClicked=true
@@ -181,12 +179,66 @@ const areAllClicked=(id,type,player)=>{
         setPlayer(player==='1'?'2':'1')
       }
     }
-    else if(Math.floor(id/(col+1))===col){//last column lower btn id provided
-
-
+    else if(id%(col+1)===col){//last column right vertical btn id provided
+      if(horizontalButtons[id-Math.ceil(id/(col+1))].isClicked && horizontalButtons[id+col-Math.ceil(id/(col+1))].isClicked && verticalButtons[id-1].isClicked && verticalButtons[id].isClicked){
+        let temp=[...squaresColors]
+        temp[id-Math.ceil(id/(col+1))].allClicked=true
+        if(player==='1'){
+          setPlayer1Score(player1Score+1)
+        }
+        else{
+          setPlayer2Score(player2Score+1)
+        }
+        setSquareColors(temp)
+        setNumberOfSquares(numberOfSquares+1)
+      }
+      else{
+        setPlayer(player==='1'?'2':'1')
+      }
     }
     else{//middle column (not first and not last) btn id provided
-
+      if((horizontalButtons[id-Math.floor(id/(col+1))].isClicked && horizontalButtons[id+col-Math.floor(id/(col+1))].isClicked && verticalButtons[id].isClicked && verticalButtons[id+1].isClicked) && (!horizontalButtons[id-Math.ceil(id/(col+1))].isClicked || !horizontalButtons[id+col-Math.ceil(id/(col+1))].isClicked || !verticalButtons[id-1].isClicked || !verticalButtons[id].isClicked)){//first row upper btn id provided
+        let temp=[...squaresColors]
+        temp[id-Math.floor(id/(col+1))].allClicked=true
+        if(player==='1'){
+          setPlayer1Score(player1Score+1)
+        }
+        else{
+          setPlayer2Score(player2Score+1)
+        }
+        setSquareColors(temp)
+        setNumberOfSquares(numberOfSquares+1)
+      }
+      else if((!horizontalButtons[id-Math.floor(id/(col+1))].isClicked || !horizontalButtons[id+col-Math.floor(id/(col+1))].isClicked || !verticalButtons[id].isClicked || !verticalButtons[id+1].isClicked) && (horizontalButtons[id-Math.ceil(id/(col+1))].isClicked && horizontalButtons[id+col-Math.ceil(id/(col+1))].isClicked && verticalButtons[id-1].isClicked && verticalButtons[id].isClicked)){
+        //last row lower btn id provided
+        let temp=[...squaresColors]
+        temp[id-Math.ceil(id/(col+1))].allClicked=true
+        if(player==='1'){
+          setPlayer1Score(player1Score+1)
+        }
+        else{
+          setPlayer2Score(player2Score+1)
+        }
+        setSquareColors(temp)
+        setNumberOfSquares(numberOfSquares+1)
+      }
+      else if((horizontalButtons[id-Math.floor(id/(col+1))].isClicked && horizontalButtons[id+col-Math.floor(id/(col+1))].isClicked && verticalButtons[id].isClicked && verticalButtons[id+1].isClicked) &&(horizontalButtons[id-Math.ceil(id/(col+1))].isClicked && horizontalButtons[id+col-Math.ceil(id/(col+1))].isClicked && verticalButtons[id-1].isClicked && verticalButtons[id].isClicked)){
+        //middle row (not first and not last) btn id provided
+        let temp=[...squaresColors]
+        temp[id-Math.floor(id/(col+1))].allClicked=true
+        temp[id-Math.ceil(id/(col+1))].allClicked=true
+        if(player==='1'){
+          setPlayer1Score(player1Score+2)
+        }
+        else{
+          setPlayer2Score(player2Score+2)
+        }
+        setSquareColors(temp)
+        setNumberOfSquares(numberOfSquares+2)
+      }
+      else{
+        setPlayer(player==='1'?'2':'1')
+      }
 
     }
   }
@@ -212,27 +264,30 @@ const setClick=(id,type)=>{
 
   return (
     <>
-    {/* <NAVBAR/> */}
     <LeftDrawer setSelect={setSelect}/>
+    <br/>
+    <br/>
+    <br/>
     <div className="App">
-      {/* {console.log(sel)} */}
      <select onChange={(e)=>{
-      // setBox([]);
-      // setSelect(e.target.value);
      makeBox(e)
      }} value={sel}>
       <option>Select size here</option>
       <option value="2*3">2 x 3</option>
       <option value="3*4">3 x 4</option>
+      <option value="4*5">4 x 5</option>
+      <option value="5*6">6 x 7</option>
       <option value="7*8">7 x 8</option>
      </select>
-    <br/> <br/>
-  {numberOfSquares<row*col?
+
+  {numberOfSquares<row*col && sel!=='Select size here'?
   (<>
+  <div style={{}}>Player1: {player1Score} Player2: {player2Score}</div>
   <div className='gridBox' 
-  style={{display:"grid",
+  style={{height: `${80*(col+1)}px`,
+    width: `${80*(col+1)}px`,display:"grid",
   gridTemplateColumns:`repeat(${col+1},1fr)`,
-gridTemplateRows:`repeat(${row+1},calc(600px/${col+1}))`}}
+  gridTemplateRows:`repeat(${row+1},80px)`}}
   >
   {
   Box.map((item)=>
@@ -274,13 +329,13 @@ gridTemplateRows:`repeat(${row+1},calc(600px/${col+1}))`}}
   )
   }
   </div>
-  <div style={{display:'inline-block'}}>Player1: {player1Score} Player2: {player2Score}</div>
   </>
   )
   :
-  sel!=='Select size here'?
+  numberOfSquares===row*col && numberOfSquares>0?
     <div style={{margin:'auto'}}>
       Player{player1Score>player2Score?'1':player1Score===player2Score?'s Tied and no one':'2'} won!
+      {/* setSelect('Select size here') */}
     </div>
   :''
   }
