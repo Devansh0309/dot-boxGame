@@ -341,6 +341,9 @@ const setClick=(id,type)=>{
     <div style={{backgroundColor:'red'}}>Player2: {player2Score}</div>
   </div>
   <br/>
+  <div>
+    Player {player} chance
+  </div>
   <div className='gridBox' 
   style={{height: `${80*(row+1)}px`,
     width: `${80*(col+1)}px`,display:"grid",
