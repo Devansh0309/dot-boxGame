@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { useContext } from 'react';
+import { GridContext } from './Contexts';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -68,7 +70,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
-function LeftDrawer({select,setSelect,makeBox}) {
+function LeftDrawer() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -79,8 +81,15 @@ function LeftDrawer({select,setSelect,makeBox}) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const navItems=[{title:'New Game',icon:<SportsEsportsIcon/>}, {title:'How to Play?',icon:<LightbulbIcon/>},{title:'Options',icon:<SettingsIcon/>}, {title:'Exit',icon:<LogoutIcon/>}]
+  
+  const {sel,setSelect,setBox}=useContext(GridContext)
 
+  const navItems=[{title:'New Game',icon:<SportsEsportsIcon/>}, {title:'How to Play?',icon:<LightbulbIcon/>},{title:'Options',icon:<SettingsIcon/>}, {title:'Exit',icon:<LogoutIcon/>}]
+  
+  const makeBox=(e)=>{
+    setBox([])
+    setSelect(e.target.value)
+  }
   const handleNavClicks=(title)=>{
     if(title==='New Game'){
         setSelect('Select size here')
@@ -128,7 +137,7 @@ function LeftDrawer({select,setSelect,makeBox}) {
 <Typography sx={{ display: { xs: 'none', sm: 'block'  } }} className="Navbartxt" variant="h6" noWrap component="div" title='New Game' onClick={(e)=>{handleNavClicks(e.target.title)}}>New 𝕲ame</Typography>
 <select onChange={(e)=>{
      makeBox(e)
-     }} value={select}>
+     }} value={sel}>
       <option value='Select size here'>Select size here</option>
       <option value="2*3">2 x 3</option>
       <option value="3*4">3 x 4</option>
