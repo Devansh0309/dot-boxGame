@@ -42,10 +42,10 @@ useEffect(()=>{
     arr.push(i)
   }
   for(let i=0;i<row*col+col;i++){
-    horizontal.push({key:i,type:'horizontal',isClicked:false,btncolor:"lightgrey"})
+    horizontal.push({key:i,type:'horizontal',isClicked:false,btncolor:"lightgrey",disabled:false})
   }
   for(let i=0;i<row*col+row;i++){
-    vertical.push({key:i,type:'vertical',isClicked:false,btncolor:"lightgrey"})
+    vertical.push({key:i,type:'vertical',isClicked:false,btncolor:"lightgrey",disabled:false})
   }
   for(let i=0;i<row*col;i++){
     squares.push({allClicked:false,squarecolor:"grey"})
@@ -70,6 +70,9 @@ useEffect(()=>{
 useEffect(()=>{
   setSelect('Select size here')
   setNumberOfSquares(0)
+  // return (<div style={{margin:'auto'}}>
+  //     Player{player1Score>player2Score?'1':player1Score===player2Score?'s Tied and no one':'2'} won!
+  // </div>);
   // alert(`Player${player1Score>player2Score?'1':player1Score===player2Score?'s Tied and no one':'2'} won!`)
 
 },[numberOfSquares>0 && numberOfSquares===row*col])
@@ -81,8 +84,9 @@ const areAllClicked=(id,type,player)=>{
   // console.log('Inside areAllClicked')
   
   if(type==='horizontal'){
-
+    
     let colortemp=[...horizontalButtons]
+    colortemp[id].disabled=true
     if(player==='1'){
       colortemp[id].btncolor="green"
       // console.log(id-Math.floor(id/col+1),colortemp[id-Math.floor(id/col+1)].btncolor)
@@ -192,6 +196,7 @@ const areAllClicked=(id,type,player)=>{
   }
   else{
     let colortemp=[...verticalButtons]
+    colortemp[id].disabled=true
     if(player==='1'){
       colortemp[id].btncolor="green"
       // console.log(id-Math.floor(id/col+1),colortemp[id-Math.floor(id/col+1)].btncolor)
@@ -334,7 +339,7 @@ const setClick=(id,type)=>{
       <option value="7*8">7 x 8</option>
      </select> */}
 
-  {numberOfSquares<row*col && sel!=='Select size here'?
+  {numberOfSquares<row*col?
   (<>
   <div style={{display:'flex',flexWrap:'wrap',justifyContent:'center',alignItems:'center',gap:'50px'}}>
     <div style={{backgroundColor:'green'}}>Player1: {player1Score}</div> 
@@ -361,7 +366,7 @@ const setClick=(id,type)=>{
         backgroundColor:
         `${verticalButtons[item].btncolor}`}}
 
-      key={item} onClick={()=>{setClick(item,'vertical');areAllClicked(item,'vertical',player)}}></button>
+      key={item} disabled={verticalButtons[item].disabled} onClick={()=>{setClick(item,'vertical');areAllClicked(item,'vertical',player)}}></button>
     </div>
   : 
     item>=row*(col+1)?
@@ -374,7 +379,7 @@ const setClick=(id,type)=>{
             backgroundColor:
             `${horizontalButtons[item-Math.floor(item/(col+1))].btncolor}`}}
 
-           key={item-Math.floor(item/(col+1))} onClick={()=>{setClick(item-Math.floor(item/(col+1)),'horizontal');areAllClicked(item-Math.floor(item/(col+1)),'horizontal',player)}}></button>
+           key={item-Math.floor(item/(col+1))}  disabled={horizontalButtons[item-Math.floor(item/(col+1))].disabled} onClick={()=>{setClick(item-Math.floor(item/(col+1)),'horizontal');areAllClicked(item-Math.floor(item/(col+1)),'horizontal',player)}}></button>
         </div>
       :
         <div style={{backgroundColor:'black',width:'20%',height:'20%'}}>
@@ -391,7 +396,9 @@ const setClick=(id,type)=>{
           backgroundColor:
           `${horizontalButtons[item-Math.floor(item/(col+1))].btncolor}`}}
 
-         key={item-Math.floor(item/(col+1))} onClick={()=>{setClick(item-Math.floor(item/(col+1)),'horizontal');
+         key={item-Math.floor(item/(col+1))}
+         disabled={horizontalButtons[item-Math.floor(item/(col+1))].disabled} 
+         onClick={()=>{setClick(item-Math.floor(item/(col+1)),'horizontal');
          areAllClicked(item-Math.floor(item/(col+1)),'horizontal',player)}}></button>
       </div>
       
@@ -401,7 +408,7 @@ const setClick=(id,type)=>{
          style={{
           backgroundColor:`${verticalButtons[item].btncolor}`}}
 
-         key={item} onClick={()=>{setClick(item,'vertical');areAllClicked(item,'vertical',player)}}></button>
+         key={item} disabled={verticalButtons[item].disabled} onClick={()=>{setClick(item,'vertical');areAllClicked(item,'vertical',player)}}></button>
         
 
         <div className='innerBox' style={{backgroundColor:squaresColors[item-Math.floor(item/(col+1))].squarecolor}}>
@@ -415,12 +422,6 @@ const setClick=(id,type)=>{
   </div>
   </>
   )
-  :
-  numberOfSquares===row*col && numberOfSquares>0?
-    <div style={{margin:'auto'}}>
-      Player{player1Score>player2Score?'1':player1Score===player2Score?'s Tied and no one':'2'} won!
-      {/* setSelect('Select size here') */}
-    </div>
   :''
   }
        {/* <Upperbtn key={item-Math.floor(item/(col+1))} clicked={setClick} areAllClicked={areAllClicked}/> */}
