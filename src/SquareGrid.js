@@ -130,7 +130,7 @@ function SquareGrid() {
            key={item} disabled={verticalButtons[item].isClicked} onClick={()=>{setClick(item,'vertical');areAllClicked(item,'vertical',player)}}></button>
           
   
-          <div className='innerBox' style={{backgroundColor:squaresColors[item-Math.floor(item/(col+1))].squarecolor}}>
+          <div className='innerBox' style={{backgroundColor:squaresColors[item-Math.floor(item/(col+1))].squarecolor,border:squaresColors[item-Math.floor(item/(col+1))].active?'1px solid white':'none'}}>
             {(squaresColors[item-Math.floor(item/(col+1))].squarecolor==="green"?"Player-1":null)||
             (squaresColors[item-Math.floor(item/(col+1))].squarecolor==="red"?"Player-2":null)}</div>
           

@@ -56,7 +56,7 @@ function Contexts(props) {
               temp[id-col].allClicked=true
               temp[id-col].active=true
               for(let i=0;i<temp.length;i++){
-                if(i!==id){
+                if(i!==id-col){
                     temp[i].active=false
                 }
               }
@@ -84,7 +84,7 @@ function Contexts(props) {
               temp[id-col].allClicked=true
               temp[id-col].active=true
               for(let i=0;i<temp.length;i++){
-                if(i!==id){
+                if(i!==id-col){
                     temp[i].active=false
                 }
               }
@@ -155,6 +155,12 @@ function Contexts(props) {
             if(horizontalButtons[id-Math.floor(id/(col+1))].isClicked && horizontalButtons[id-Math.floor(id/(col+1))+col].isClicked && verticalButtons[id].isClicked && verticalButtons[id+1].isClicked){
               let temp=[...squaresColors]
               temp[id-Math.floor(id/(col+1))].allClicked=true
+              temp[id-Math.floor(id/(col+1))].active=true
+              for(let i=0;i<temp.length;i++){
+                if(i!==id-Math.floor(id/(col+1))){
+                    temp[i].active=false
+                }
+              }
               if(player==='1'){
                 temp[id-Math.floor(id/(col+1))].squarecolor="green"
                 setPlayer1Score(player1Score+1)
@@ -175,6 +181,12 @@ function Contexts(props) {
             if(horizontalButtons[id-Math.ceil(id/(col+1))].isClicked && horizontalButtons[id+col-Math.ceil(id/(col+1))].isClicked && verticalButtons[id-1].isClicked && verticalButtons[id].isClicked){
               let temp=[...squaresColors]
               temp[id-Math.ceil(id/(col+1))].allClicked=true
+              temp[id-Math.ceil(id/(col+1))].active=true
+              for(let i=0;i<temp.length;i++){
+                if(i!==id-Math.ceil(id/(col+1))){
+                    temp[i].active=false
+                }
+              }
               if(player==='1'){
                 temp[id-Math.ceil(id/(col+1))].squarecolor="green"
                 setPlayer1Score(player1Score+1)
@@ -195,6 +207,12 @@ function Contexts(props) {
             if((horizontalButtons[id-Math.floor(id/(col+1))].isClicked && horizontalButtons[id+col-Math.floor(id/(col+1))].isClicked && verticalButtons[id].isClicked && verticalButtons[id+1].isClicked) && (!horizontalButtons[id-Math.ceil(id/(col+1))].isClicked || !horizontalButtons[id+col-Math.ceil(id/(col+1))].isClicked || !verticalButtons[id-1].isClicked || !verticalButtons[id].isClicked)){//first row upper btn id provided
               let temp=[...squaresColors]
               temp[id-Math.floor(id/(col+1))].allClicked=true
+              temp[id-Math.floor(id/(col+1))].active=true
+              for(let i=0;i<temp.length;i++){
+                if(i!==id-Math.floor(id/(col+1))){
+                    temp[i].active=false
+                }
+              }
               if(player==='1'){
                 temp[id-Math.floor(id/(col+1))].squarecolor="green"
                 setPlayer1Score(player1Score+1)
@@ -210,6 +228,12 @@ function Contexts(props) {
               //last row lower btn id provided
               let temp=[...squaresColors]
               temp[id-Math.ceil(id/(col+1))].allClicked=true
+              temp[id-Math.ceil(id/(col+1))].active=true
+              for(let i=0;i<temp.length;i++){
+                if(i!==id-Math.ceil(id/(col+1))){
+                    temp[i].active=false
+                }
+              }
               if(player==='1'){
                 temp[id-Math.ceil(id/(col+1))].squarecolor="green"
                 setPlayer1Score(player1Score+1)
@@ -226,6 +250,13 @@ function Contexts(props) {
               let temp=[...squaresColors]
               temp[id-Math.floor(id/(col+1))].allClicked=true
               temp[id-Math.ceil(id/(col+1))].allClicked=true
+              temp[id-Math.floor(id/(col+1))].active=true
+              temp[id-Math.ceil(id/(col+1))].active=true
+              for(let i=0;i<temp.length;i++){
+                if(i!==id-Math.floor(id/(col+1)) && i!==id-Math.ceil(id/(col+1))){
+                    temp[i].active=false
+                }
+              }
               if(player==='1'){
                 temp[id-Math.floor(id/(col+1))].squarecolor="green"
                 temp[id-Math.ceil(id/(col+1))].squarecolor="green"
