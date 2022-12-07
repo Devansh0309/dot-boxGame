@@ -4,8 +4,6 @@ import './App.css';
 import LeftDrawer from './Drawer';
 
 
-
-
 function App() {
   const[sel,setSelect]=useState('Select size here')
  const [row,setRow]=useState(0)
@@ -44,13 +42,13 @@ useEffect(()=>{
     arr.push(i)
   }
   for(let i=0;i<row*col+col;i++){
-    horizontal.push({key:i,type:'horizontal',isClicked:false})
+    horizontal.push({key:i,type:'horizontal',isClicked:false,btncolor:"lightgrey"})
   }
   for(let i=0;i<row*col+row;i++){
-    vertical.push({key:i,type:'vertical',isClicked:false})
+    vertical.push({key:i,type:'vertical',isClicked:false,btncolor:"lightgrey"})
   }
   for(let i=0;i<row*col;i++){
-    squares.push({allClicked:false})
+    squares.push({allClicked:false,squarecolor:"grey"})
   }
   setHorizontalButtons(horizontal)
   setVerticalButtons(vertical)
@@ -73,7 +71,7 @@ useEffect(()=>{
   setSelect('Select size here')
   setNumberOfSquares(0)
   // alert(`Player${player1Score>player2Score?'1':player1Score===player2Score?'s Tied and no one':'2'} won!`)
-  
+
 },[numberOfSquares>0 && numberOfSquares===row*col])
 
 const areAllClicked=(id,type,player)=>{
@@ -83,14 +81,29 @@ const areAllClicked=(id,type,player)=>{
   // console.log('Inside areAllClicked')
   
   if(type==='horizontal'){
+
+    let colortemp=[...horizontalButtons]
+    if(player==='1'){
+      colortemp[id].btncolor="green"
+      // console.log(id-Math.floor(id/col+1),colortemp[id-Math.floor(id/col+1)].btncolor)
+    }
+    else{
+      colortemp[id].btncolor="red"
+      // console.log(id-Math.floor(id/col+1),colortemp[id-Math.floor(id/col+1)].btncolor)
+    }
+     setHorizontalButtons(colortemp)
+
     if(Math.floor(id/col)===0){
       if(horizontalButtons[id].isClicked && horizontalButtons[id+col].isClicked && verticalButtons[id].isClicked && verticalButtons[id+1].isClicked){
         let temp=[...squaresColors]
         temp[id].allClicked=true
+        
         if(player==='1'){
+          temp[id].squarecolor='green'
           setPlayer1Score(player1Score+1)
         }
         else{
+          temp[id].squarecolor='red'
           setPlayer2Score(player2Score+1)
         }
         setSquareColors(temp)
@@ -98,16 +111,20 @@ const areAllClicked=(id,type,player)=>{
       }
       else{
         setPlayer(player==='1'?'2':'1')
+       
       }
     }
     else if(Math.floor(id/col)===row){
-      if(horizontalButtons[id-col].isClicked && horizontalButtons[id].isClicked && verticalButtons[id-col+row-1].isClicked && verticalButtons[id-col+row].isClicked){
+      if(horizontalButtons[id-col].isClicked && horizontalButtons[id].isClicked && 
+        verticalButtons[id-col+row-1].isClicked && verticalButtons[id-col+row].isClicked){
         let temp=[...squaresColors]
         temp[id-col].allClicked=true
         if(player==='1'){
+          temp[id-col].squarecolor='green'
           setPlayer1Score(player1Score+1)
         }
         else{
+          temp[id-col].squarecolor='red'
           setPlayer2Score(player2Score+1)
         }
         setSquareColors(temp)
@@ -118,13 +135,18 @@ const areAllClicked=(id,type,player)=>{
       }
     }
     else{
-      if((horizontalButtons[id-col].isClicked && horizontalButtons[id].isClicked && verticalButtons[id-col+Math.floor(id/col)-1].isClicked && verticalButtons[id-col+Math.floor(id/col)].isClicked) && (!horizontalButtons[id].isClicked || !horizontalButtons[id+col].isClicked || !verticalButtons[id+Math.floor(id/col)].isClicked || !verticalButtons[id+Math.floor(id/col)+1].isClicked)){//first row upper btn id provided
+      if((horizontalButtons[id-col].isClicked && horizontalButtons[id].isClicked && 
+        verticalButtons[id-col+Math.floor(id/col)-1].isClicked && 
+        verticalButtons[id-col+Math.floor(id/col)].isClicked) && 
+        (!horizontalButtons[id].isClicked || !horizontalButtons[id+col].isClicked || !verticalButtons[id+Math.floor(id/col)].isClicked || !verticalButtons[id+Math.floor(id/col)+1].isClicked)){//first row upper btn id provided
         let temp=[...squaresColors]
         temp[id-col].allClicked=true
         if(player==='1'){
+          temp[id-col].squarecolor='green'
           setPlayer1Score(player1Score+1)
         }
         else{
+          temp[id-col].squarecolor='red'
           setPlayer2Score(player2Score+1)
         }
         setSquareColors(temp)
@@ -135,9 +157,11 @@ const areAllClicked=(id,type,player)=>{
         let temp=[...squaresColors]
         temp[id].allClicked=true
         if(player==='1'){
+          temp[id].squarecolor='green'
           setPlayer1Score(player1Score+1)
         }
         else{
+          temp[id].squarecolor='red'
           setPlayer2Score(player2Score+1)
         }
         setSquareColors(temp)
@@ -149,9 +173,13 @@ const areAllClicked=(id,type,player)=>{
         temp[id].allClicked=true
         temp[id-col].allClicked=true
         if(player==='1'){
+          temp[id].squarecolor='green'
+          temp[id-col].squarecolor='green'
           setPlayer1Score(player1Score+2)
         }
         else{
+          temp[id].squarecolor='red'
+          temp[id-col].squarecolor='red'
           setPlayer2Score(player2Score+2)
         }
         setSquareColors(temp)
@@ -163,20 +191,35 @@ const areAllClicked=(id,type,player)=>{
     }
   }
   else{
+    let colortemp=[...verticalButtons]
+    if(player==='1'){
+      colortemp[id].btncolor="green"
+      // console.log(id-Math.floor(id/col+1),colortemp[id-Math.floor(id/col+1)].btncolor)
+    }
+    else{
+      colortemp[id].btncolor="red"
+      // console.log(id-Math.floor(id/col+1),colortemp[id-Math.floor(id/col+1)].btncolor)
+    }
+    
+    setVerticalButtons(colortemp)
+
     if(id%(col+1)===0){//first column left vertical btn id provided
       if(horizontalButtons[id-Math.floor(id/(col+1))].isClicked && horizontalButtons[id-Math.floor(id/(col+1))+col].isClicked && verticalButtons[id].isClicked && verticalButtons[id+1].isClicked){
         let temp=[...squaresColors]
         temp[id-Math.floor(id/(col+1))].allClicked=true
         if(player==='1'){
+          temp[id-Math.floor(id/(col+1))].squarecolor="green"
           setPlayer1Score(player1Score+1)
         }
         else{
+          temp[id-Math.floor(id/(col+1))].squarecolor="red"
           setPlayer2Score(player2Score+1)
         }
         setSquareColors(temp)
         setNumberOfSquares(numberOfSquares+1)
       }
-      else{
+      else
+      { 
         setPlayer(player==='1'?'2':'1')
       }
     }
@@ -185,15 +228,18 @@ const areAllClicked=(id,type,player)=>{
         let temp=[...squaresColors]
         temp[id-Math.ceil(id/(col+1))].allClicked=true
         if(player==='1'){
+          temp[id-Math.ceil(id/(col+1))].squarecolor="green"
           setPlayer1Score(player1Score+1)
         }
         else{
+          temp[id-Math.ceil(id/(col+1))].squarecolor="red"
           setPlayer2Score(player2Score+1)
         }
         setSquareColors(temp)
         setNumberOfSquares(numberOfSquares+1)
       }
       else{
+       
         setPlayer(player==='1'?'2':'1')
       }
     }
@@ -202,9 +248,11 @@ const areAllClicked=(id,type,player)=>{
         let temp=[...squaresColors]
         temp[id-Math.floor(id/(col+1))].allClicked=true
         if(player==='1'){
+          temp[id-Math.floor(id/(col+1))].squarecolor="green"
           setPlayer1Score(player1Score+1)
         }
         else{
+          temp[id-Math.floor(id/(col+1))].squarecolor="red"
           setPlayer2Score(player2Score+1)
         }
         setSquareColors(temp)
@@ -215,9 +263,11 @@ const areAllClicked=(id,type,player)=>{
         let temp=[...squaresColors]
         temp[id-Math.ceil(id/(col+1))].allClicked=true
         if(player==='1'){
+          temp[id-Math.ceil(id/(col+1))].squarecolor="green"
           setPlayer1Score(player1Score+1)
         }
         else{
+          temp[id-Math.ceil(id/(col+1))].squarecolor="red"
           setPlayer2Score(player2Score+1)
         }
         setSquareColors(temp)
@@ -229,15 +279,20 @@ const areAllClicked=(id,type,player)=>{
         temp[id-Math.floor(id/(col+1))].allClicked=true
         temp[id-Math.ceil(id/(col+1))].allClicked=true
         if(player==='1'){
+          temp[id-Math.floor(id/(col+1))].squarecolor="green"
+          temp[id-Math.ceil(id/(col+1))].squarecolor="green"
           setPlayer1Score(player1Score+2)
         }
         else{
+          temp[id-Math.floor(id/(col+1))].squarecolor="red"
+          temp[id-Math.ceil(id/(col+1))].squarecolor="red"
           setPlayer2Score(player2Score+2)
         }
         setSquareColors(temp)
         setNumberOfSquares(numberOfSquares+2)
       }
       else{
+       
         setPlayer(player==='1'?'2':'1')
       }
 
@@ -265,12 +320,10 @@ const setClick=(id,type)=>{
 
   return (
     <>
-    <LeftDrawer setSelect={setSelect}/>
-    <br/>
-    <br/>
+    <LeftDrawer select={sel} setSelect={setSelect} makeBox={makeBox}/>
     <br/>
     <div className="App">
-     <select onChange={(e)=>{
+     {/* <select onChange={(e)=>{
      makeBox(e)
      }} value={sel}>
       <option>Select size here</option>
@@ -279,16 +332,20 @@ const setClick=(id,type)=>{
       <option value="4*5">4 x 5</option>
       <option value="5*6">6 x 7</option>
       <option value="7*8">7 x 8</option>
-     </select>
+     </select> */}
 
   {numberOfSquares<row*col && sel!=='Select size here'?
   (<>
-  <div style={{}}>Player1: {player1Score} Player2: {player2Score}</div>
+  <div style={{display:'flex',flexWrap:'wrap',justifyContent:'center',alignItems:'center',gap:'50px'}}>
+    <div style={{backgroundColor:'green'}}>Player1: {player1Score}</div> 
+    <div style={{backgroundColor:'red'}}>Player2: {player2Score}</div>
+  </div>
+  <br/>
   <div className='gridBox' 
-  style={{height: `${80*(col+1)}px`,
+  style={{height: `${80*(row+1)}px`,
     width: `${80*(col+1)}px`,display:"grid",
   gridTemplateColumns:`repeat(${col+1},1fr)`,
-  gridTemplateRows:`repeat(${row+1},80px)`}}
+  gridTemplateRows:`repeat(${row+1},1fr)`}}
   >
   {
   Box.map((item)=>
@@ -296,7 +353,12 @@ const setClick=(id,type)=>{
     <div className='twobox' style={{display:'flex',flexDirection:'column'}}>
       <div style={{backgroundColor:'black',width:'20%',height:'20%'}}>
       </div>
-      <button className='sidelastbtn' key={item} onClick={()=>{setClick(item,'vertical');areAllClicked(item,'vertical',player)}}></button>
+      <button className='sidelastbtn'
+      style={{
+        backgroundColor:
+        `${verticalButtons[item].btncolor}`}}
+
+      key={item} onClick={()=>{setClick(item,'vertical');areAllClicked(item,'vertical',player)}}></button>
     </div>
   : 
     item>=row*(col+1)?
@@ -304,7 +366,12 @@ const setClick=(id,type)=>{
         <div className='twobox'  style={{display:'flex'}}>
           <div style={{backgroundColor:'black',width:'20%',height:'20%'}}>
           </div>
-          <button className='lowerbtn' key={item-Math.floor(item/(col+1))} onClick={()=>{setClick(item-Math.floor(item/(col+1)),'horizontal');areAllClicked(item-Math.floor(item/(col+1)),'horizontal',player)}}></button>
+          <button className='lowerbtn' 
+          style={{
+            backgroundColor:
+            `${horizontalButtons[item-Math.floor(item/(col+1))].btncolor}`}}
+
+           key={item-Math.floor(item/(col+1))} onClick={()=>{setClick(item-Math.floor(item/(col+1)),'horizontal');areAllClicked(item-Math.floor(item/(col+1)),'horizontal',player)}}></button>
         </div>
       :
         <div style={{backgroundColor:'black',width:'20%',height:'20%'}}>
@@ -315,15 +382,28 @@ const setClick=(id,type)=>{
       <div  style={{display:"flex",height:"20%"}}>
         <div style={{backgroundColor:'black',width:'20%'}}>
         </div>
-        <button className='upperbtn' key={item-Math.floor(item/(col+1))} onClick={()=>{setClick(item-Math.floor(item/(col+1)),'horizontal');areAllClicked(item-Math.floor(item/(col+1)),'horizontal',player)}}></button>
+        <button className='upperbtn' 
+
+        style={{
+          backgroundColor:
+          `${horizontalButtons[item-Math.floor(item/(col+1))].btncolor}`}}
+
+         key={item-Math.floor(item/(col+1))} onClick={()=>{setClick(item-Math.floor(item/(col+1)),'horizontal');
+         areAllClicked(item-Math.floor(item/(col+1)),'horizontal',player)}}></button>
       </div>
       
-      <div  style={{display:"flex",height:"80%"}}>
+      <div  style={{display:"flex",height:"80%",width:'100%'}}>
 
-        <button className='sidebtn' key={item} onClick={()=>{setClick(item,'vertical');areAllClicked(item,'vertical',player)}}></button>
+        <button className='sidebtn'
+         style={{
+          backgroundColor:`${verticalButtons[item].btncolor}`}}
+
+         key={item} onClick={()=>{setClick(item,'vertical');areAllClicked(item,'vertical',player)}}></button>
         
 
-        <div className='innerBox' style={{backgroundColor:squaresColors[item-Math.floor(item/(col+1))].allClicked?'yellow':'lightgrey'}}>hi{item}</div>
+        <div className='innerBox' style={{backgroundColor:squaresColors[item-Math.floor(item/(col+1))].squarecolor}}>
+          {(squaresColors[item-Math.floor(item/(col+1))].squarecolor==="green"?"Player-1":null)||
+          (squaresColors[item-Math.floor(item/(col+1))].squarecolor==="red"?"Player-2":null)}</div>
         
       </div>
       </div>

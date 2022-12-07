@@ -68,7 +68,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
-function LeftDrawer({setSelect}) {
+function LeftDrawer({select,setSelect,makeBox}) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -126,6 +126,16 @@ function LeftDrawer({setSelect}) {
 <Typography component="div"
  sx={{alignItems:"right",display:"flex",gap:"20px"}}>      
 <Typography sx={{ display: { xs: 'none', sm: 'block'  } }} className="Navbartxt" variant="h6" noWrap component="div" title='New Game' onClick={(e)=>{handleNavClicks(e.target.title)}}>New 𝕲ame</Typography>
+<select onChange={(e)=>{
+     makeBox(e)
+     }} value={select}>
+      <option value='Select size here'>Select size here</option>
+      <option value="2*3">2 x 3</option>
+      <option value="3*4">3 x 4</option>
+      <option value="4*5">4 x 5</option>
+      <option value="5*6">6 x 7</option>
+      <option value="7*8">7 x 8</option>
+     </select>
 <Typography sx={{ display: { xs: 'none', sm: 'block' } }} className="Navbartxt" variant="h6" noWrap component="div" title='How to play?' onClick={(e)=>{handleNavClicks(e.target.title)}}>About 𝕲ame</Typography>
 </Typography>
 
