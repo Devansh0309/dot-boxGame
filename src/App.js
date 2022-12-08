@@ -1,6 +1,7 @@
 import LeftDrawer from './Drawer';
 import Contexts from './Contexts';
 import SquareGrid from './SquareGrid';
+import MyVerticallyCenteredModal from './OptionsDialogBox';
 
 
 function App() {
@@ -9,7 +10,7 @@ function App() {
       <Contexts>
         <LeftDrawer/>
         <br/>
-        {/* <Modal/> */}
+        <MyVerticallyCenteredModal/>
         <SquareGrid/>
       </Contexts>
     </div>
