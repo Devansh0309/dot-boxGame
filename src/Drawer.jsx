@@ -23,6 +23,17 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
 import "./Drawer.css"
+import {Link} from "react-router-dom"
+
+
+
+
+
+
+
+
+
+
 
 const drawerWidth = 240;
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -84,7 +95,10 @@ function LeftDrawer() {
   
   const {sel,setSelect,setBox}=useContext(GridContext)
 
-  const navItems=[{title:'New Game',icon:<SportsEsportsIcon/>}, {title:'How to Play?',icon:<LightbulbIcon/>},{title:'Options',icon:<SettingsIcon/>}, {title:'Exit',icon:<LogoutIcon/>}]
+  const navItems=[{title:'New Game',icon:<SportsEsportsIcon/>}, 
+  {title:'How to Play?',icon:<LightbulbIcon/>},
+  {title:'Options',icon:<SettingsIcon/>}, 
+  {title:'Exit',icon:<LogoutIcon/>}]
   
   const makeBox=(e)=>{
     setBox([])
@@ -98,10 +112,10 @@ function LeftDrawer() {
         window.close()
     }
     else if(title==='Options'){
-        alert('Open options dialog')
+     
     }
     else{
-        alert('Open How to play? dialog')
+        
     }
   }
 
@@ -118,7 +132,7 @@ function LeftDrawer() {
             sx={{ mr: 2, ...(open && { display: 'none' }) }}
           >
 
-          <button class="button-29" role="button"><MenuIcon /></button>  
+          <button className="button-29" role="button"><MenuIcon /></button>  
             
           </IconButton>
           
@@ -131,7 +145,7 @@ function LeftDrawer() {
           <img width="50" height='40'
            src="https://media.giphy.com/avatars/jaaaamesperrett/Dx0SbsMf7gjn.gif"/>
           </div>
-          
+        
 <Typography component="div"
  sx={{alignItems:"right",display:"flex",gap:"20px"}}>      
 <Typography sx={{ display: { xs: 'none', sm: 'block'  } }} className="Navbartxt" variant="h6" noWrap component="div" title='New Game' onClick={(e)=>{handleNavClicks(e.target.title)}}>New 𝕲ame</Typography>
@@ -145,7 +159,12 @@ function LeftDrawer() {
       <option value="5*6">6 x 7</option>
       <option value="7*8">7 x 8</option>
      </select>
-<Typography sx={{ display: { xs: 'none', sm: 'block' } }} className="Navbartxt" variant="h6" noWrap component="div" title='How to play?' onClick={(e)=>{handleNavClicks(e.target.title)}}>About 𝕲ame</Typography>
+<Typography sx={{ display: { xs: 'none', sm: 'block' } }} 
+className="Navbartxt" variant="h6" noWrap component="div" 
+ title='How to play?' 
+onClick={(e)=>{handleNavClicks(e.target.title)}}>
+  <Link to="/aboutgame">About 𝕲ame</Link>
+  </Typography>
 </Typography>
 
 
@@ -210,3 +229,7 @@ function LeftDrawer() {
   );
 }
 export default LeftDrawer;
+
+
+
+

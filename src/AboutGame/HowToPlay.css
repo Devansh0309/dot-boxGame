@@ -1,0 +1,66 @@
+.howtoplay{
+    margin: auto;
+    width: 50%;
+    text-align: center;
+}
+.aboutdotandbox{
+   
+    margin: auto;
+    width: 65%;
+    text-align: center;
+}
+
+.divider{
+display: grid;
+grid-template-columns: repeat(2,1fr);
+gap:3%;
+text-align: justify;
+}
+
+
+
+
+
+/* for min screen */
+@media all and (min-width:80px) and (max-width:450px){
+    .howtoplay{
+        margin: auto;
+        width: 85%;
+    }
+    .aboutdotandbox{
+   margin-top: 10%;
+        margin: auto;
+        width: 80%;
+        text-align: center;
+    }
+    
+    .divider{
+    display: grid;
+    grid-template-columns: repeat(1,1fr);
+    gap:3%;
+    text-align: justify;
+    }
+    
+}
+
+/* for medium  screen size */
+@media all and (min-width:451px) and (max-width:850px){
+    .howtoplay{
+        margin: auto;
+        width: 80%;
+    }
+    .aboutdotandbox{
+   
+        margin: auto;
+        width: 80%;
+        text-align: center;
+    }
+    
+    .divider{
+    display: grid;
+    grid-template-columns: repeat(1,1fr);
+    gap:3%;
+    text-align: justify;
+    }
+    
+}
