@@ -15,6 +15,7 @@ function Contexts(props) {
     const [player1Score,setPlayer1Score]=useState(0)
     const [player2Score,setPlayer2Score]=useState(0)
     const [player,setPlayer]=useState('1')
+    const [won,setWon]=useState('')
 
     //Functions
     const areAllClicked=(id,type,player)=>{
@@ -327,7 +328,8 @@ function Contexts(props) {
         }
     }
   return (
-  <GridContext.Provider value={{sel,setSelect,row,setRow,col,setCol,Box,setBox,player,setPlayer,horizontalButtons,setHorizontalButtons,verticalButtons,setVerticalButtons,player1Score,setPlayer1Score,player2Score,setPlayer2Score,squaresColors,setSquareColors,numberOfSquares,setNumberOfSquares,areAllClicked,setClick}}>      {props.children}
+  <GridContext.Provider value={{sel,setSelect,row,setRow,col,setCol,Box,setBox,player,setPlayer,horizontalButtons,setHorizontalButtons,verticalButtons,setVerticalButtons,player1Score,setPlayer1Score,player2Score,setPlayer2Score,squaresColors,setSquareColors,numberOfSquares,setNumberOfSquares,areAllClicked,setClick,won,setWon}}>
+    {props.children}
   </GridContext.Provider>)
 }
 

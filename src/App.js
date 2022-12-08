@@ -9,6 +9,7 @@ function App() {
       <Contexts>
         <LeftDrawer/>
         <br/>
+        {/* <Modal/> */}
         <SquareGrid/>
       </Contexts>
     </div>
