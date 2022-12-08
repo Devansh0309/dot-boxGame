@@ -93,7 +93,7 @@ function LeftDrawer() {
     setOpen(false);
   };
   
-  const {sel,setSelect,setBox}=useContext(GridContext)
+  const {sel,setSelect,setBox,modalShow,setModalShow}=useContext(GridContext)
 
   const navItems=[{title:'New Game',icon:<SportsEsportsIcon/>}, 
   {title:'How to Play?',icon:<LightbulbIcon/>},
@@ -112,7 +112,12 @@ function LeftDrawer() {
         window.close()
     }
     else if(title==='Options'){
+<<<<<<< HEAD
      
+=======
+        // alert('Open options dialog')
+        setModalShow(true)
+>>>>>>> fe5d2bd418721653380df29769707ceffb8b983b
     }
     else{
         
