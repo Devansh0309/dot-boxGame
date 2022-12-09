@@ -1,6 +1,6 @@
 import React,{useContext,useEffect} from 'react'
-import './App.css'
-import { GridContext } from './Contexts';
+import './SquareGrid.css'
+import { GridContext } from '../Contexts';
 
 function SquareGrid() {
     const {sel,setSelect,row,setRow,col,setCol,Box,setBox,player,setPlayer,horizontalButtons,setHorizontalButtons,verticalButtons,setVerticalButtons,player1Score,setPlayer1Score,player2Score,setPlayer2Score,squaresColors,setSquareColors,numberOfSquares,setNumberOfSquares,areAllClicked,setClick,won,setWon}=useContext(GridContext)
@@ -42,7 +42,7 @@ function SquareGrid() {
       
     useEffect(()=>{
         setSelect('Select size here')
-        setWon(`Player${player1Score>player2Score?'1':(player1Score===player2Score && player1Score>0)?'s Tied and no one':'2'} won!`)
+      if(player1Score>0||player2Score>0)setWon(`Player${player1Score>player2Score?'1':(player1Score===player2Score && player1Score>0)?'s Tied and no one':'2'} won!`)
       },[numberOfSquares>0 && numberOfSquares===row*col]) 
 
   return (

@@ -329,14 +329,16 @@ function Contexts(props) {
         }
     }
   return (
-<<<<<<< HEAD
-  <GridContext.Provider value={{sel,setSelect,row,setRow,col,setCol,Box,setBox,player,setPlayer,
-  horizontalButtons,setHorizontalButtons,verticalButtons,setVerticalButtons,player1Score,setPlayer1Score,player2Score,setPlayer2Score,squaresColors,setSquareColors,numberOfSquares,setNumberOfSquares,areAllClicked,setClick}}>      {props.children}
+
+     
  
-=======
-  <GridContext.Provider value={{sel,setSelect,row,setRow,col,setCol,Box,setBox,player,setPlayer,horizontalButtons,setHorizontalButtons,verticalButtons,setVerticalButtons,player1Score,setPlayer1Score,player2Score,setPlayer2Score,squaresColors,setSquareColors,numberOfSquares,setNumberOfSquares,areAllClicked,setClick,won,setWon,modalShow,setModalShow}}>
+
+  <GridContext.Provider value={{sel,setSelect,row,setRow,col,setCol,Box,setBox,player,setPlayer,horizontalButtons,
+    setHorizontalButtons,verticalButtons,setVerticalButtons,player1Score,setPlayer1Score,player2Score,setPlayer2Score,
+    squaresColors,setSquareColors,numberOfSquares,setNumberOfSquares,areAllClicked,setClick,won,setWon,modalShow,
+    setModalShow}}>
     {props.children}
->>>>>>> fe5d2bd418721653380df29769707ceffb8b983b
+
   </GridContext.Provider>)
 }
 

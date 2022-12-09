@@ -15,11 +15,12 @@
     }
 
 .cont {
+  cursor: pointer;
     display: flex;
     justify-content: left;
     align-items: center;
     height: 100%;
-   width: 70%;
+     width: 70%;
   
     font-weight: bold;
     margin-left: 1%;

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useContext } from 'react';
-import { GridContext } from './Contexts';
+import { GridContext } from '../Contexts';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -22,8 +22,9 @@ import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
-import "./Drawer.css"
-import {Link} from "react-router-dom"
+import "./NewNavbar.css"
+import {Link, useNavigate} from "react-router-dom"
+import HomeIcon from '@mui/icons-material/Home';
 
 
 
@@ -81,9 +82,10 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
-function LeftDrawer() {
+function NewNavbar() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+ const navigate =useNavigate()
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -95,7 +97,8 @@ function LeftDrawer() {
   
   const {sel,setSelect,setBox,modalShow,setModalShow}=useContext(GridContext)
 
-  const navItems=[{title:'New Game',icon:<SportsEsportsIcon/>}, 
+  const navItems=[{title:'Home',icon:<HomeIcon/>},
+    {title:'New Game',icon:<SportsEsportsIcon/>}, 
   {title:'How to Play?',icon:<LightbulbIcon/>},
   {title:'Options',icon:<SettingsIcon/>}, 
   {title:'Exit',icon:<LogoutIcon/>}]
@@ -108,19 +111,19 @@ function LeftDrawer() {
     if(title==='New Game'){
         setSelect('Select size here')
     }
+    else if(title==="Home"){
+      navigate("/")
+    }
     else if(title==='Exit'){
         window.close()
     }
     else if(title==='Options'){
-<<<<<<< HEAD
      
-=======
         // alert('Open options dialog')
         setModalShow(true)
->>>>>>> fe5d2bd418721653380df29769707ceffb8b983b
     }
     else{
-        
+        navigate("/aboutgame")
     }
   }
 
@@ -142,14 +145,15 @@ function LeftDrawer() {
           </IconButton>
           
           {/* //dot and box name code here  */}
-         
-<div className="cont">
-        <Typography  variant="h4"  noWrap component="div" className="typewriter">
-          𝕯𝖔𝖙 & 𝕭𝖔𝖝 𝕲𝖆𝖒𝖊
+    
+<div className="cont" onClick={()=>navigate("/")}>
+ <Typography  variant="h4"  noWrap component="div" className="typewriter">
+      𝕯𝖔𝖙 & 𝕭𝖔𝖝 𝕲𝖆𝖒𝖊 
           </Typography>
           <img width="50" height='40'
            src="https://media.giphy.com/avatars/jaaaamesperrett/Dx0SbsMf7gjn.gif"/>
           </div>
+        
         
 <Typography component="div"
  sx={{alignItems:"right",display:"flex",gap:"20px"}}>      
@@ -233,7 +237,7 @@ onClick={(e)=>{handleNavClicks(e.target.title)}}>
     </Box>
   );
 }
-export default LeftDrawer;
+export default NewNavbar;
 
 
 

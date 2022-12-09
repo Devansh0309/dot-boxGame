@@ -1,5 +1,5 @@
 import React from 'react'
-import LeftDrawer from '../Drawer'
+import LeftDrawer from '../NewNavbar/NewNavbar'
 import { Heading ,Box,Text, List,Center,
   ListItem,
  Divider,

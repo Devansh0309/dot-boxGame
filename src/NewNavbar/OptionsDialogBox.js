@@ -1,7 +1,7 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useContext } from 'react';
-import { GridContext } from './Contexts';
+import { GridContext } from "../Contexts";
 import SettingsIcon from '@mui/icons-material/Settings';
 import { ListItemIcon } from '@mui/material';
 
