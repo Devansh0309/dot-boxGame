@@ -36,7 +36,7 @@ import HomeIcon from '@mui/icons-material/Home';
 
 
 
-const drawerWidth = 240;
+const drawerWidth = 190;
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
     flexGrow: 1,
@@ -108,9 +108,12 @@ function NewNavbar() {
     setSelect(e.target.value)
   }
   const handleNavClicks=(title)=>{
-    if(title==='New Game'){
+    if(title==='New Game' && sel!=='Select size here'){
         setSelect('Select size here')
     }
+    else if(title==='New Game' && sel==='Select size here'){
+      alert('Select size')
+  }
     else if(title==="Home"){
       navigate("/")
     }
@@ -118,8 +121,6 @@ function NewNavbar() {
         window.close()
     }
     else if(title==='Options'){
-     
-        // alert('Open options dialog')
         setModalShow(true)
     }
     else{

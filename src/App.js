@@ -13,7 +13,6 @@ function App() {
       <Route path="/" element={<Contexts> <NewNavbar /><br /><MyVerticallyCenteredModal/><SquareGrid /></Contexts>}/>
       <Route path="/aboutgame" element={<Contexts><NewNavbar /><MyVerticallyCenteredModal/><HowToPlay/></Contexts>}/>       
       </Routes>
-      
     </div>
   );
 }
