@@ -25,8 +25,8 @@ import LightbulbIcon from '@mui/icons-material/Lightbulb';
 import "./NewNavbar.css"
 import {Link, useNavigate} from "react-router-dom"
 import HomeIcon from '@mui/icons-material/Home';
-
-
+import ButtonSound1 from "./ButtonSound/buttons.mp3"
+import ButtonSound2 from "./ButtonSound/button1.mp3"
 
 
 
@@ -85,7 +85,11 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 function NewNavbar() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const audio1=new Audio(ButtonSound1)
+const audio2=new Audio(ButtonSound2)
+
  const navigate =useNavigate()
+
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -148,7 +152,7 @@ function NewNavbar() {
           {/* //dot and box name code here  */}
     
 <div className="cont" onClick={()=>navigate("/")}>
- <Typography  variant="h4"  noWrap component="div" className="typewriter">
+ <Typography  variant="h4"  noWrap component="div" className="typewriter" >
       𝕯𝖔𝖙 & 𝕭𝖔𝖝 𝕲𝖆𝖒𝖊 
           </Typography>
           <img width="50" height='40'
@@ -158,11 +162,12 @@ function NewNavbar() {
         
 <Typography component="div"
  sx={{alignItems:"right",display:"flex",gap:"20px"}}>      
-<Typography sx={{ display: { xs: 'none', sm: 'block'  } }} className="Navbartxt" variant="h6" noWrap component="div" title='New Game' onClick={(e)=>{handleNavClicks(e.target.title)}}>New 𝕲ame</Typography>
+<Typography sx={{ display: { xs: 'none', sm: 'block'  } }} className="Navbartxt" variant="h6" noWrap 
+component="div" title='New Game' onClick={(e)=>{handleNavClicks(e.target.title);audio2.play()}} >New 𝕲ame</Typography>
 <select onChange={(e)=>{
      makeBox(e)
      }} value={sel}>
-      <option value='Select size here'>Select size here</option>
+      <option value='Select size here'>𝕾elect 𝕾ize here</option>
       <option value="2*3">2 x 3</option>
       <option value="3*4">3 x 4</option>
       <option value="4*5">4 x 5</option>
@@ -172,8 +177,8 @@ function NewNavbar() {
 <Typography sx={{ display: { xs: 'none', sm: 'block' } }} 
 className="Navbartxt" variant="h6" noWrap component="div" 
  title='How to play?' 
-onClick={(e)=>{handleNavClicks(e.target.title)}}>
-  <Link to="/aboutgame">About 𝕲ame</Link>
+onClick={(e)=>{handleNavClicks(e.target.title);audio2.play()}}>
+  <Link to="/aboutgame" >About 𝕲ame</Link>
   </Typography>
 </Typography>
 
@@ -203,7 +208,7 @@ onClick={(e)=>{handleNavClicks(e.target.title)}}>
         <List>
           {navItems.map((ele) => (
             <ListItem key={ele.title} disablePadding>
-               <ListItemButton onClick={()=>{handleNavClicks(ele.title)}}>
+               <ListItemButton onClick={()=>{handleNavClicks(ele.title);audio1.play()}}>
                 <ListItemIcon>
                   {ele.icon}
                 </ListItemIcon>
