@@ -4,15 +4,23 @@
     background: -webkit-linear-gradient(rgb(208, 235, 235), white);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    
+    color:#212121;
+    border:'0'
     }
     
     .Navbartxt:hover{
-        color: wheat;
-    cursor: pointer;
-    transition: 1s;
-    transform: scale(0.9);
+      border:'none';
+      color: wheat;
+      cursor: pointer;
+      transition: 1s;
+      transform: scale(0.9);
     }
+  /* select:hover{
+    color: wheat;
+      cursor: pointer;
+      transition: 1s;
+      transform: scale(0.9);
+  } */
 
 .cont {
   cursor: pointer;

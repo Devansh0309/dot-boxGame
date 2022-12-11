@@ -8,7 +8,7 @@ import NewNavbar from "./NewNavbar/NewNavbar";
 
 function App() {
   return (
-    <div className="App">
+    <div className="App" style={{backgroundColor:'wheat',minHeight:'100vh'}}>
       <Routes>
       <Route path="/" element={<Contexts> <NewNavbar /><br /><MyVerticallyCenteredModal/><SquareGrid /></Contexts>}/>
       <Route path="/aboutgame" element={<Contexts><NewNavbar /><MyVerticallyCenteredModal/><HowToPlay/></Contexts>}/>       

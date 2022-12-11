@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useContext } from 'react';
+import { useContext,useState } from 'react';
 import { GridContext } from '../Contexts';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -27,13 +27,6 @@ import {Link, useNavigate} from "react-router-dom"
 import HomeIcon from '@mui/icons-material/Home';
 import ButtonSound1 from "./ButtonSound/buttons.mp3"
 import ButtonSound2 from "./ButtonSound/button1.mp3"
-
-
-
-
-
-
-
 
 
 const drawerWidth = 190;
@@ -99,7 +92,7 @@ const audio2=new Audio(ButtonSound2)
     setOpen(false);
   };
   
-  const {sel,setSelect,setBox,modalShow,setModalShow}=useContext(GridContext)
+  const {sel,setSelect,setBox,modalShow,setModalShow,start,setStart}=useContext(GridContext)
 
   const navItems=[{title:'Home',icon:<HomeIcon/>},
     {title:'New Game',icon:<SportsEsportsIcon/>}, 
@@ -152,48 +145,48 @@ const audio2=new Audio(ButtonSound2)
           {/* //dot and box name code here  */}
     
 <div className="cont" onClick={()=>navigate("/")}>
- <Typography  variant="h4"  noWrap component="div" className="typewriter" >
+  <Typography  variant="h4"  noWrap component="div" className="typewriter" >
       𝕯𝖔𝖙 & 𝕭𝖔𝖝 𝕲𝖆𝖒𝖊 
-          </Typography>
-          <img width="50" height='40'
-           src="https://media.giphy.com/avatars/jaaaamesperrett/Dx0SbsMf7gjn.gif"/>
-          </div>
+  </Typography>
+  <img width="50" height='40' src="https://media.giphy.com/avatars/jaaaamesperrett/Dx0SbsMf7gjn.gif"/>
+</div>
         
         
 <Typography component="div"
- sx={{alignItems:"right",display:"flex",gap:"20px"}}>      
-<Typography sx={{ display: { xs: 'none', sm: 'block'  } }} className="Navbartxt" variant="h6" noWrap 
-component="div" title='New Game' onClick={(e)=>{handleNavClicks(e.target.title);audio2.play()}} >New 𝕲ame</Typography>
-<select onChange={(e)=>{
-     makeBox(e)
-     }} value={sel}>
+ sx={{alignItems:"right",display:"flex",gap:"20px"}}>
+  <Typography sx={{ display: { xs: 'none', sm: 'block'  } }} className="Navbartxt" variant="h6" noWrap 
+    component="div" title='New Game' onClick={(e)=>{handleNavClicks(e.target.title);audio2.play()}} >New 𝕲ame
+  </Typography>
+  {start?
+    <select onChange={(e)=>{makeBox(e)
+     }} value={sel} style={{color:'white',border:'none',background:'#4A00E0'}}>
       <option value='Select size here'>𝕾elect 𝕾ize here</option>
       <option value="2*3">2 x 3</option>
       <option value="3*4">3 x 4</option>
       <option value="4*5">4 x 5</option>
       <option value="5*6">6 x 7</option>
       <option value="7*8">7 x 8</option>
-     </select>
-<Typography sx={{ display: { xs: 'none', sm: 'block' } }} 
-className="Navbartxt" variant="h6" noWrap component="div" 
- title='How to play?' 
-onClick={(e)=>{handleNavClicks(e.target.title);audio2.play()}}>
-  <Link to="/aboutgame" >About 𝕲ame</Link>
+    </select>:
+    <button type='button' onClick={()=>setStart(true)}>Start Game</button>}
+  <Typography sx={{ display: { xs: 'none', sm: 'block' } }} 
+    className="Navbartxt" variant="h6" noWrap component="div" 
+    title='How to play?' 
+    onClick={(e)=>{handleNavClicks(e.target.title);audio2.play()}}>
+  <Link to="/aboutgame">About 𝕲ame</Link>
   </Typography>
 </Typography>
-
-
-
         </Toolbar>
       </AppBar>
       <Drawer
         sx={{
           width: drawerWidth,
           flexShrink: 0,
+          color:'white',
           '& .MuiDrawer-paper': {
             width: drawerWidth,
             boxSizing: 'border-box',
-          },
+            backgroundColor:'#4A00E0'
+          }
         }}
         variant="persistent"
         anchor="left"
@@ -201,15 +194,14 @@ onClick={(e)=>{handleNavClicks(e.target.title);audio2.play()}}>
       >
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+            {theme.direction === 'ltr' ? <ChevronLeftIcon sx={{color:'white'}}/> : <ChevronRightIcon sx={{color:'white'}}/>}
           </IconButton>
         </DrawerHeader>
-        <Divider />
-        <List>
+        <List sx={{color:'white'}}>
           {navItems.map((ele) => (
             <ListItem key={ele.title} disablePadding>
                <ListItemButton onClick={()=>{handleNavClicks(ele.title);audio1.play()}}>
-                <ListItemIcon>
+                <ListItemIcon sx={{color:'white'}}>
                   {ele.icon}
                 </ListItemIcon>
                 <ListItemText primary={ele.title} />
@@ -217,28 +209,9 @@ onClick={(e)=>{handleNavClicks(e.target.title);audio2.play()}}>
             </ListItem>
           ))}
         </List>
-        {/* <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List> */}
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
-        <Typography paragraph>
-          
-        </Typography>
-        <Typography paragraph>
-          
-        </Typography>
       </Main>
     </Box>
   );

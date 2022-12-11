@@ -1,5 +1,6 @@
 import React,{useState} from 'react'
 export const GridContext=React.createContext()
+import SquareSound from './NewNavbar/ButtonSound/shortSuccess.mp3'
 
 function Contexts(props) {
 
@@ -17,6 +18,8 @@ function Contexts(props) {
     const [player,setPlayer]=useState('1')
     const [won,setWon]=useState('')
     const [modalShow, setModalShow] = React.useState(false);
+    const [start,setStart]=useState(false)
+    const audio3=new Audio(SquareSound)
 
     //Functions
     const areAllClicked=(id,type,player)=>{
@@ -46,6 +49,7 @@ function Contexts(props) {
               }
               setSquareColors(temp)
               setNumberOfSquares(numberOfSquares+1)
+              audio3.play()
             }
             else{
               setPlayer(player==='1'?'2':'1')
@@ -72,6 +76,7 @@ function Contexts(props) {
               }
               setSquareColors(temp)
               setNumberOfSquares(numberOfSquares+1)
+              audio3.play()
             }
             else{
               setPlayer(player==='1'?'2':'1')
@@ -100,6 +105,7 @@ function Contexts(props) {
               }
               setSquareColors(temp)
               setNumberOfSquares(numberOfSquares+1)
+              audio3.play()
             }
             else if((!horizontalButtons[id-col].isClicked || !horizontalButtons[id].isClicked || !verticalButtons[id-col+Math.floor(id/col)-1].isClicked || !verticalButtons[id-col+Math.floor(id/col)].isClicked) && (horizontalButtons[id].isClicked && horizontalButtons[id+col].isClicked && verticalButtons[id+Math.floor(id/col)].isClicked && verticalButtons[id+Math.floor(id/col)+1].isClicked)){
               //last row lower btn id provided
@@ -121,6 +127,7 @@ function Contexts(props) {
               }
               setSquareColors(temp)
               setNumberOfSquares(numberOfSquares+1)
+              audio3.play()
             }
             else if((horizontalButtons[id-col].isClicked && horizontalButtons[id].isClicked && verticalButtons[id-col+Math.floor(id/col)-1].isClicked && verticalButtons[id-col+Math.floor(id/col)].isClicked) && (horizontalButtons[id].isClicked && horizontalButtons[id+col].isClicked && verticalButtons[id+Math.floor(id/col)].isClicked && verticalButtons[id+Math.floor(id/col)+1].isClicked)){
               //middle row (not first and not last) btn id provided
@@ -146,6 +153,7 @@ function Contexts(props) {
               }
               setSquareColors(temp)
               setNumberOfSquares(numberOfSquares+2)
+              audio3.play()
             }
             else{
               setPlayer(player==='1'?'2':'1')
@@ -173,6 +181,7 @@ function Contexts(props) {
               }
               setSquareColors(temp)
               setNumberOfSquares(numberOfSquares+1)
+              audio3.play()
             }
             else
             { 
@@ -199,6 +208,7 @@ function Contexts(props) {
               }
               setSquareColors(temp)
               setNumberOfSquares(numberOfSquares+1)
+              audio3.play()
             }
             else{
              
@@ -225,6 +235,7 @@ function Contexts(props) {
               }
               setSquareColors(temp)
               setNumberOfSquares(numberOfSquares+1)
+              audio3.play()
             }
             else if((!horizontalButtons[id-Math.floor(id/(col+1))].isClicked || !horizontalButtons[id+col-Math.floor(id/(col+1))].isClicked || !verticalButtons[id].isClicked || !verticalButtons[id+1].isClicked) && (horizontalButtons[id-Math.ceil(id/(col+1))].isClicked && horizontalButtons[id+col-Math.ceil(id/(col+1))].isClicked && verticalButtons[id-1].isClicked && verticalButtons[id].isClicked)){
               //last row lower btn id provided
@@ -246,6 +257,7 @@ function Contexts(props) {
               }
               setSquareColors(temp)
               setNumberOfSquares(numberOfSquares+1)
+              audio3.play()
             }
             else if((horizontalButtons[id-Math.floor(id/(col+1))].isClicked && horizontalButtons[id+col-Math.floor(id/(col+1))].isClicked && verticalButtons[id].isClicked && verticalButtons[id+1].isClicked) &&(horizontalButtons[id-Math.ceil(id/(col+1))].isClicked && horizontalButtons[id+col-Math.ceil(id/(col+1))].isClicked && verticalButtons[id-1].isClicked && verticalButtons[id].isClicked)){
               //middle row (not first and not last) btn id provided
@@ -271,6 +283,7 @@ function Contexts(props) {
               }
               setSquareColors(temp)
               setNumberOfSquares(numberOfSquares+2)
+              audio3.play()
             }
             else{
               setPlayer(player==='1'?'2':'1')
@@ -336,7 +349,7 @@ function Contexts(props) {
   <GridContext.Provider value={{sel,setSelect,row,setRow,col,setCol,Box,setBox,player,setPlayer,horizontalButtons,
     setHorizontalButtons,verticalButtons,setVerticalButtons,player1Score,setPlayer1Score,player2Score,setPlayer2Score,
     squaresColors,setSquareColors,numberOfSquares,setNumberOfSquares,areAllClicked,setClick,won,setWon,modalShow,
-    setModalShow}}>
+    setModalShow,start,setStart}}>
     {props.children}
 
   </GridContext.Provider>)
