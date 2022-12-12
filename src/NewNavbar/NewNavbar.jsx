@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useContext,useState } from 'react';
+import { useContext } from 'react';
 import { GridContext } from '../Contexts';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -27,6 +27,7 @@ import {Link, useNavigate} from "react-router-dom"
 import HomeIcon from '@mui/icons-material/Home';
 import ButtonSound1 from "./ButtonSound/buttons.mp3"
 import ButtonSound2 from "./ButtonSound/button1.mp3"
+
 
 
 const drawerWidth = 190;
@@ -92,7 +93,8 @@ const audio2=new Audio(ButtonSound2)
     setOpen(false);
   };
   
-  const {sel,setSelect,setBox,modalShow,setModalShow,start,setStart}=useContext(GridContext)
+  // const {sel,setSelect,setBox,modalShow,setModalShow,start,setStart}=useContext(GridContext)
+  const {state,dispatch} = useContext(GridContext)
 
   const navItems=[{title:'Home',icon:<HomeIcon/>},
     {title:'New Game',icon:<SportsEsportsIcon/>}, 
@@ -101,14 +103,16 @@ const audio2=new Audio(ButtonSound2)
   {title:'Exit',icon:<LogoutIcon/>}]
   
   const makeBox=(e)=>{
-    setBox([])
-    setSelect(e.target.value)
+    dispatch({type:'SetStates',payload:{...state,Box:[],sel:e.target.value}})
+    // setBox([])
+    // setSelect(e.target.value)
   }
   const handleNavClicks=(title)=>{
-    if(title==='New Game' && sel!=='Select size here'){
-        setSelect('Select size here')
+    if(title==='New Game' && state.sel!=='Select size here'){
+      dispatch({type:'SetStates',payload:{...state,sel:'Select size here'}})
+        // setSelect('Select size here')
     }
-    else if(title==='New Game' && sel==='Select size here'){
+    else if(title==='New Game' && state.sel==='Select size here'){
       alert('Select size')
   }
     else if(title==="Home"){
@@ -118,7 +122,8 @@ const audio2=new Audio(ButtonSound2)
         window.close()
     }
     else if(title==='Options'){
-        setModalShow(true)
+      dispatch({type:'SetStates',payload:{...state,modalShow:true}})
+        // setModalShow(true)
     }
     else{
         navigate("/aboutgame")
@@ -157,9 +162,9 @@ const audio2=new Audio(ButtonSound2)
   <Typography sx={{ display: { xs: 'none', sm: 'block'  } }} className="Navbartxt" variant="h6" noWrap 
     component="div" title='New Game' onClick={(e)=>{handleNavClicks(e.target.title);audio2.play()}} >New 𝕲ame
   </Typography>
-  {start?
+  {state.start?
     <select onChange={(e)=>{makeBox(e)
-     }} value={sel} style={{color:'white',border:'none',background:'#4A00E0'}}>
+     }} value={state.sel} style={{color:'white',border:'none',background:'#4A00E0'}}>
       <option value='Select size here'>𝕾elect 𝕾ize here</option>
       <option value="2*3">2 x 3</option>
       <option value="3*4">3 x 4</option>
@@ -167,7 +172,11 @@ const audio2=new Audio(ButtonSound2)
       <option value="5*6">6 x 7</option>
       <option value="7*8">7 x 8</option>
     </select>:
-    <button type='button' onClick={()=>setStart(true)}>Start Game</button>}
+    <button type='button' onClick={()=>dispatch({type:'SetStates',payload:{...state,start:true}})}>Start Game</button>}
+    {/* setStart(true) */}
+    
+    <button type="button" onClick={()=>{navigate("/signIn")}}>Load Game</button>
+    <button onClick={()=>{navigate("/signIn")}}>Save Game</button>
   <Typography sx={{ display: { xs: 'none', sm: 'block' } }} 
     className="Navbartxt" variant="h6" noWrap component="div" 
     title='How to play?' 

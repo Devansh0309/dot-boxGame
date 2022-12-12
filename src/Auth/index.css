@@ -1,0 +1,35 @@
+.auth-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.auth-container button{
+    display: flex;
+    align-items: center;
+    /* justify-content: space-around; */
+    height: 50px;
+    width:175px;
+    gap:20px;
+    color:white;
+    background-color: rgb(67, 80, 123);
+    border: none;
+    border-radius: 5px;
+    box-shadow: 3px 2px 5px 3px lightgrey,-3px -2px 5px 3px lightgrey;
+    cursor: pointer;
+}
+.auth-container button:hover{
+    background-color: rgb(38, 78, 211);
+    transition: 0.03s ease-in;
+}
+.auth-container button:active{
+    background-color: rgb(38, 78, 211);
+    transition: 0.03s ease-in-out;
+    height: 55px;
+    width:178px;
+    font-size: medium;
+}
+.auth-container button img{
+    height: 75%;
+    width:30%;
+}

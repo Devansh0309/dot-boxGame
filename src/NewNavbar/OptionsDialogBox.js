@@ -6,11 +6,14 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import { ListItemIcon } from '@mui/material';
 
 function MyVerticallyCenteredModal() {
-    const {modalShow,setModalShow}=useContext(GridContext)
-    const onHide=() => setModalShow(false)
+    // const {modalShow,setModalShow}=useContext(GridContext)
+    const {state,dispatch} = useContext(GridContext)
+
+    const onHide=() => dispatch({type:'SetStates',payload:{...state,modalShow:false}})
+    // setModalShow(false)
   return (
     <Modal
-      show={modalShow} size="lg" aria-labelledby="contained-modal-title-vcenter" style={{
+      show={state.modalShow} size="lg" aria-labelledby="contained-modal-title-vcenter" style={{
       zIndex:'1800'
     }}
       centered

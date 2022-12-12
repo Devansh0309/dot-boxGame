@@ -2,108 +2,105 @@ import React,{useContext,useEffect} from 'react'
 import './SquareGrid.css'
 import { GridContext } from '../Contexts';
 import ButtonSound2 from '../NewNavbar/ButtonSound/button1.mp3'
-import SquareSound from '../NewNavbar/ButtonSound/shortSuccess.mp3'
 
 function SquareGrid() {
-    const {sel,setSelect,row,setRow,col,setCol,Box,setBox,player,setPlayer,horizontalButtons,setHorizontalButtons,verticalButtons,setVerticalButtons,player1Score,setPlayer1Score,player2Score,setPlayer2Score,squaresColors,setSquareColors,numberOfSquares,setNumberOfSquares,areAllClicked,setClick,won,setWon,setStart} = useContext(GridContext)
+    // const {sel,setSelect,row,setRow,col,setCol,Box,setBox,player,setPlayer,horizontalButtons,setHorizontalButtons,verticalButtons,setVerticalButtons,player1Score,setPlayer1Score,player2Score,setPlayer2Score,squaresColors,setSquareColors,numberOfSquares,setNumberOfSquares,areAllClicked,setClick,won,setWon,setStart} = useContext(GridContext)
+    const {state,dispatch,areAllClicked,setClick} = useContext(GridContext)
 
     const audio2=new Audio(ButtonSound2)
-    const audio3=new Audio(SquareSound)
 
     useEffect(()=>{
-        setCol(sel.split("*").map(Number)[1])
-        setRow(sel.split("*").map(Number)[0])
+      dispatch({type:'SetStates',payload:{...state,row:state.sel.split("*").map(Number)[0],col:state.sel.split("*").map(Number)[1]}})
       }
-    ,[sel])
+    ,[state.sel])
 
     useEffect(()=>{
         let arr=[];
         let horizontal=[]
         let vertical=[]
         let squares=[]
-        for(let i=0;i<=row*col+row+col;i++){
+        for(let i=0;i<=state.row*state.col+state.row+state.col;i++){
           arr.push(i)
         }
-        for(let i=0;i<row*col+col;i++){
+        for(let i=0;i<state.row*state.col+state.col;i++){
           horizontal.push({key:i,type:'horizontal',isClicked:false,btncolor:"lightgrey",active:false})
         }
-        for(let i=0;i<row*col+row;i++){
+        for(let i=0;i<state.row*state.col+state.row;i++){
           vertical.push({key:i,type:'vertical',isClicked:false,btncolor:"lightgrey",active:false})
         }
-        for(let i=0;i<row*col;i++){
+        for(let i=0;i<state.row*state.col;i++){
           squares.push({allClicked:false,squarecolor:"grey",active:false})
         }
-        setHorizontalButtons(horizontal)
-        setVerticalButtons(vertical)
-        setSquareColors(squares)
-        setBox(arr)
-        setNumberOfSquares(0)
-        setPlayer1Score(0)
-        setPlayer2Score(0)
-        setPlayer('1')
-        // let rc=sel.split("*").map(Number)
-        // console.log("rc",rc,"r","c",row,col)
-      },[row,col])  
+        dispatch({type:'SetStates',payload:{...state,horizontalButtons:horizontal,verticalButtons:vertical,squaresColors:squares,Box:arr,numberOfSquares:0,player1Score:0,player2Score:0,player:'1'}})
+
+      },[state.row,state.col])  
       
     useEffect(()=>{
-        setSelect('Select size here')
-      if(player1Score>0||player2Score>0)setWon(`Player${player1Score>player2Score?'1':(player1Score===player2Score && player1Score>0)?'s Tied and no one':'2'} won!`)
-      },[numberOfSquares>0 && numberOfSquares===row*col]) 
+      dispatch({type:'SetStates',payload:{...state,sel:'Select size here',won:(state.player1Score>0||state.player2Score>0)?`Player${state.player1Score>state.player2Score?'1':
+      (state.player1Score===state.player2Score && state.player1Score>0)?
+      's Tied and no one':'2'} won!`:''}})
+      // if(state.player1Score>0||state.player2Score>0){
+      //   let str=`Player${state.player1Score>state.player2Score?'1':
+      //   (state.player1Score===state.player2Score && state.player1Score>0)?
+      //   's Tied and no one':'2'} won!`
+      //   dispatch({type:'SetStates',payload:{...state,won:str}})
+      // }
+      // else{
+      //   console.log('hi')
+      // }
+      },[state.numberOfSquares>0 && state.numberOfSquares===state.row*state.col])
 
-    useEffect(()=>{setStart(false)},[sel==='Select size here' && won!==''])  
+    useEffect(()=>{
+      dispatch({type:'SetStates',payload:{...state,start:false}})
+    },[state.sel==='Select size here' && state.won!==''])
+
+    useEffect(()=>{dispatch({type:'SetStates',payload:{...state,won:''}})},[state.sel!=='Select size here' && state.won!==''])
 
   return (
     <div className="Appe">
-     {/* {
-     if(sel!=='Select size here' && won===''){}
-     else if(sel==='Select size here' && won!==''){}
-     else if(sel!=='Select size here' && won!==''){}
-     else{}
-     } */}
-
-    {sel!=='Select size here' && won===''?
+    {state.sel!=='Select size here' && state.won===''?
     (<div>
       <div style={{display:'flex',flexWrap:'wrap',justifyContent:'center',alignItems:'center',gap:'50px'}}>
-      <div style={{backgroundColor:'green'}}>Player1: {player1Score}</div> 
-      <div style={{backgroundColor:'red'}}>Player2: {player2Score}</div>
+      <div style={{backgroundColor:'green'}}>Player1: {state.player1Score}</div> 
+      <div style={{backgroundColor:'red'}}>Player2: {state.player2Score}</div>
       </div>
       <br/>
       <div>
-        Player {player} chance
+        Player {state.player} chance
       </div>
       <div className='gridBox' 
-      style={{height: `${80*(row+1)}px`,
-        width: `${80*(col+1)}px`,display:"grid",
-      gridTemplateColumns:`repeat(${col+1},1fr)`,
-      gridTemplateRows:`repeat(${row+1},1fr)`}}
+      style={{height: `${80*(state.row+1)}px`,
+        width: `${80*(state.col+1)}px`,display:"grid",
+      gridTemplateColumns:`repeat(${state.col+1},1fr)`,
+      gridTemplateRows:`repeat(${state.row+1},1fr)`}}
       >
       {
-      Box.map((item)=>
-      item%(col+1) ===col && item<row*col+row+col?
+      (state.Box).map((item)=>
+      item%(state.col+1) ===state.col && item<state.row*state.col+state.row+state.col?
         <div className='twobox' style={{display:'flex',flexDirection:'column'}}>
           <div style={{backgroundColor:'black',width:'20%',height:'20%'}}>
           </div>
           <button className='sidelastbtn'
           style={{
             backgroundColor:
-            `${verticalButtons[item].btncolor}`,
-          border:`${verticalButtons[item].active?'1px solid white':'none'}`}}
+            `${state.verticalButtons[item].btncolor}`,
+          border:`${state.verticalButtons[item].active?'1px solid white':'none'}`}}
     
-          key={item} disabled={verticalButtons[item].isClicked} onClick={()=>{setClick(item,'vertical');areAllClicked(item,'vertical',player);audio2.play()}}></button>
+          key={item} disabled={state.verticalButtons[item].isClicked} onClick={()=>{setClick(item,'vertical');areAllClicked(item,'vertical');audio2.play()}}></button>
         </div>
       : 
-        item>=row*(col+1)?
-          item<row*col+row+col?
+        item>=state.row*(state.col+1)?
+          item<state.row*state.col+state.row+state.col?
             <div className='twobox'  style={{display:'flex'}}>
               <div style={{backgroundColor:'black',width:'20%',height:'20%'}}>
               </div>
               <button className='lowerbtn' 
               style={{
                 backgroundColor:
-                `${horizontalButtons[item-Math.floor(item/(col+1))].btncolor}`,
-                border:`${horizontalButtons[item-Math.floor(item/(col+1))].active?'1px solid white':'none'}`}}
+                `${state.horizontalButtons[item-Math.floor(item/(state.col+1))].btncolor}`,
+                border:`${state.horizontalButtons[item-Math.floor(item/(state.col+1))].active?'1px solid white':'none'}`}}
     
-               key={item-Math.floor(item/(col+1))}  disabled={horizontalButtons[item-Math.floor(item/(col+1))].isClicked} onClick={()=>{setClick(item-Math.floor(item/(col+1)),'horizontal');areAllClicked(item-Math.floor(item/(col+1)),'horizontal',player);audio2.play()}}></button>
+               key={item-Math.floor(item/(state.col+1))}  disabled={state.horizontalButtons[item-Math.floor(item/(state.col+1))].isClicked} onClick={()=>{setClick(item-Math.floor(item/(state.col+1)),'horizontal');areAllClicked(item-Math.floor(item/(state.col+1)),'horizontal');audio2.play()}}></button>
             </div>
           :
             <div style={{backgroundColor:'black',width:'20%',height:'20%'}}>
@@ -117,29 +114,29 @@ function SquareGrid() {
     
             style={{
               backgroundColor:
-              `${horizontalButtons[item-Math.floor(item/(col+1))].btncolor}`,
-              border:`${horizontalButtons[item-Math.floor(item/(col+1))].active?'1px solid white':'none'}`
+              `${state.horizontalButtons[item-Math.floor(item/(state.col+1))].btncolor}`,
+              border:`${state.horizontalButtons[item-Math.floor(item/(state.col+1))].active?'1px solid white':'none'}`
             }}
     
-             key={item-Math.floor(item/(col+1))}
-             disabled={horizontalButtons[item-Math.floor(item/(col+1))].isClicked} 
-             onClick={()=>{setClick(item-Math.floor(item/(col+1)),'horizontal');
-             areAllClicked(item-Math.floor(item/(col+1)),'horizontal',player);audio2.play()}}></button>
+             key={item-Math.floor(item/(state.col+1))}
+             disabled={state.horizontalButtons[item-Math.floor(item/(state.col+1))].isClicked} 
+             onClick={()=>{setClick(item-Math.floor(item/(state.col+1)),'horizontal');
+             areAllClicked(item-Math.floor(item/(state.col+1)),'horizontal');audio2.play()}}></button>
           </div>
           
           <div  style={{display:"flex",height:"80%",width:'100%'}}>
     
             <button className='sidebtn'
              style={{
-              backgroundColor:`${verticalButtons[item].btncolor}`,
-              border:`${verticalButtons[item].active?'1px solid white':'none'}`}}
+              backgroundColor:`${state.verticalButtons[item].btncolor}`,
+              border:`${state.verticalButtons[item].active?'1px solid white':'none'}`}}
     
-             key={item} disabled={verticalButtons[item].isClicked} onClick={()=>{setClick(item,'vertical');areAllClicked(item,'vertical',player);audio2.play()}}></button>
+             key={item} disabled={state.verticalButtons[item].isClicked} onClick={()=>{setClick(item,'vertical');areAllClicked(item,'vertical');audio2.play()}}></button>
             
     
-            <div className='innerBox' style={{backgroundColor:squaresColors[item-Math.floor(item/(col+1))].squarecolor,border:squaresColors[item-Math.floor(item/(col+1))].active?'1px solid white':'none'}}>
-              {(squaresColors[item-Math.floor(item/(col+1))].squarecolor==="green"?"Player-1":null)||
-              (squaresColors[item-Math.floor(item/(col+1))].squarecolor==="red"?"Player-2":null)}</div>
+            <div className='innerBox' style={{backgroundColor:state.squaresColors[item-Math.floor(item/(state.col+1))].squarecolor,border:state.squaresColors[item-Math.floor(item/(state.col+1))].active?'1px solid white':'none'}}>
+              {(state.squaresColors[item-Math.floor(item/(state.col+1))].squarecolor==="green"?"Player-1":null)||
+              (state.squaresColors[item-Math.floor(item/(state.col+1))].squarecolor==="red"?"Player-2":null)}</div>
             
           </div>
           </div>
@@ -148,14 +145,13 @@ function SquareGrid() {
       </div>
       </div>
       )
-    :sel==='Select size here' && won!==''?
-    <h3>{won}</h3>
-     :sel!=='Select size here' && won!==''?
-     setWon(''):<button type='button' onClick={()=>setSelect('2*3')}>Start 2 x 3 game</button>
+    :state.sel==='Select size here' && state.won!==''?
+    <h3>{state.won}</h3>
+     :state.sel!=='Select size here' && state.won!==''?''
+     :<button type='button' onClick={()=>dispatch({type:'SetStates',payload:{...state,sel:'2*3'}})}>Start 2 x 3 game</button>
     }
        {/* Idea for rendering square color on click of all neighbouring buttons: Create react components for four buttons surrounding innerbox or square which is to be colored and pass 'isClicked' prop to Button component i.e. <Button isClicked={}/> and from Button Component pass result of isClicked to a function in App.js whose result of allButtons clicked is passed as a prop to innerBox React component and then if allButtons clicked is true then change color of innerBox from innerBox react component there itself  */}
       </div>
   )
 }
-
 export default SquareGrid
