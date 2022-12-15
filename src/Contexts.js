@@ -29,8 +29,7 @@ function reducer(state, action){
       //     }
       case 'SetStates':
         localStorage.setItem('states',JSON.stringify(action.payload))
-        state={...action.payload}
-        return state
+        return {...state,...action.payload}
       default:
           throw new Error()      
   }
@@ -61,16 +60,16 @@ function Contexts(props) {
               }
               if(state.player==='1'){
                 temp[id].squarecolor='green'
-                dispatch({type:'SetStates',payload:{...state,player1Score:(state.player1Score+1),squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
+                dispatch({type:'SetStates',payload:{player1Score:(state.player1Score+1),squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
               }
               else{
                 temp[id].squarecolor='red'
-                dispatch({type:'SetStates',payload:{...state,player2Score:(state.player2Score+1),squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
+                dispatch({type:'SetStates',payload:{player2Score:(state.player2Score+1),squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
               }
               audio3.play()
             }
             else{
-              dispatch({type:'SetStates',payload:{...state,player:state.player==='1'?'2':'1'}})
+              dispatch({type:'SetStates',payload:{player:state.player==='1'?'2':'1'}})
             }
           }
           else if(Math.floor(id/state.col)===state.row){
@@ -86,16 +85,16 @@ function Contexts(props) {
               }
               if(state.player==='1'){
                 temp[id-state.col].squarecolor='green'
-                dispatch({type:'SetStates',payload:{...state,player1Score:state.player1Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
+                dispatch({type:'SetStates',payload:{player1Score:state.player1Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
               }
               else{
                 temp[id-state.col].squarecolor='red'
-                dispatch({type:'SetStates',payload:{...state,player2Score:state.player2Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
+                dispatch({type:'SetStates',payload:{player2Score:state.player2Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
               }
               audio3.play()
             }
             else{
-              dispatch({type:'SetStates',payload:{...state,player:state.player==='1'?'2':'1'}})
+              dispatch({type:'SetStates',payload:{player:state.player==='1'?'2':'1'}})
             }
           }
           else{
@@ -113,11 +112,11 @@ function Contexts(props) {
               }
               if(state.player==='1'){
                 temp[id-state.col].squarecolor='green'
-                dispatch({type:'SetStates',payload:{...state,player1Score:state.player1Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
+                dispatch({type:'SetStates',payload:{player1Score:state.player1Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
               }
               else{
                 temp[id-state.col].squarecolor='red'
-                dispatch({type:'SetStates',payload:{...state,player2Score:state.player2Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
+                dispatch({type:'SetStates',payload:{player2Score:state.player2Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
               }
               audio3.play()
             }
@@ -133,11 +132,11 @@ function Contexts(props) {
               }
               if(state.player==='1'){
                 temp[id].squarecolor='green'
-                dispatch({type:'SetStates',payload:{...state,player1Score:state.player1Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
+                dispatch({type:'SetStates',payload:{player1Score:state.player1Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
               }
               else{
                 temp[id].squarecolor='red'
-                dispatch({type:'SetStates',payload:{...state,player1Score:state.player1Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
+                dispatch({type:'SetStates',payload:{player1Score:state.player1Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
               }
               audio3.play()
             }
@@ -156,17 +155,17 @@ function Contexts(props) {
               if(state.player==='1'){
                 temp[id].squarecolor='green'
                 temp[id-state.col].squarecolor='green'
-                dispatch({type:'SetStates',payload:{...state,player1Score:state.player1Score+2,squaresColors:temp,numberOfSquares:state.numberOfSquares+2}})
+                dispatch({type:'SetStates',payload:{player1Score:state.player1Score+2,squaresColors:temp,numberOfSquares:state.numberOfSquares+2}})
               }
               else{
                 temp[id].squarecolor='red'
                 temp[id-state.col].squarecolor='red'
-                dispatch({type:'SetStates',payload:{...state,player2Score:state.player2Score+2,squaresColors:temp,numberOfSquares:state.numberOfSquares+2}})
+                dispatch({type:'SetStates',payload:{player2Score:state.player2Score+2,squaresColors:temp,numberOfSquares:state.numberOfSquares+2}})
               }
               audio3.play()
             }
             else{
-              dispatch({type:'SetStates',payload:{...state,player:state.player==='1'?'2':'1'}})
+              dispatch({type:'SetStates',payload:{player:state.player==='1'?'2':'1'}})
             }
           }
         }
@@ -183,17 +182,17 @@ function Contexts(props) {
               }
               if(state.player==='1'){
                 temp[id-Math.floor(id/(state.col+1))].squarecolor="green"
-                dispatch({type:'SetStates',payload:{...state,player1Score:state.player1Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
+                dispatch({type:'SetStates',payload:{player1Score:state.player1Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
               }
               else{
                 temp[id-Math.floor(id/(state.col+1))].squarecolor="red"
-                dispatch({type:'SetStates',payload:{...state,player2Score:state.player2Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
+                dispatch({type:'SetStates',payload:{player2Score:state.player2Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
               }
               audio3.play()
             }
             else
             { 
-              dispatch({type:'SetStates',payload:{...state,player:state.player==='1'?'2':'1'}})
+              dispatch({type:'SetStates',payload:{player:state.player==='1'?'2':'1'}})
             }
           }
           else if(id%(state.col+1)===state.col){//last column right vertical btn id provided
@@ -208,16 +207,16 @@ function Contexts(props) {
               }
               if(state.player==='1'){
                 temp[id-Math.ceil(id/(state.col+1))].squarecolor="green"
-                dispatch({type:'SetStates',payload:{...state,player1Score:state.player1Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
+                dispatch({type:'SetStates',payload:{player1Score:state.player1Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
               }
               else{
                 temp[id-Math.ceil(id/(state.col+1))].squarecolor="red"
-                dispatch({type:'SetStates',payload:{...state,player2Score:state.player2Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
+                dispatch({type:'SetStates',payload:{player2Score:state.player2Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
               }
               audio3.play()
             }
             else{
-              dispatch({type:'SetStates',payload:{...state,player:state.player==='1'?'2':'1'}})
+              dispatch({type:'SetStates',payload:{player:state.player==='1'?'2':'1'}})
             }
           }
           else{//middle column (not first and not last) btn id provided
@@ -232,11 +231,11 @@ function Contexts(props) {
               }
               if(state.player==='1'){
                 temp[id-Math.floor(id/(state.col+1))].squarecolor="green"
-                dispatch({type:'SetStates',payload:{...state,player1Score:state.player1Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
+                dispatch({type:'SetStates',payload:{player1Score:state.player1Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
               }
               else{
                 temp[id-Math.floor(id/(state.col+1))].squarecolor="red"
-                dispatch({type:'SetStates',payload:{...state,player2Score:state.player2Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
+                dispatch({type:'SetStates',payload:{player2Score:state.player2Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
               }
               audio3.play()
             }
@@ -252,11 +251,11 @@ function Contexts(props) {
               }
               if(state.player==='1'){
                 temp[id-Math.ceil(id/(state.col+1))].squarecolor="green"
-                dispatch({type:'SetStates',payload:{...state,player1Score:state.player1Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
+                dispatch({type:'SetStates',payload:{player1Score:state.player1Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
               }
               else{
                 temp[id-Math.ceil(id/(state.col+1))].squarecolor="red"
-                dispatch({type:'SetStates',payload:{...state,player2Score:state.player2Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
+                dispatch({type:'SetStates',payload:{player2Score:state.player2Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
               }
               audio3.play()
             }
@@ -275,17 +274,17 @@ function Contexts(props) {
               if(state.player==='1'){
                 temp[id-Math.floor(id/(state.col+1))].squarecolor="green"
                 temp[id-Math.ceil(id/(state.col+1))].squarecolor="green"
-                dispatch({type:'SetStates',payload:{...state,player1Score:state.player1Score+2,squaresColors:temp,numberOfSquares:state.numberOfSquares+2}})
+                dispatch({type:'SetStates',payload:{player1Score:state.player1Score+2,squaresColors:temp,numberOfSquares:state.numberOfSquares+2}})
               }
               else{
                 temp[id-Math.floor(id/(state.col+1))].squarecolor="red"
                 temp[id-Math.ceil(id/(state.col+1))].squarecolor="red"
-                dispatch({type:'SetStates',payload:{...state,player2Score:state.player2Score+2,squaresColors:temp,numberOfSquares:state.numberOfSquares+2}})
+                dispatch({type:'SetStates',payload:{player2Score:state.player2Score+2,squaresColors:temp,numberOfSquares:state.numberOfSquares+2}})
               }
               audio3.play()
             }
             else{
-              dispatch({type:'SetStates',payload:{...state,player:state.player==='1'?'2':'1'}})
+              dispatch({type:'SetStates',payload:{player:state.player==='1'?'2':'1'}})
             }
       
           }
@@ -312,7 +311,7 @@ function Contexts(props) {
           else{
             temp[id].btncolor="red"
           }
-          dispatch({type:'SetStates',payload:{...state,horizontalButtons:temp}})
+          dispatch({type:'SetStates',payload:{horizontalButtons:temp}})
           // setHorizontalButtons(temp)
           //or this?
           // setHorizontalButtons(...horizontalButtons,{key:id,type:'horizontal',isClicked:true})
@@ -336,7 +335,7 @@ function Contexts(props) {
           else{
             temp[id].btncolor="red"
           }
-          dispatch({type:'SetStates',payload:{...state,verticalButtons:temp}})
+          dispatch({type:'SetStates',payload:{verticalButtons:temp}})
           // setVerticalButtons(temp)
           //or this?
           // setHorizontalButtons(...horizontalButtons,{key:id,type:'horizontal',isClicked:true})

@@ -80,11 +80,9 @@ function NewNavbar() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const audio1=new Audio(ButtonSound1)
-const audio2=new Audio(ButtonSound2)
+  const audio2=new Audio(ButtonSound2)
 
- const navigate =useNavigate()
-
-
+  const navigate =useNavigate()
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -102,14 +100,9 @@ const audio2=new Audio(ButtonSound2)
   {title:'Options',icon:<SettingsIcon/>}, 
   {title:'Exit',icon:<LogoutIcon/>}]
   
-  const makeBox=(e)=>{
-    dispatch({type:'SetStates',payload:{...state,Box:[],sel:e.target.value}})
-    // setBox([])
-    // setSelect(e.target.value)
-  }
   const handleNavClicks=(title)=>{
     if(title==='New Game' && state.sel!=='Select size here'){
-      dispatch({type:'SetStates',payload:{...state,sel:'Select size here'}})
+      dispatch({type:'SetStates',payload:{sel:'Select size here'}})
         // setSelect('Select size here')
     }
     else if(title==='New Game' && state.sel==='Select size here'){
@@ -122,7 +115,7 @@ const audio2=new Audio(ButtonSound2)
         window.close()
     }
     else if(title==='Options'){
-      dispatch({type:'SetStates',payload:{...state,modalShow:true}})
+      dispatch({type:'SetStates',payload:{modalShow:true}})
         // setModalShow(true)
     }
     else{
@@ -130,7 +123,7 @@ const audio2=new Audio(ButtonSound2)
     }
   }
 
-  return (
+  return(
     <Box sx={{ display: 'flex',}} >
       <CssBaseline />
       <AppBar position="fixed" sx={{backgroundColor:"#4A00E0"}} open={open}>
@@ -159,25 +152,27 @@ const audio2=new Audio(ButtonSound2)
         
 <Typography component="div"
  sx={{alignItems:"right",display:"flex",gap:"20px"}}>
-  <Typography sx={{ display: { xs: 'none', sm: 'block'  } }} className="Navbartxt" variant="h6" noWrap 
+  <Typography sx={{ display: { xs: 'none', sm: 'block'  },overflow:'visible' }} className="Navbartxt" variant="h6" noWrap 
     component="div" title='New Game' onClick={(e)=>{handleNavClicks(e.target.title);audio2.play()}} >New 𝕲ame
   </Typography>
   {state.start?
-    <select onChange={(e)=>{makeBox(e)
+    <select onChange={(e)=>{dispatch({type:'SetStates',payload:{Box:[],sel:e.target.value
+      // ,row:e.target.value.split("*").map(Number)[0],col:e.target.value.split("*").map(Number)[1]
+    }})
      }} value={state.sel} style={{color:'white',border:'none',background:'#4A00E0'}}>
       <option value='Select size here'>𝕾elect 𝕾ize here</option>
+      <option value="1*1">1 x 1</option>
       <option value="2*3">2 x 3</option>
       <option value="3*4">3 x 4</option>
       <option value="4*5">4 x 5</option>
       <option value="5*6">6 x 7</option>
       <option value="7*8">7 x 8</option>
     </select>:
-    <button type='button' onClick={()=>dispatch({type:'SetStates',payload:{...state,start:true}})}>Start Game</button>}
-    {/* setStart(true) */}
+    <button type='button' onClick={()=>dispatch({type:'SetStates',payload:{start:true}})}>Start Game</button>}
     
     <button type="button" onClick={()=>{navigate("/signIn")}}>Load Game</button>
     <button onClick={()=>{navigate("/signIn")}}>Save Game</button>
-  <Typography sx={{ display: { xs: 'none', sm: 'block' } }} 
+  <Typography sx={{ display: { xs: 'none', sm: 'block' },overflow:'visible' }} 
     className="Navbartxt" variant="h6" noWrap component="div" 
     title='How to play?' 
     onClick={(e)=>{handleNavClicks(e.target.title);audio2.play()}}>

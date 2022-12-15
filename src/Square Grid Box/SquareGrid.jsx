@@ -10,7 +10,7 @@ function SquareGrid() {
     const audio2=new Audio(ButtonSound2)
 
     useEffect(()=>{
-      dispatch({type:'SetStates',payload:{...state,row:state.sel.split("*").map(Number)[0],col:state.sel.split("*").map(Number)[1]}})
+      dispatch({type:'SetStates',payload:{row:state.sel.split("*").map(Number)[0],col:state.sel.split("*").map(Number)[1]}})
       }
     ,[state.sel])
 
@@ -31,30 +31,24 @@ function SquareGrid() {
         for(let i=0;i<state.row*state.col;i++){
           squares.push({allClicked:false,squarecolor:"grey",active:false})
         }
-        dispatch({type:'SetStates',payload:{...state,horizontalButtons:horizontal,verticalButtons:vertical,squaresColors:squares,Box:arr,numberOfSquares:0,player1Score:0,player2Score:0,player:'1'}})
+        dispatch({type:'SetStates',payload:{horizontalButtons:horizontal,verticalButtons:vertical,squaresColors:squares,Box:arr,numberOfSquares:0,player1Score:0,player2Score:0,player:'1'}})
 
       },[state.row,state.col])  
       
     useEffect(()=>{
-      dispatch({type:'SetStates',payload:{...state,sel:'Select size here',won:(state.player1Score>0||state.player2Score>0)?`Player${state.player1Score>state.player2Score?'1':
+      dispatch({type:'SetStates',payload:{sel:'Select size here',won:(state.player1Score>0||state.player2Score>0)?`Player${state.player1Score>state.player2Score?'1':
       (state.player1Score===state.player2Score && state.player1Score>0)?
       's Tied and no one':'2'} won!`:''}})
-      // if(state.player1Score>0||state.player2Score>0){
-      //   let str=`Player${state.player1Score>state.player2Score?'1':
-      //   (state.player1Score===state.player2Score && state.player1Score>0)?
-      //   's Tied and no one':'2'} won!`
-      //   dispatch({type:'SetStates',payload:{...state,won:str}})
-      // }
-      // else{
-      //   console.log('hi')
-      // }
       },[state.numberOfSquares>0 && state.numberOfSquares===state.row*state.col])
 
     useEffect(()=>{
-      dispatch({type:'SetStates',payload:{...state,start:false}})
+      dispatch({type:'SetStates',payload:{start:false}})
     },[state.sel==='Select size here' && state.won!==''])
 
-    useEffect(()=>{dispatch({type:'SetStates',payload:{...state,won:''}})},[state.sel!=='Select size here' && state.won!==''])
+    useEffect(()=>{
+      // localStorage.clear()
+      dispatch({type:'SetStates',payload:{won:''}})
+  },[state.sel!=='Select size here' && state.won!==''])
 
   return (
     <div className="Appe">
@@ -148,7 +142,7 @@ function SquareGrid() {
     :state.sel==='Select size here' && state.won!==''?
     <h3>{state.won}</h3>
      :state.sel!=='Select size here' && state.won!==''?''
-     :<button type='button' onClick={()=>dispatch({type:'SetStates',payload:{...state,sel:'2*3'}})}>Start 2 x 3 game</button>
+     :<button type='button' onClick={()=>dispatch({type:'SetStates',payload:{sel:'1*1'}})}>Start 1 x 1 game</button>
     }
        {/* Idea for rendering square color on click of all neighbouring buttons: Create react components for four buttons surrounding innerbox or square which is to be colored and pass 'isClicked' prop to Button component i.e. <Button isClicked={}/> and from Button Component pass result of isClicked to a function in App.js whose result of allButtons clicked is passed as a prop to innerBox React component and then if allButtons clicked is true then change color of innerBox from innerBox react component there itself  */}
       </div>
