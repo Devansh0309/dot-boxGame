@@ -10,11 +10,13 @@ function SquareGrid() {
     const audio2=new Audio(ButtonSound2)
 
     useEffect(()=>{
+      console.log('runned')
       dispatch({type:'SetStates',payload:{row:state.sel.split("*").map(Number)[0],col:state.sel.split("*").map(Number)[1]}})
       }
     ,[state.sel])
 
     useEffect(()=>{
+      console.log('runned')
         let arr=[];
         let horizontal=[]
         let vertical=[]
@@ -46,7 +48,6 @@ function SquareGrid() {
     },[state.sel==='Select size here' && state.won!==''])
 
     useEffect(()=>{
-      // localStorage.clear()
       dispatch({type:'SetStates',payload:{won:''}})
   },[state.sel!=='Select size here' && state.won!==''])
 
@@ -55,13 +56,14 @@ function SquareGrid() {
     {state.sel!=='Select size here' && state.won===''?
     (<div>
       <div style={{display:'flex',flexWrap:'wrap',justifyContent:'center',alignItems:'center',gap:'50px'}}>
-      <div style={{backgroundColor:'green'}}>Player1: {state.player1Score}</div> 
-      <div style={{backgroundColor:'red'}}>Player2: {state.player2Score}</div>
+      <div style={{backgroundColor:'#eb5d5d',borderRadius:'5px'}}>Player1: {state.player1Score}</div> 
+      <div style={{backgroundColor:'#42c442',borderRadius:'5px'}}>Player2: {state.player2Score}</div>
       </div>
       <br/>
-      <div>
+      <div className='chance' style={{backgroundColor:state.player==='1'?'#eb5d5d':'#42c442'}}>
         Player {state.player} chance
       </div>
+      <br/>
       <div className='gridBox' 
       style={{height: `${80*(state.row+1)}px`,
         width: `${80*(state.col+1)}px`,display:"grid",
@@ -78,7 +80,7 @@ function SquareGrid() {
           style={{
             backgroundColor:
             `${state.verticalButtons[item].btncolor}`,
-          border:`${state.verticalButtons[item].active?'1px solid white':'none'}`}}
+          border:`${state.verticalButtons[item].active?'2px solid black':'none'}`,borderRadius:'15px'}}
     
           key={item} disabled={state.verticalButtons[item].isClicked} onClick={()=>{setClick(item,'vertical');areAllClicked(item,'vertical');audio2.play()}}></button>
         </div>
@@ -92,7 +94,7 @@ function SquareGrid() {
               style={{
                 backgroundColor:
                 `${state.horizontalButtons[item-Math.floor(item/(state.col+1))].btncolor}`,
-                border:`${state.horizontalButtons[item-Math.floor(item/(state.col+1))].active?'1px solid white':'none'}`}}
+                border:`${state.horizontalButtons[item-Math.floor(item/(state.col+1))].active?'2px solid black':'none'}`,borderRadius:'15px'}}
     
                key={item-Math.floor(item/(state.col+1))}  disabled={state.horizontalButtons[item-Math.floor(item/(state.col+1))].isClicked} onClick={()=>{setClick(item-Math.floor(item/(state.col+1)),'horizontal');areAllClicked(item-Math.floor(item/(state.col+1)),'horizontal');audio2.play()}}></button>
             </div>
@@ -109,7 +111,7 @@ function SquareGrid() {
             style={{
               backgroundColor:
               `${state.horizontalButtons[item-Math.floor(item/(state.col+1))].btncolor}`,
-              border:`${state.horizontalButtons[item-Math.floor(item/(state.col+1))].active?'1px solid white':'none'}`
+              border:`${state.horizontalButtons[item-Math.floor(item/(state.col+1))].active?'2px solid black':'none'}`,borderRadius:'15px'
             }}
     
              key={item-Math.floor(item/(state.col+1))}
@@ -123,14 +125,13 @@ function SquareGrid() {
             <button className='sidebtn'
              style={{
               backgroundColor:`${state.verticalButtons[item].btncolor}`,
-              border:`${state.verticalButtons[item].active?'1px solid white':'none'}`}}
+              border:`${state.verticalButtons[item].active?'2px solid black':'none'}`,borderRadius:'15px'}}
     
              key={item} disabled={state.verticalButtons[item].isClicked} onClick={()=>{setClick(item,'vertical');areAllClicked(item,'vertical');audio2.play()}}></button>
-            
     
-            <div className='innerBox' style={{backgroundColor:state.squaresColors[item-Math.floor(item/(state.col+1))].squarecolor,border:state.squaresColors[item-Math.floor(item/(state.col+1))].active?'1px solid white':'none'}}>
-              {(state.squaresColors[item-Math.floor(item/(state.col+1))].squarecolor==="green"?"Player-1":null)||
-              (state.squaresColors[item-Math.floor(item/(state.col+1))].squarecolor==="red"?"Player-2":null)}</div>
+            <div className='innerBox' style={{backgroundColor:state.squaresColors[item-Math.floor(item/(state.col+1))].squarecolor,border:state.squaresColors[item-Math.floor(item/(state.col+1))].active?'2px solid black':'none',borderRadius:'5px'}}>
+              {(state.squaresColors[item-Math.floor(item/(state.col+1))].squarecolor==="#eb5d5d"?"Player-1":null)||
+              (state.squaresColors[item-Math.floor(item/(state.col+1))].squarecolor==="#42c442"?"Player-2":null)}</div>
             
           </div>
           </div>
@@ -140,9 +141,10 @@ function SquareGrid() {
       </div>
       )
     :state.sel==='Select size here' && state.won!==''?
-    <h3>{state.won}</h3>
+    <h3 className='result'>{state.won}</h3>
      :state.sel!=='Select size here' && state.won!==''?''
-     :<button type='button' onClick={()=>dispatch({type:'SetStates',payload:{sel:'1*1'}})}>Start 1 x 1 game</button>
+     :<button type='button' onClick={()=>dispatch({type:'SetStates',payload:{sel:'1*1'}})} style={{backgroundColor: 'inherit',
+     fontSize: 'large',color: '#354dc1'}} className='start-default'>Start 1 x 1 game</button>
     }
        {/* Idea for rendering square color on click of all neighbouring buttons: Create react components for four buttons surrounding innerbox or square which is to be colored and pass 'isClicked' prop to Button component i.e. <Button isClicked={}/> and from Button Component pass result of isClicked to a function in App.js whose result of allButtons clicked is passed as a prop to innerBox React component and then if allButtons clicked is true then change color of innerBox from innerBox react component there itself  */}
       </div>
