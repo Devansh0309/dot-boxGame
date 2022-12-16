@@ -8,6 +8,7 @@ import { ListItemIcon } from '@mui/material';
 function MyVerticallyCenteredModal() {
     // const {modalShow,setModalShow}=useContext(GridContext)
     const {state,dispatch} = useContext(GridContext)
+    // const state=JSON.parse(localStorage.getItem('states'))
 
     const onHide=() => dispatch({type:'SetStates',payload:{...state,modalShow:false}})
     // setModalShow(false)

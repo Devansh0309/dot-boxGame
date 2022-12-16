@@ -1,17 +1,26 @@
-import React,{useContext,useEffect} from 'react'
+import React,{useContext,useEffect,useRef} from 'react'
 import './SquareGrid.css'
 import { GridContext } from '../Contexts';
 import ButtonSound2 from '../NewNavbar/ButtonSound/button1.mp3'
 
 function SquareGrid() {
-    // const {sel,setSelect,row,setRow,col,setCol,Box,setBox,player,setPlayer,horizontalButtons,setHorizontalButtons,verticalButtons,setVerticalButtons,player1Score,setPlayer1Score,player2Score,setPlayer2Score,squaresColors,setSquareColors,numberOfSquares,setNumberOfSquares,areAllClicked,setClick,won,setWon,setStart} = useContext(GridContext)
     const {state,dispatch,areAllClicked,setClick} = useContext(GridContext)
-
+    // const state=JSON.parse(localStorage.getItem('states'))
+    const notInitialRender1 = useRef(false)
+    const notInitialRender2 = useRef(false)
+    const notInitialRender3 = useRef(false)
+    const notInitialRender4 = useRef(false)
+    const notInitialRender5 = useRef(false)
     const audio2=new Audio(ButtonSound2)
 
     useEffect(()=>{
       console.log('runned')
-      dispatch({type:'SetStates',payload:{row:state.sel.split("*").map(Number)[0],col:state.sel.split("*").map(Number)[1]}})
+      if(state.notRouted || notInitialRender1.current){
+        dispatch({type:'SetStates',payload:{row:state.sel.split("*").map(Number)[0],col:state.sel.split("*").map(Number)[1]}})
+      }
+      else{
+        notInitialRender1.current = true
+      }
       }
     ,[state.sel])
 
@@ -33,22 +42,45 @@ function SquareGrid() {
         for(let i=0;i<state.row*state.col;i++){
           squares.push({allClicked:false,squarecolor:"grey",active:false})
         }
-        dispatch({type:'SetStates',payload:{horizontalButtons:horizontal,verticalButtons:vertical,squaresColors:squares,Box:arr,numberOfSquares:0,player1Score:0,player2Score:0,player:'1'}})
-
+        if(state.notRouted || notInitialRender2.current){
+          dispatch({type:'SetStates',payload:{horizontalButtons:horizontal,verticalButtons:vertical,squaresColors:squares,Box:arr,numberOfSquares:0,player1Score:0,player2Score:0,player:'1'}})
+        }
+        else{
+          notInitialRender2.current = true
+        }
+        
       },[state.row,state.col])  
       
     useEffect(()=>{
-      dispatch({type:'SetStates',payload:{sel:'Select size here',won:(state.player1Score>0||state.player2Score>0)?`Player${state.player1Score>state.player2Score?'1':
+      if(state.notRouted || notInitialRender3.current){
+        dispatch({type:'SetStates',payload:{sel:'Select size here',won:(state.player1Score>0||state.player2Score>0)?`Player${state.player1Score>state.player2Score?'1':
       (state.player1Score===state.player2Score && state.player1Score>0)?
       's Tied and no one':'2'} won!`:''}})
+      }
+      else{
+        notInitialRender3.current = true
+      }
+      
       },[state.numberOfSquares>0 && state.numberOfSquares===state.row*state.col])
 
     useEffect(()=>{
-      dispatch({type:'SetStates',payload:{start:false}})
+      if(state.notRouted || notInitialRender4.current){
+        dispatch({type:'SetStates',payload:{start:false}})
+      }
+      else{
+        notInitialRender4.current = true
+      }
+      
     },[state.sel==='Select size here' && state.won!==''])
 
     useEffect(()=>{
-      dispatch({type:'SetStates',payload:{won:''}})
+      if(state.notRouted || notInitialRender5.current){
+        dispatch({type:'SetStates',payload:{won:''}})
+      }
+      else{
+        // dispatch({type:'SetStates',payload:{notRouted:true}})
+        notInitialRender5.current = true
+      }
   },[state.sel!=='Select size here' && state.won!==''])
 
   return (
@@ -143,8 +175,8 @@ function SquareGrid() {
     :state.sel==='Select size here' && state.won!==''?
     <h3 className='result'>{state.won}</h3>
      :state.sel!=='Select size here' && state.won!==''?''
-     :<button type='button' onClick={()=>dispatch({type:'SetStates',payload:{sel:'1*1'}})} style={{backgroundColor: 'inherit',
-     fontSize: 'large',color: '#354dc1'}} className='start-default'>Start 1 x 1 game</button>
+     :<button type='button' onClick={()=>dispatch({type:'SetStates',payload:{sel:'2*3'}})} style={{backgroundColor: 'inherit',
+     fontSize: 'large',color: '#354dc1'}} className='start-default'>Start 2 x 3 game</button>
     }
        {/* Idea for rendering square color on click of all neighbouring buttons: Create react components for four buttons surrounding innerbox or square which is to be colored and pass 'isClicked' prop to Button component i.e. <Button isClicked={}/> and from Button Component pass result of isClicked to a function in App.js whose result of allButtons clicked is passed as a prop to innerBox React component and then if allButtons clicked is true then change color of innerBox from innerBox react component there itself  */}
       </div>

@@ -4,6 +4,7 @@ import SquareSound from './NewNavbar/ButtonSound/shortSuccess.mp3'
 
 const states=JSON.parse(localStorage.getItem('states'))
 //States
+// const notInitialRender = useRef(false)
 const initialState={
   sel:states?states.sel:'Select size here',
   row:states?states.row:'0',
@@ -18,7 +19,8 @@ const initialState={
   player:states?states.player:'1',
   won:states?states.won:'',
   modalShow:states?states.modalShow:false,
-  start:states?states.start:false
+  start:states?states.start:false,
+  notRouted:states?states.notRouted:true
 }
 function reducer(state, action){
   switch(action.type){

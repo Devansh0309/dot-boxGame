@@ -81,6 +81,7 @@ function NewNavbar() {
   const [open, setOpen] = React.useState(false);
   const audio1=new Audio(ButtonSound1)
   const audio2=new Audio(ButtonSound2)
+  // const state=JSON.parse(localStorage.getItem('states'))
 
   const navigate =useNavigate()
   const handleDrawerOpen = () => {
@@ -119,6 +120,7 @@ function NewNavbar() {
         // setModalShow(true)
     }
     else{
+        dispatch({type:'SetStates',payload:{notRouted:false}})
         navigate("/aboutgame")
     }
   }
@@ -153,15 +155,12 @@ function NewNavbar() {
 <Typography component="div"
  sx={{alignItems:"right",display:"flex",gap:"20px"}}>
   <Typography sx={{ display: { xs: 'none', sm: 'block'  },overflow:'visible' }} className="Navbartxt" variant="h6" noWrap 
-    component="div" title='New Game' onClick={(e)=>{handleNavClicks(e.target.title);audio2.play()}} >New 𝕲ame
+    component="div" title='New Game' onClick={(e)=>{audio2.play();handleNavClicks(e.target.title);}} >New 𝕲ame
   </Typography>
   {state.start?
-    <select onChange={(e)=>{dispatch({type:'SetStates',payload:{Box:[],sel:e.target.value
-      // ,row:e.target.value.split("*").map(Number)[0],col:e.target.value.split("*").map(Number)[1]
-    }})
-     }} value={state.sel} style={{color:'white',border:'none',background:'#4A00E0'}}>
+    <select value={state.sel}  onChange={(e)=>{console.log(e);dispatch({type:'SetStates',payload:{Box:[],sel:e.target.value}})
+     }}style={{color:'white',border:'none',background:'#4A00E0'}}>
       <option value='Select size here'>𝕾elect 𝕾ize here</option>
-      <option value="1*1">1 x 1</option>
       <option value="2*3">2 x 3</option>
       <option value="3*4">3 x 4</option>
       <option value="4*5">4 x 5</option>
