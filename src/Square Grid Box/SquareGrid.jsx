@@ -18,7 +18,7 @@ function SquareGrid() {
       if(state.notRouted || notInitialRender1.current){
         dispatch({type:'SetStates',payload:{row:state.sel.split("*").map(Number)[0],col:state.sel.split("*").map(Number)[1]}})
       }
-      else{
+      else if(!notInitialRender1.current){
         notInitialRender1.current = true
       }
       }
@@ -45,7 +45,7 @@ function SquareGrid() {
         if(state.notRouted || notInitialRender2.current){
           dispatch({type:'SetStates',payload:{horizontalButtons:horizontal,verticalButtons:vertical,squaresColors:squares,Box:arr,numberOfSquares:0,player1Score:0,player2Score:0,player:'1'}})
         }
-        else{
+        else if(!notInitialRender2.current){
           notInitialRender2.current = true
         }
         
@@ -57,7 +57,7 @@ function SquareGrid() {
       (state.player1Score===state.player2Score && state.player1Score>0)?
       's Tied and no one':'2'} won!`:''}})
       }
-      else{
+      else if(!notInitialRender3.current){
         notInitialRender3.current = true
       }
       
@@ -67,7 +67,7 @@ function SquareGrid() {
       if(state.notRouted || notInitialRender4.current){
         dispatch({type:'SetStates',payload:{start:false}})
       }
-      else{
+      else if(!notInitialRender4.current){
         notInitialRender4.current = true
       }
       
@@ -77,8 +77,7 @@ function SquareGrid() {
       if(state.notRouted || notInitialRender5.current){
         dispatch({type:'SetStates',payload:{won:''}})
       }
-      else{
-        // dispatch({type:'SetStates',payload:{notRouted:true}})
+      else if(!notInitialRender5.current){
         notInitialRender5.current = true
       }
   },[state.sel!=='Select size here' && state.won!==''])
