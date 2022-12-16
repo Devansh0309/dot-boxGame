@@ -7,12 +7,13 @@ import MyVerticallyCenteredModal from "./NewNavbar/OptionsDialogBox"
 import NewNavbar from "./NewNavbar/NewNavbar";
 import Auth from "./Auth";
 import Saves from './SavedGames/Saves'
+import VerticallyCenteredModal from './StartDialog/index'
 
 function App() {
   return (
     <div className="App" style={{backgroundColor:'wheat',minHeight:'100vh'}}>
       <Routes>
-      <Route path="/" element={<Contexts> <NewNavbar /><MyVerticallyCenteredModal/><SquareGrid /></Contexts>}/>
+      <Route path="/" element={<Contexts> <NewNavbar /><VerticallyCenteredModal/><MyVerticallyCenteredModal/><SquareGrid /></Contexts>}/>
       <Route path="/aboutgame" element={<Contexts><NewNavbar /><MyVerticallyCenteredModal/><HowToPlay/></Contexts>}/>  
       <Route path="/signIn"  element={<Auth/>}/> 
       <Route path="/savedGames"  element={<Saves/>}/>

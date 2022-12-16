@@ -17,8 +17,11 @@ const initialState={
   player1Score:states?states.player1Score:'0',
   player2Score:states?states.player2Score:'0',
   player:states?states.player:'1',
+  player1Name:states?states.player1Name:'Player 1',
+  player2Name:states?states.player2Name:'Player 2',
   won:states?states.won:'',
   modalShow:states?states.modalShow:false,
+  modalShow2:states?states.modalShow2:true,
   start:states?states.start:false,
   Routed:states?states.Routed:false //Routed means route changed
 }

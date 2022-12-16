@@ -54,15 +54,15 @@ function SquareGrid() {
       
     useEffect(()=>{
       if(!state.Routed && InitialRender3.current){
-        dispatch({type:'SetStates',payload:{sel:'Select size here',won:(state.player1Score>0||state.player2Score>0)?`Player${state.player1Score>state.player2Score?'1':
+        dispatch({type:'SetStates',payload:{sel:'Select size here',won:(state.player1Score>0||state.player2Score>0)?`${state.player1Score>state.player2Score?state.player1Name:
       (state.player1Score===state.player2Score && state.player1Score>0)?
-      's Tied and no one':'2'} won!`:''}})
+      ' Tied and no one':state.player2Name} won!`:''}})
         InitialRender3.current = false
       }
       else if(!state.Routed && !InitialRender3.current){
-        dispatch({type:'SetStates',payload:{sel:'Select size here',won:(state.player1Score>0||state.player2Score>0)?`Player${state.player1Score>state.player2Score?'1':
-      (state.player1Score===state.player2Score && state.player1Score>0)?
-      's Tied and no one':'2'} won!`:''}})
+        dispatch({type:'SetStates',payload:{sel:'Select size here',won:(state.player1Score>0||state.player2Score>0)?`${state.player1Score>state.player2Score?state.player1Name:
+          (state.player1Score===state.player2Score && state.player1Score>0)?
+          ' Tied and no one':state.player2Name} won!`:''}})
       }
       
       },[state.numberOfSquares>0 && state.numberOfSquares===state.row*state.col])
@@ -100,12 +100,12 @@ function SquareGrid() {
     {state.sel!=='Select size here' && state.won===''?
     (<div>
       <div style={{display:'flex',flexWrap:'wrap',justifyContent:'center',alignItems:'center',gap:'50px'}}>
-      <div style={{backgroundColor:'#eb5d5d',borderRadius:'5px'}}>Player1: {state.player1Score}</div> 
-      <div style={{backgroundColor:'#42c442',borderRadius:'5px'}}>Player2: {state.player2Score}</div>
+      <div style={{backgroundColor:'#eb5d5d',borderRadius:'5px'}}>{state.player1Name}: {state.player1Score}</div> 
+      <div style={{backgroundColor:'#42c442',borderRadius:'5px'}}>{state.player2Name}: {state.player2Score}</div>
       </div>
       <br/>
       <div className='chance' style={{backgroundColor:state.player==='1'?'#eb5d5d':'#42c442'}}>
-        Player {state.player} chance
+      {state.player==='1'?state.player1Name:state.player2Name} chance
       </div>
       <br/>
       <div className='gridBox' 

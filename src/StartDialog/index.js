@@ -2,32 +2,33 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useContext } from 'react';
 import { GridContext } from "../Contexts";
-import SettingsIcon from '@mui/icons-material/Settings';
+import GroupIcon from '@mui/icons-material/Group';
+import { Grid, ListItemIcon, TextField,Typography } from '@mui/material';
 
-import {  Grid, ListItemIcon, TextField,Typography } from '@mui/material';
 
-function MyVerticallyCenteredModal() {
+function VerticallyCenteredModal() {
+
     const {state,dispatch} = useContext(GridContext)
-    const onHide=() => dispatch({type:'SetStates',payload:{...state,modalShow:false}})
-    
+    const onHide=() => dispatch({type:'SetStates',payload:{...state,modalShow2:false}})
+
   return (
     <Modal
-      show={state.modalShow} size="lg" aria-labelledby="contained-modal-title-vcenter" style={{
-      zIndex:'1800'
+      show={state.modalShow2} size="lg" aria-labelledby="contained-modal-title-vcenter" style={{
+      zIndex:'4000'
     }}
       centered
       >
       <Modal.Header onClick={onHide} closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
         <ListItemIcon style={{display:'flex',alignItems:'center',gap:'3px',color:'black'}}>
-          <SettingsIcon/>
-          Options
+          <GroupIcon/>
+          Player Names
         </ListItemIcon>
         
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-      <Grid container spacing={2}>
+        <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
                 <Typography variant='h6' title='Enter Name'>Player 1:</Typography>
                 <TextField onChange={e=>dispatch({type:'SetStates',payload:{player1Name:e.target.value}})}/>
@@ -44,4 +45,4 @@ function MyVerticallyCenteredModal() {
     </Modal>
   );
 }
-export default MyVerticallyCenteredModal;
+export default VerticallyCenteredModal;
