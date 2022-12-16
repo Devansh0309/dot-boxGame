@@ -6,7 +6,7 @@ import ButtonSound2 from '../NewNavbar/ButtonSound/button1.mp3'
 function SquareGrid() {
     const {state,dispatch,areAllClicked,setClick} = useContext(GridContext)
     // const state=JSON.parse(localStorage.getItem('states'))
-    const InitialRender1 = useRef(true)
+    const InitialRender1 = useRef(true)//Initial Render 1 for initial render of first useEffect and so on for others useEffect
     const InitialRender2 = useRef(true)
     const InitialRender3 = useRef(true)
     const InitialRender4 = useRef(true)
@@ -14,6 +14,7 @@ function SquareGrid() {
     const audio2=new Audio(ButtonSound2)
 
     useEffect(()=>{
+       //Routed means route changed
       if(!state.Routed && InitialRender1.current){
         dispatch({type:'SetStates',payload:{row:state.sel.split("*").map(Number)[0],col:state.sel.split("*").map(Number)[1]}})
         InitialRender1.current = false
