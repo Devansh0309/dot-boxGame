@@ -20,7 +20,7 @@ const initialState={
   won:states?states.won:'',
   modalShow:states?states.modalShow:false,
   start:states?states.start:false,
-  notRouted:states?states.notRouted:true
+  Routed:states?states.Routed:false
 }
 function reducer(state, action){
   switch(action.type){

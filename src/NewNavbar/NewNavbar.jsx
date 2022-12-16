@@ -120,7 +120,7 @@ function NewNavbar() {
         // setModalShow(true)
     }
     else{
-        dispatch({type:'SetStates',payload:{notRouted:false}})
+        dispatch({type:'SetStates',payload:{Routed:true}})
         navigate("/aboutgame")
     }
   }

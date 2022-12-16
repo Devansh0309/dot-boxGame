@@ -6,26 +6,25 @@ import ButtonSound2 from '../NewNavbar/ButtonSound/button1.mp3'
 function SquareGrid() {
     const {state,dispatch,areAllClicked,setClick} = useContext(GridContext)
     // const state=JSON.parse(localStorage.getItem('states'))
-    const notInitialRender1 = useRef(false)
-    const notInitialRender2 = useRef(false)
-    const notInitialRender3 = useRef(false)
-    const notInitialRender4 = useRef(false)
-    const notInitialRender5 = useRef(false)
+    const InitialRender1 = useRef(true)
+    const InitialRender2 = useRef(true)
+    const InitialRender3 = useRef(true)
+    const InitialRender4 = useRef(true)
+    const InitialRender5 = useRef(true)
     const audio2=new Audio(ButtonSound2)
 
     useEffect(()=>{
-      console.log('runned')
-      if(state.notRouted || notInitialRender1.current){
+      if(!state.Routed && InitialRender1.current){
         dispatch({type:'SetStates',payload:{row:state.sel.split("*").map(Number)[0],col:state.sel.split("*").map(Number)[1]}})
+        InitialRender1.current = false
       }
-      else if(!notInitialRender1.current){
-        notInitialRender1.current = true
+      if(!state.Routed && !InitialRender1.current){
+        dispatch({type:'SetStates',payload:{row:state.sel.split("*").map(Number)[0],col:state.sel.split("*").map(Number)[1]}})
       }
       }
     ,[state.sel])
 
     useEffect(()=>{
-      console.log('runned')
         let arr=[];
         let horizontal=[]
         let vertical=[]
@@ -42,43 +41,56 @@ function SquareGrid() {
         for(let i=0;i<state.row*state.col;i++){
           squares.push({allClicked:false,squarecolor:"grey",active:false})
         }
-        if(state.notRouted || notInitialRender2.current){
+        if(!state.Routed && InitialRender2.current){
           dispatch({type:'SetStates',payload:{horizontalButtons:horizontal,verticalButtons:vertical,squaresColors:squares,Box:arr,numberOfSquares:0,player1Score:0,player2Score:0,player:'1'}})
+          InitialRender2.current = false
         }
-        else if(!notInitialRender2.current){
-          notInitialRender2.current = true
+        else if(!state.Routed && !InitialRender2.current){
+          dispatch({type:'SetStates',payload:{horizontalButtons:horizontal,verticalButtons:vertical,squaresColors:squares,Box:arr,numberOfSquares:0,player1Score:0,player2Score:0,player:'1'}})
         }
         
       },[state.row,state.col])  
       
     useEffect(()=>{
-      if(state.notRouted || notInitialRender3.current){
+      if(!state.Routed && InitialRender3.current){
         dispatch({type:'SetStates',payload:{sel:'Select size here',won:(state.player1Score>0||state.player2Score>0)?`Player${state.player1Score>state.player2Score?'1':
       (state.player1Score===state.player2Score && state.player1Score>0)?
       's Tied and no one':'2'} won!`:''}})
+        InitialRender3.current = false
       }
-      else if(!notInitialRender3.current){
-        notInitialRender3.current = true
+      else if(!state.Routed && !InitialRender3.current){
+        dispatch({type:'SetStates',payload:{sel:'Select size here',won:(state.player1Score>0||state.player2Score>0)?`Player${state.player1Score>state.player2Score?'1':
+      (state.player1Score===state.player2Score && state.player1Score>0)?
+      's Tied and no one':'2'} won!`:''}})
       }
       
       },[state.numberOfSquares>0 && state.numberOfSquares===state.row*state.col])
 
     useEffect(()=>{
-      if(state.notRouted || notInitialRender4.current){
+      if(!state.Routed && InitialRender4.current){
+        dispatch({type:'SetStates',payload:{start:false}})
+        InitialRender4.current = false
+      }
+      else if(!state.Routed && !InitialRender5.current){
         dispatch({type:'SetStates',payload:{start:false}})
       }
-      else if(!notInitialRender4.current){
-        notInitialRender4.current = true
-      }
-      
     },[state.sel==='Select size here' && state.won!==''])
 
     useEffect(()=>{
-      if(state.notRouted || notInitialRender5.current){
+      if(!state.Routed && InitialRender5.current){
         dispatch({type:'SetStates',payload:{won:''}})
+        InitialRender5.current = false
       }
-      else if(!notInitialRender5.current){
-        notInitialRender5.current = true
+      else if(state.Routed && InitialRender5.current){
+        dispatch({type:'SetStates',payload:{Routed:false}})
+        InitialRender1.current = false
+        InitialRender2.current = false
+        InitialRender3.current = false
+        InitialRender4.current = false
+        InitialRender5.current = false
+      }
+      else if(!state.Routed && !InitialRender5.current){
+        dispatch({type:'SetStates',payload:{won:''}})
       }
   },[state.sel!=='Select size here' && state.won!==''])
 
