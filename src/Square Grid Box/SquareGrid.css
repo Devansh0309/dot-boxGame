@@ -53,7 +53,8 @@
     padding: 0;
   }
   .chance{
-    width:150px;
+    min-width:150px;
+    max-width:200px;
     margin:auto;
     padding:5px;
     animation:chance 2000ms infinite linear;

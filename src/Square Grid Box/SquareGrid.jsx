@@ -174,8 +174,9 @@ function SquareGrid() {
              key={item} disabled={state.verticalButtons[item].isClicked} onClick={()=>{setClick(item,'vertical');areAllClicked(item,'vertical');audio2.play()}}></button>
     
             <div className='innerBox' style={{backgroundColor:state.squaresColors[item-Math.floor(item/(state.col+1))].squarecolor,border:state.squaresColors[item-Math.floor(item/(state.col+1))].active?'2px solid black':'none',borderRadius:'5px'}}>
-              {(state.squaresColors[item-Math.floor(item/(state.col+1))].squarecolor==="#eb5d5d"?"Player-1":null)||
-              (state.squaresColors[item-Math.floor(item/(state.col+1))].squarecolor==="#42c442"?"Player-2":null)}</div>
+              {/* {(state.squaresColors[item-Math.floor(item/(state.col+1))].squarecolor==="#eb5d5d"?state.player1Name:null)||
+              (state.squaresColors[item-Math.floor(item/(state.col+1))].squarecolor==="#42c442"?state.player2Name:null)} */}
+              </div>
             
           </div>
           </div>
