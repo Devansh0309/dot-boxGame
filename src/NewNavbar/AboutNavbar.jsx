@@ -76,7 +76,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
-function NewNavbar() {
+function NewNavbar2() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const audio1=new Audio(ButtonSound1)
@@ -96,30 +96,18 @@ function NewNavbar() {
   const {state,dispatch} = useContext(GridContext)
 
   const navItems=[{title:'Home',icon:<HomeIcon/>},
-    {title:'New Game',icon:<SportsEsportsIcon/>}, 
-  {title:'How to Play?',icon:<LightbulbIcon/>},
   {title:'Options',icon:<SettingsIcon/>}, 
   {title:'Exit',icon:<LogoutIcon/>}]
   
   const handleNavClicks=(title)=>{
-    if(title==='New Game' && state.sel!=='Select size here'){
-      dispatch({type:'SetStates',payload:{sel:'Select size here'}})
-    }
-    else if(title==='New Game' && state.sel==='Select size here'){
-      alert('Select size')
-    }
-    else if(title==="Home"){
+    if(title==="Home"){
       navigate("/")
     }
     else if(title==='Exit'){
         window.close()
     }
-    else if(title==='Options'){
-      dispatch({type:'SetStates',payload:{modalShow:true}})
-    }
     else{
-        dispatch({type:'SetStates',payload:{Routed:true}})
-        navigate("/aboutgame")
+      dispatch({type:'SetStates',payload:{modalShow:true}})
     }
   }
 
@@ -143,7 +131,7 @@ function NewNavbar() {
           {/* //dot and box name code here  */}
     
 <div className="cont" onClick={()=>navigate("/")}>
-  <Typography  variant="h4"  noWrap component="div" className="typewriter" sx={{ display: { xs: 'none', sm: 'block'  },overflow:'visible' }}>
+  <Typography  variant="h4"  noWrap component="div" className="typewriter" >
       𝕯𝖔𝖙 & 𝕭𝖔𝖝 𝕲𝖆𝖒𝖊 
   </Typography>
   <img width="50" height='40' src="https://media.giphy.com/avatars/jaaaamesperrett/Dx0SbsMf7gjn.gif"/>
@@ -153,27 +141,7 @@ function NewNavbar() {
 <Typography component="div"
  sx={{alignItems:"right",display:"flex",gap:"20px"}}>
   <Typography sx={{ display: { xs: 'none', sm: 'block'  },overflow:'visible' }} className="Navbartxt" variant="h6" noWrap 
-    component="div" title='New Game' onClick={(e)=>{audio2.play();handleNavClicks(e.target.title);}} >New 𝕲ame
-  </Typography>
-  {state.start?
-    <select value={state.sel}  onChange={(e)=>dispatch({type:'SetStates',payload:{Box:[],sel:e.target.value}})
-     } style={{color:'white',border:'none',background:'#4A00E0'}}>
-      <option value='Select size here'>𝕾elect 𝕾ize here</option>
-      <option value="2*3">2 x 3</option>
-      <option value="3*4">3 x 4</option>
-      <option value="4*5">4 x 5</option>
-      <option value="5*6">6 x 7</option>
-      <option value="7*8">7 x 8</option>
-    </select>:
-    <button type='button'  className='Navbartxt' onClick={()=>dispatch({type:'SetStates',payload:{start:true}})}  style={{overflow:'visible'}}>Start Game</button>}
-    
-    <button type="button" onClick={()=>{navigate("/signIn")}}   className='Navbartxt'>Load Game</button>
-    <button onClick={()=>{navigate("/signIn")}}  className='Navbartxt'>Save Game</button>
-  <Typography sx={{ display: { xs: 'none', sm: 'block' },overflow:'visible' }} 
-    className="Navbartxt" variant="h6" noWrap component="div" 
-    title='How to play?' 
-    onClick={(e)=>{handleNavClicks(e.target.title);audio2.play()}}>
-  <Link to="/aboutgame">About 𝕲ame</Link>
+    component="div" title='New Game' onClick={(e)=>{audio2.play();handleNavClicks('Home');}} >Home
   </Typography>
 </Typography>
         </Toolbar>
@@ -217,7 +185,7 @@ function NewNavbar() {
     </Box>
   );
 }
-export default NewNavbar;
+export default NewNavbar2;
 
 
 

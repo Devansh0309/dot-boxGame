@@ -9,6 +9,7 @@ import {  Grid, ListItemIcon, TextField,Typography } from '@mui/material';
 function MyVerticallyCenteredModal() {
     const {state,dispatch} = useContext(GridContext)
     const onHide=() => dispatch({type:'SetStates',payload:{...state,modalShow:false}})
+    const save=()=> alert('Changes made successfully')
     
   return (
     <Modal
@@ -27,19 +28,21 @@ function MyVerticallyCenteredModal() {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-      <Grid container spacing={2}>
+      <form>
+        <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
                 <Typography variant='h6' title='Enter Name'>Player 1:</Typography>
-                <TextField onChange={e=>dispatch({type:'SetStates',payload:{player1Name:e.target.value}})}/>
+                <TextField value={state.player1Name} onChange={e=>dispatch({type:'SetStates',payload:{player1Name:e.target.value}})}/>
             </Grid>
             <Grid item  xs={12} sm={6}>
                 <Typography variant='h6'  title='Enter Name'>Player 2:</Typography>
-                <TextField onChange={e=>dispatch({type:'SetStates',payload:{player2Name:e.target.value}})}/>
+                <TextField value={state.player2Name}  onChange={e=>dispatch({type:'SetStates',payload:{player2Name:e.target.value}})}/>
             </Grid>
         </Grid>
+        </form>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={onHide}>Close</Button>
+        <Button onClick={save}>Save</Button>
       </Modal.Footer>
     </Modal>
   );
