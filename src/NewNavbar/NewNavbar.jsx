@@ -167,8 +167,8 @@ function NewNavbar() {
     </select>:
     <button type='button'  className='Navbartxt' onClick={()=>dispatch({type:'SetStates',payload:{start:true}})}  style={{overflow:'visible'}}>Start Game</button>}
     
-    <button type="button" onClick={()=>{navigate("/signIn")}}   className='Navbartxt'>Load Game</button>
-    <button onClick={()=>{navigate("/signIn")}}  className='Navbartxt'>Save Game</button>
+    {/* <button type="button" onClick={()=>{navigate("/signIn")}}   className='Navbartxt'>Load Game</button>
+    <button onClick={()=>{navigate("/signIn")}}  className='Navbartxt'>Save Game</button> */}
   <Typography sx={{ display: { xs: 'none', sm: 'block' },overflow:'visible' }} 
     className="Navbartxt" variant="h6" noWrap component="div" 
     title='How to play?' 

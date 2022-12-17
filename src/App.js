@@ -12,12 +12,12 @@ import NewNavbar2 from "./NewNavbar/AboutNavbar";
 
 function App() {
   return (
-    <div className="App" style={{backgroundColor:'wheat',minHeight:'100vh'}}>
+    <div className="App" style={{backgroundColor:'wheat',minHeight:'100vh',minWidth:'100vw'}}>
       <Routes>
       <Route path="/" element={<Contexts> <NewNavbar /><VerticallyCenteredModal/><MyVerticallyCenteredModal/><SquareGrid /></Contexts>}/>
       <Route path="/aboutgame" element={<Contexts><NewNavbar2 /><MyVerticallyCenteredModal/><HowToPlay/></Contexts>}/>  
-      <Route path="/signIn"  element={<Auth/>}/> 
-      <Route path="/savedGames"  element={<Saves/>}/>
+      {/* <Route path="/signIn"  element={<Auth/>}/> 
+      <Route path="/savedGames"  element={<Saves/>}/> */}
       </Routes>
     </div>
   );

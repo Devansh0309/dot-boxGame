@@ -5,9 +5,6 @@ import { Heading ,Box,Text,
  } from '@chakra-ui/react'
 import "./HowToPlay.css"
 
-
-
-
 const HowToPlay = () => {
   return (
     <Box  >
@@ -24,8 +21,6 @@ const HowToPlay = () => {
   </OrderedList>
   </Box>
 </Box>
-
-
 
 <Box className='aboutdotandbox'>
 <Heading as='h1' size='4xl' color='red'>𝐀𝐛𝐨𝐮𝐭 BARS AND SQUARES</Heading>
@@ -51,28 +46,13 @@ const HowToPlay = () => {
     
 
      <Text>BARS AND SQUARES ʜᴀꜱ ᴄʟᴀꜱꜱɪᴄᴀʟʟʏ ʙᴇᴇɴ ᴘʟᴀʏᴇᴅ ᴏɴ ᴘᴀᴘᴇʀ ᴜꜱɪɴɢ ᴘᴇɴᴄɪʟꜱ. ɪᴛ ᴡᴀꜱ ꜰɪʀꜱᴛ ᴅᴇꜱᴄʀɪʙᴇᴅ ʙʏ ᴀ ꜰʀᴇɴᴄʜ ᴍᴀᴛʜᴇᴍᴀᴛɪᴄɪᴀɴ, Éᴅᴏᴜᴀʀᴅ ʟᴜᴄᴀꜱ, ɪɴ ᴛʜᴇ 19ᴛʜ ᴄᴇɴᴛᴜʀʏ. ᴍʀ. ʟᴜᴄᴀꜱ ᴄᴀʟʟᴇᴅ ɪᴛ ʟᴀ ᴘɪᴘᴏᴘɪᴘᴇᴛᴛᴇ.</Text>
-
-
-
      <Heading>𝕯𝙊𝙏𝙎 𝕲𝘼𝙈𝙀, 𝕾𝙌𝙐𝘼𝙍𝙀𝙎, 𝙤𝙧 𝕻𝙄𝙂𝙎 𝕴𝙉 𝘼 𝙋𝙀𝙉</Heading>
     
-
      <Text>ᴅᴏᴛꜱ ᴀɴᴅ ʙᴏxᴇꜱ ʜᴀꜱ ʙᴇᴇɴ ᴋɴᴏᴡɴ ʙʏ ᴍᴀɴʏ ᴏᴛʜᴇʀ ɴᴀᴍᴇꜱ ɪɴᴄʟᴜᴅɪɴɢ ᴛʜᴇ ᴅᴏᴛꜱ ɢᴀᴍᴇ, ʙᴏxᴇꜱ, ꜱQᴜᴀʀᴇꜱ, ᴅᴏᴛ ᴛᴏ ᴅᴏᴛ ɢʀɪᴅ, ʟᴀ ᴘɪᴘᴏᴘɪᴘᴇᴛᴛᴇ, ᴀɴᴅ ᴏᴜʀ ꜰᴀᴠᴏʀɪᴛᴇ- ᴘɪɢꜱ ɪɴ ᴀ ᴘᴇɴ!</Text>
-  
-
-
-
-  
   
   </Box>
 </Box>
-
-
 </Box>
-
-
-
-
 </Box>
   )
 }
