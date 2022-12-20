@@ -124,7 +124,7 @@ function NewNavbar() {
   }
 
   return(
-    <Box sx={{ display: 'flex',}} >
+    <Box sx={{ display: 'flex',minWidth:'100vw'}} >
       <CssBaseline />
       <AppBar position="fixed" sx={{backgroundColor:"#4A00E0"}} open={open}>
         <Toolbar>
@@ -158,7 +158,7 @@ function NewNavbar() {
   {state.start?
     <select value={state.sel}  onChange={(e)=>dispatch({type:'SetStates',payload:{Box:[],sel:e.target.value}})
      } style={{color:'white',border:'none',background:'#4A00E0'}}>
-      <option value='Select size here'>𝕾elect 𝕾ize here</option>
+      <option value='Select size here'>𝕾elect 𝕾ize</option>
       <option value="2*3">2 x 3</option>
       <option value="3*4">3 x 4</option>
       <option value="4*5">4 x 5</option>

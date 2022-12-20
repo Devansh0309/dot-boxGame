@@ -99,9 +99,9 @@ function SquareGrid() {
     <div className="Appe">
     {state.sel!=='Select size here' && state.won===''?
     (<div>
-      <div style={{display:'flex',flexWrap:'wrap',justifyContent:'center',alignItems:'center',gap:'50px'}}>
-      <div style={{backgroundColor:'#eb5d5d',borderRadius:'5px'}}>{state.player1Name}: {state.player1Score}</div> 
-      <div style={{backgroundColor:'#42c442',borderRadius:'5px'}}>{state.player2Name}: {state.player2Score}</div>
+      <div style={{display:'flex',flexWrap:'wrap',justifyContent:'center',alignItems:'center',gap:'3.125rem'}}>
+      <div style={{backgroundColor:'#eb5d5d',borderRadius:'0.3125rem'}}>{state.player1Name}: {state.player1Score}</div> 
+      <div style={{backgroundColor:'#42c442',borderRadius:'0.3125rem'}}>{state.player2Name}: {state.player2Score}</div>
       </div>
       <br/>
       <div className='chance' style={{backgroundColor:state.player==='1'?'#eb5d5d':'#42c442'}}>
@@ -109,10 +109,17 @@ function SquareGrid() {
       </div>
       <br/>
       <div className='gridBox' 
-      style={{height: `${80*(state.row+1)}px`,
-        width: `${80*(state.col+1)}px`,display:"grid",
-      gridTemplateColumns:`repeat(${state.col+1},1fr)`,
-      gridTemplateRows:`repeat(${state.row+1},1fr)`}}
+      style={{
+        height: 'var(--height)',
+        width: 'var(--width)',
+        gridTemplateColumns:`repeat(${state.col+1},calc(var(--width)/${state.col+1}))`,
+      gridTemplateRows:`repeat(${state.row+1},calc(var(--width)/${state.col+1}))`,
+        display:"grid",
+        // height:`calc(${state.row+1}*var(--height))`,
+        // width:`calc(${state.col+1}*var(--width))`,
+      // gridTemplateColumns:`repeat(${state.col+1},1fr)`,
+      // gridTemplateRows:`repeat(${state.row+1},1fr)`
+    }}
       >
       {
       (state.Box).map((item)=>
@@ -124,7 +131,7 @@ function SquareGrid() {
           style={{
             backgroundColor:
             `${state.verticalButtons[item].btncolor}`,
-          border:`${state.verticalButtons[item].active?'2px solid black':'none'}`,borderRadius:'15px'}}
+          border:`${state.verticalButtons[item].active?'2px solid black':'none'}`,borderRadius:'0.9375rem'}}
     
           key={item} disabled={state.verticalButtons[item].isClicked} onClick={()=>{setClick(item,'vertical');areAllClicked(item,'vertical');audio2.play()}}></button>
         </div>
@@ -138,7 +145,7 @@ function SquareGrid() {
               style={{
                 backgroundColor:
                 `${state.horizontalButtons[item-Math.floor(item/(state.col+1))].btncolor}`,
-                border:`${state.horizontalButtons[item-Math.floor(item/(state.col+1))].active?'2px solid black':'none'}`,borderRadius:'15px'}}
+                border:`${state.horizontalButtons[item-Math.floor(item/(state.col+1))].active?'2px solid black':'none'}`,borderRadius:'0.9375rem'}}
     
                key={item-Math.floor(item/(state.col+1))}  disabled={state.horizontalButtons[item-Math.floor(item/(state.col+1))].isClicked} onClick={()=>{setClick(item-Math.floor(item/(state.col+1)),'horizontal');areAllClicked(item-Math.floor(item/(state.col+1)),'horizontal');audio2.play()}}></button>
             </div>
@@ -155,7 +162,7 @@ function SquareGrid() {
             style={{
               backgroundColor:
               `${state.horizontalButtons[item-Math.floor(item/(state.col+1))].btncolor}`,
-              border:`${state.horizontalButtons[item-Math.floor(item/(state.col+1))].active?'2px solid black':'none'}`,borderRadius:'15px'
+              border:`${state.horizontalButtons[item-Math.floor(item/(state.col+1))].active?'2px solid black':'none'}`,borderRadius:'0.9375rem'
             }}
     
              key={item-Math.floor(item/(state.col+1))}
@@ -173,7 +180,7 @@ function SquareGrid() {
     
              key={item} disabled={state.verticalButtons[item].isClicked} onClick={()=>{setClick(item,'vertical');areAllClicked(item,'vertical');audio2.play()}}></button>
     
-            <div className='innerBox' style={{backgroundColor:state.squaresColors[item-Math.floor(item/(state.col+1))].squarecolor,border:state.squaresColors[item-Math.floor(item/(state.col+1))].active?'2px solid black':'none',borderRadius:'5px'}}>
+            <div className='innerBox' style={{backgroundColor:state.squaresColors[item-Math.floor(item/(state.col+1))].squarecolor,border:state.squaresColors[item-Math.floor(item/(state.col+1))].active?'2px solid black':'none',borderRadius:'0.3125rem'}}>
               {/* {(state.squaresColors[item-Math.floor(item/(state.col+1))].squarecolor==="#eb5d5d"?state.player1Name:null)||
               (state.squaresColors[item-Math.floor(item/(state.col+1))].squarecolor==="#42c442"?state.player2Name:null)} */}
               </div>
