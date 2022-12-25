@@ -106,7 +106,7 @@ function NewNavbar() {
       dispatch({type:'SetStates',payload:{sel:'Select size here'}})
     }
     else if(title==='New Game' && state.sel==='Select size here'){
-      alert('Select size')
+      alert('Select size or Start Game')
     }
     else if(title==="Home"){
       navigate("/")
