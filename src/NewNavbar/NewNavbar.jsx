@@ -28,8 +28,6 @@ import HomeIcon from '@mui/icons-material/Home';
 import ButtonSound1 from "./ButtonSound/buttons.mp3"
 import ButtonSound2 from "./ButtonSound/button1.mp3"
 
-
-
 const drawerWidth = 190;
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
