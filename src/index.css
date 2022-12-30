@@ -8,12 +8,7 @@ body {
   min-height:'100vh';
   min-width: '100vw';
 }
-/* @media screen  and (max-width:280px){
-  :root{
-    --height:653px;
-    --width:280px;
-  }
-} */
+
 
 
 
