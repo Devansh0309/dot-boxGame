@@ -9,6 +9,8 @@
   /* min-width: 280px; */
   /* min-width: 280px; */
   /* display:grid; */
+  --height:600px;
+  --width:500px;
   margin: 0 auto;
   /* padding:5px; */
   padding: 0.3125rem;
@@ -132,9 +134,27 @@
       border-radius: .3125rem;
     }
   }
-  @media screen and (max-width:280px){
+  @media all and (min-width:80px) and (max-width:450px){ 
+    /* Mobile */
     .gridBox{
-      
+      --height:600px;
+      --width:280px;
+    }
+  }
+  
+  @media all and (min-width:451px) and (max-width:600px){
+    /* Tablet */
+    .gridBox{
+      --height:653px;
+      --width:450px;
+    }
+  }
+  
+  @media all and (min-width:601px) and (max-width:850px){
+    /* Tablet */
+    .gridBox{
+      --height:653px;
+      --width:600px;
     }
   }
   /* .App{
