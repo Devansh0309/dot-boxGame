@@ -9,7 +9,6 @@ import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -18,12 +17,10 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
-import LightbulbIcon from '@mui/icons-material/Lightbulb';
 import "./NewNavbar.css"
-import {Link, useNavigate} from "react-router-dom"
+import {useNavigate} from "react-router-dom"
 import HomeIcon from '@mui/icons-material/Home';
 import ButtonSound1 from "./ButtonSound/buttons.mp3"
 import ButtonSound2 from "./ButtonSound/button1.mp3"
@@ -112,7 +109,7 @@ function NewNavbar2() {
   }
 
   return(
-    <Box sx={{ display: 'flex',}} >
+    <Box sx={{ display: 'flex',minWidth:'100vw',height:'65px'}} >
       <CssBaseline />
       <AppBar position="fixed" sx={{backgroundColor:"#4A00E0"}} open={open}>
         <Toolbar>

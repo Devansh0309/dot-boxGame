@@ -2,6 +2,7 @@ import React,{useContext,useEffect,useRef} from 'react'
 import './SquareGrid.css'
 import { GridContext } from '../Contexts';
 import ButtonSound2 from '../NewNavbar/ButtonSound/button1.mp3'
+import background from '../background.jpg'
 
 function SquareGrid() {
     const {state,dispatch,areAllClicked,setClick} = useContext(GridContext)
@@ -96,18 +97,18 @@ function SquareGrid() {
   },[state.sel!=='Select size here' && state.won!==''])
 
   return (
-    <div className="Appe">
+    <div className="Appe" style={{position:'relative',minHeight:'100vh'}}>
+      <img src={background} style={{width:'100vw',height:'100%',position:'absolute',zIndex:'-10',top:'-13px',bottom:'0',left:'0',right:'0'}}/>
     {state.sel!=='Select size here' && state.won===''?
     (<div>
-      <div style={{display:'flex',flexWrap:'wrap',justifyContent:'center',alignItems:'center',gap:'3.125rem'}}>
-      <div style={{backgroundColor:'#eb5d5d',borderRadius:'0.3125rem'}}>{state.player1Name}: {state.player1Score}</div> 
-      <div style={{backgroundColor:'#42c442',borderRadius:'0.3125rem'}}>{state.player2Name}: {state.player2Score}</div>
+      <div style={{display:'flex',flexWrap:'wrap',justifyContent:'center',alignItems:'center',gap:'3.125rem',marginTop: '0.6rem',
+    padding: '0.5rem'}}>
+        <div style={{backgroundColor:'#eb5d5d',borderRadius:'0.3125rem',padding:'0.3125rem'}}>{state.player1Name}: {state.player1Score}</div>
+        <div style={{backgroundColor:'#42c442',borderRadius:'0.3125rem',padding:'0.3125rem'}}>{state.player2Name}: {state.player2Score}</div>
       </div>
-      <br/>
-      <div className='chance' style={{backgroundColor:state.player==='1'?'#eb5d5d':'#42c442'}}>
+      <div className='chance' style={{backgroundColor:state.player==='1'?'#eb5d5d':'#42c442',padding:'0.3125rem'}}>
       {state.player==='1'?state.player1Name:state.player2Name} chance
       </div>
-      <br/>
       <div className='gridBox' 
       style={{
         height: 'var(--height)',
@@ -196,7 +197,7 @@ function SquareGrid() {
     <h3 className='result'>{state.won}</h3>
      :state.sel!=='Select size here' && state.won!==''?''
      :<button type='button' onClick={()=>dispatch({type:'SetStates',payload:{sel:'2*3'}})} style={{backgroundColor: 'inherit',
-     fontSize: 'large',color: '#354dc1'}} className='start-default'>Start 2 x 3 game</button>
+     fontSize: 'large',color: '#354dc1',marginTop:'0.625rem'}} className='start-default'>Start 2 x 3 game</button>
     }
        {/* Idea for rendering square color on click of all neighbouring buttons: Create react components for four buttons surrounding innerbox or square which is to be colored and pass 'isClicked' prop to Button component i.e. <Button isClicked={}/> and from Button Component pass result of isClicked to a function in App.js whose result of allButtons clicked is passed as a prop to innerBox React component and then if allButtons clicked is true then change color of innerBox from innerBox react component there itself  */}
       </div>

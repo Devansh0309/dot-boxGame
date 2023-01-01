@@ -9,7 +9,6 @@ import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -27,6 +26,7 @@ import {Link, useNavigate} from "react-router-dom"
 import HomeIcon from '@mui/icons-material/Home';
 import ButtonSound1 from "./ButtonSound/buttons.mp3"
 import ButtonSound2 from "./ButtonSound/button1.mp3"
+import background from '../background.jpg'
 
 const drawerWidth = 190;
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -79,7 +79,6 @@ function NewNavbar() {
   const [open, setOpen] = React.useState(false);
   const audio1=new Audio(ButtonSound1)
   const audio2=new Audio(ButtonSound2)
-  // const state=JSON.parse(localStorage.getItem('states'))
 
   const navigate =useNavigate()
   const handleDrawerOpen = () => {
@@ -90,7 +89,6 @@ function NewNavbar() {
     setOpen(false);
   };
   
-  // const {sel,setSelect,setBox,modalShow,setModalShow,start,setStart}=useContext(GridContext)
   const {state,dispatch} = useContext(GridContext)
 
   const navItems=[{title:'Home',icon:<HomeIcon/>},
@@ -122,9 +120,10 @@ function NewNavbar() {
   }
 
   return(
-    <Box sx={{ display: 'flex',minWidth:'100vw'}} >
+    <Box sx={{ display: 'flex',minWidth:'100vw',height:'65px'}} >
       <CssBaseline />
       <AppBar position="fixed" sx={{backgroundColor:"#4A00E0"}} open={open}>
+      {/* <img src={background} style={{width:'100%',height:'100%',position:'absolute',zIndex:'-10',top:'0',bottom:'0',left:'0',right:'0'}}/> */}
         <Toolbar>
           <IconButton
             color="inherit"
@@ -151,19 +150,21 @@ function NewNavbar() {
 <Typography component="div"
  sx={{alignItems:"right",display:"flex",gap:"20px"}}>
   <Typography sx={{ display: { xs: 'none', sm: 'block'  },overflow:'visible' }} className="Navbartxt" variant="h6" noWrap 
-    component="div" title='New Game' onClick={(e)=>{audio2.play();handleNavClicks(e.target.title);}} >New 𝕲ame
+    component="div" title='New Game' onClick={(e)=>{audio2.play();handleNavClicks(e.target.title);}} >New Game
   </Typography>
   {state.start?
     <select value={state.sel}  onChange={(e)=>dispatch({type:'SetStates',payload:{Box:[],sel:e.target.value}})
      } style={{color:'white',border:'none',background:'#4A00E0'}}>
-      <option value='Select size here'>𝕾elect 𝕾ize</option>
+      <option value='Select size here'>Select Size</option>
       <option value="2*3">2 x 3</option>
       <option value="3*4">3 x 4</option>
       <option value="4*5">4 x 5</option>
       <option value="5*6">6 x 7</option>
       <option value="7*8">7 x 8</option>
     </select>:
-    <button type='button'  className='Navbartxt' onClick={()=>dispatch({type:'SetStates',payload:{start:true}})}  style={{overflow:'visible'}}>Start Game</button>}
+    <Typography sx={{ display: { xs: 'none', sm: 'block'  },overflow:'visible' }} className="Navbartxt" variant="h6" noWrap 
+    component="div" title='Start Game' onClick={()=>dispatch({type:'SetStates',payload:{start:true}})} >Start Game
+  </Typography>}
     
     {/* <button type="button" onClick={()=>{navigate("/signIn")}}   className='Navbartxt'>Load Game</button>
     <button onClick={()=>{navigate("/signIn")}}  className='Navbartxt'>Save Game</button> */}
@@ -171,7 +172,7 @@ function NewNavbar() {
     className="Navbartxt" variant="h6" noWrap component="div" 
     title='How to play?' 
     onClick={(e)=>{handleNavClicks(e.target.title);audio2.play()}}>
-  <Link to="/aboutgame">About 𝕲ame</Link>
+  <Link to="/aboutgame">About Game</Link>
   </Typography>
 </Typography>
         </Toolbar>
@@ -183,14 +184,14 @@ function NewNavbar() {
           color:'white',
           '& .MuiDrawer-paper': {
             width: drawerWidth,
-            boxSizing: 'border-box',
-            backgroundColor:'#4A00E0'
+            boxSizing: 'border-box'
           }
         }}
         variant="persistent"
         anchor="left"
         open={open}
       >
+        <img src={background} style={{width:'100%',height:'100%',position:'absolute',zIndex:'-10',top:'0',bottom:'0',left:'0',right:'0',opacity:'0.85'}}/>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon sx={{color:'white'}}/> : <ChevronRightIcon sx={{color:'white'}}/>}

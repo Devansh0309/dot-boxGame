@@ -4,10 +4,12 @@ import { Heading ,Box,Text,
   OrderedList,
  } from '@chakra-ui/react'
 import "./HowToPlay.css"
+import background from '../background.jpg'
 
 const HowToPlay = () => {
   return (
-    <Box  >
+    <Box sx={{minHeight:'100vh',position:'relative'}} >
+      <img src={background} style={{width:'100vw',height:'100%',position:'absolute',zIndex:'-10',top:'-15px',bottom:'0',left:'0',right:'0'}}/>
       <Box className='howtoplay'>
         <Heading as='h1' size='4xl' color='red'>𝐇𝐨𝐰 𝐓𝐨 𝐏𝐥𝐚𝐲 ? </Heading>
           
