@@ -162,9 +162,8 @@ function NewNavbar() {
       <option value="5*6">6 x 7</option>
       <option value="7*8">7 x 8</option>
     </select>:
-    <Typography sx={{ display: { xs: 'none', sm: 'block'  },overflow:'visible' }} className="Navbartxt" variant="h6" noWrap 
-    component="div" title='Start Game' onClick={()=>dispatch({type:'SetStates',payload:{start:true}})} >Start Game
-  </Typography>}
+    <Typography sx={{ display: { xs: 'block', sm: 'block'  },overflow:'visible' }} className="Navbartxt" variant="h6" noWrap 
+    component="div" title='Start Game' onClick={()=>dispatch({type:'SetStates',payload:{start:true}})} >Start Game</Typography>}
     
     {/* <button type="button" onClick={()=>{navigate("/signIn")}}   className='Navbartxt'>Load Game</button>
     <button onClick={()=>{navigate("/signIn")}}  className='Navbartxt'>Save Game</button> */}
