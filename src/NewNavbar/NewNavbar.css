@@ -48,6 +48,17 @@
       animation: cursor 0.5s step-start infinite, 
       text 5s steps(18) alternate infinite;
 }
+
+/* @media all and (min-width:0px) and (max-width:820px) {
+  .typewriter{
+    display:'none'
+  }
+}
+@media all and (min-width:821px){
+  .typewriter{
+    display:'block'
+  }
+} */
   
   @keyframes cursor {
       0%, 40% { 

@@ -6,7 +6,6 @@ import background from '../background.jpg'
 
 function SquareGrid() {
     const {state,dispatch,areAllClicked,setClick} = useContext(GridContext)
-    // const state=JSON.parse(localStorage.getItem('states'))
     const InitialRender1 = useRef(true)//Initial Render 1 for initial render of first useEffect and so on for others useEffect
     const InitialRender2 = useRef(true)
     const InitialRender3 = useRef(true)
@@ -34,15 +33,19 @@ function SquareGrid() {
         for(let i=0;i<=state.row*state.col+state.row+state.col;i++){
           arr.push(i)
         }
+
         for(let i=0;i<state.row*state.col+state.col;i++){
           horizontal.push({key:i,type:'horizontal',isClicked:false,btncolor:"lightgrey",active:false})
         }
+
         for(let i=0;i<state.row*state.col+state.row;i++){
           vertical.push({key:i,type:'vertical',isClicked:false,btncolor:"lightgrey",active:false})
         }
+
         for(let i=0;i<state.row*state.col;i++){
           squares.push({allClicked:false,squarecolor:"grey",active:false})
         }
+        
         if(!state.Routed && InitialRender2.current){
           dispatch({type:'SetStates',payload:{horizontalButtons:horizontal,verticalButtons:vertical,squaresColors:squares,Box:arr,numberOfSquares:0,player1Score:0,player2Score:0,player:'1'}})
           InitialRender2.current = false
@@ -76,7 +79,7 @@ function SquareGrid() {
       else if(!state.Routed && !InitialRender5.current){
         dispatch({type:'SetStates',payload:{start:false}})
       }
-    },[state.sel==='Select size here' && state.won!==''])
+    },[state.sel==='Select size here' && state.won])
 
     useEffect(()=>{
       if(!state.Routed && InitialRender5.current){
@@ -94,12 +97,12 @@ function SquareGrid() {
       else if(!state.Routed && !InitialRender5.current){
         dispatch({type:'SetStates',payload:{won:''}})
       }
-  },[state.sel!=='Select size here' && state.won!==''])
+  },[state.sel!=='Select size here' && state.won])
 
   return (
     <div className="Appe" style={{position:'relative',minHeight:'100vh'}}>
       <img src={background} style={{width:'100vw',height:'100%',position:'absolute',zIndex:'-10',top:'-13px',bottom:'0',left:'0',right:'0'}}/>
-    {state.sel!=='Select size here' && state.won===''?
+    {state.sel!=='Select size here' && !state.won?
     (<div>
       <div style={{display:'flex',flexWrap:'wrap',justifyContent:'center',alignItems:'center',gap:'3.125rem',marginTop: '0.6rem',
     padding: '0.5rem'}}>
@@ -155,47 +158,42 @@ function SquareGrid() {
             </div>
         :
           <div key={item} className='onebox'>
-          <div  style={{display:"flex",height:"20%"}}>
-            <div style={{backgroundColor:'black',width:'20%'}}>
-            </div>
-            <button className='upperbtn' 
-    
-            style={{
+            <div  style={{display:"flex",height:"20%"}}>
+              <div style={{backgroundColor:'black',width:'20%'}}>
+              </div>
+              <button className='upperbtn' style={{
               backgroundColor:
-              `${state.horizontalButtons[item-Math.floor(item/(state.col+1))].btncolor}`,
-              border:`${state.horizontalButtons[item-Math.floor(item/(state.col+1))].active?'2px solid black':'none'}`,borderRadius:'0.9375rem'
-            }}
-    
-             key={item-Math.floor(item/(state.col+1))}
-             disabled={state.horizontalButtons[item-Math.floor(item/(state.col+1))].isClicked} 
-             onClick={()=>{setClick(item-Math.floor(item/(state.col+1)),'horizontal');
-             areAllClicked(item-Math.floor(item/(state.col+1)),'horizontal');audio2.play()}}></button>
-          </div>
+              `${state.horizontalButtons[item-Math.floor(item/(state.col+1))].btncolor}`,border:`${state.horizontalButtons[item-Math.floor(item/(state.col+1))].active?'2px solid black':'none'}`,borderRadius:'0.9375rem'}}
+              key={item-Math.floor(item/(state.col+1))}
+              disabled={state.horizontalButtons[item-Math.floor(item/(state.col+1))].isClicked} 
+              onClick={()=>{setClick(item-Math.floor(item/(state.col+1)),'horizontal');
+              areAllClicked(item-Math.floor(item/(state.col+1)),'horizontal');audio2.play()}}>
+              </button>
+            </div>
           
-          <div  style={{display:"flex",height:"80%",width:'100%'}}>
+            <div  style={{display:"flex",height:"80%",width:'100%'}}>
+              <button className='sidebtn'
+               style={{
+               backgroundColor:`${state.verticalButtons[item].btncolor}`,
+               border:`${state.verticalButtons[item].active?'2px solid black':'none'}`,borderRadius:'15px'}}
+               key={item} disabled={state.verticalButtons[item].isClicked} onClick={()=>{setClick(item,'vertical');areAllClicked(item,'vertical');audio2.play()}}>
+              </button>
     
-            <button className='sidebtn'
-             style={{
-              backgroundColor:`${state.verticalButtons[item].btncolor}`,
-              border:`${state.verticalButtons[item].active?'2px solid black':'none'}`,borderRadius:'15px'}}
-    
-             key={item} disabled={state.verticalButtons[item].isClicked} onClick={()=>{setClick(item,'vertical');areAllClicked(item,'vertical');audio2.play()}}></button>
-    
-            <div className='innerBox' style={{backgroundColor:state.squaresColors[item-Math.floor(item/(state.col+1))].squarecolor,border:state.squaresColors[item-Math.floor(item/(state.col+1))].active?'2px solid black':'none',borderRadius:'0.3125rem'}}>
+              <div className='innerBox' style={{backgroundColor:state.squaresColors[item-Math.floor(item/(state.col+1))].squarecolor,border:state.squaresColors[item-Math.floor(item/(state.col+1))].active?'2px solid black':'none',borderRadius:'0.3125rem'}}>
               {/* {(state.squaresColors[item-Math.floor(item/(state.col+1))].squarecolor==="#eb5d5d"?state.player1Name:null)||
               (state.squaresColors[item-Math.floor(item/(state.col+1))].squarecolor==="#42c442"?state.player2Name:null)} */}
               </div>
             
-          </div>
+            </div>
           </div>
       )
       }
       </div>
       </div>
       )
-    :state.sel==='Select size here' && state.won!==''?
-    <h3 className='result'>{state.won}</h3>
-     :state.sel!=='Select size here' && state.won!==''?''
+    :state.sel==='Select size here' && state.won?
+    <div><br/><h3 className='result'>{state.won}</h3></div>
+     :state.sel!=='Select size here' && state.won?''
      :<button type='button' onClick={()=>dispatch({type:'SetStates',payload:{sel:'2*3'}})} style={{backgroundColor: 'inherit',
      fontSize: 'large',color: '#354dc1',marginTop:'0.625rem'}} className='start-default'>Start 2 x 3 game</button>
     }

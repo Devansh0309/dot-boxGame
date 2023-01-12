@@ -84,7 +84,8 @@
   .start-default{
     /* padding:5px; */
     padding: .3125rem;
-    animation:start 2000ms infinite linear;
+    animation:start 2s linear 1000ms infinite ;
+    transition: font-size 100ms;
   }
   @keyframes  start{
     0%{
@@ -108,7 +109,7 @@
     padding: .3125rem;
     /* width:200px; */
     width: 12.5rem;
-    animation:result 1500ms infinite linear;
+    animation:result 1800ms infinite linear;
   }
   @keyframes  result{
     0%{

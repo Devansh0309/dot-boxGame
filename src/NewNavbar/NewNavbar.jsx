@@ -118,12 +118,10 @@ function NewNavbar() {
         navigate("/aboutgame")
     }
   }
-
   return(
     <Box sx={{ display: 'flex',minWidth:'100vw',height:'65px'}} >
       <CssBaseline />
       <AppBar position="fixed" sx={{backgroundColor:"#4A00E0"}} open={open}>
-      {/* <img src={background} style={{width:'100%',height:'100%',position:'absolute',zIndex:'-10',top:'0',bottom:'0',left:'0',right:'0'}}/> */}
         <Toolbar>
           <IconButton
             color="inherit"
@@ -140,8 +138,8 @@ function NewNavbar() {
           {/* //dot and box name code here  */}
     
 <div className="cont" onClick={()=>navigate("/")}>
-  <Typography  variant="h4"  noWrap component="div" className="typewriter" sx={{ display: { xs: 'none', sm: 'block'  },overflow:'visible' }}>
-      𝕯𝖔𝖙 & 𝕭𝖔𝖝 𝕲𝖆𝖒𝖊 
+  <Typography  variant="h4"  noWrap component="div" className="typewriter" sx={{ display: { xs: 'none',sm:'none',md:'block'},overflow:'visible' }}>
+      𝕯𝖔𝖙 & 𝕭𝖔𝖝 𝕲𝖆𝖒𝖊
   </Typography>
   <img width="50" height='40' src="https://media.giphy.com/avatars/jaaaamesperrett/Dx0SbsMf7gjn.gif"/>
 </div>

@@ -1,4 +1,4 @@
-import React,{useState,useReducer} from 'react'
+import React,{useReducer} from 'react'
 import SquareSound from './NewNavbar/ButtonSound/shortSuccess.mp3'
 export const GridContext=React.createContext()
 
@@ -141,7 +141,7 @@ function Contexts(props) {
               }
               else{
                 temp[id].squarecolor='#42c442'
-                dispatch({type:'SetStates',payload:{player1Score:state.player1Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
+                dispatch({type:'SetStates',payload:{player2Score:state.player2Score+1,squaresColors:temp,numberOfSquares:state.numberOfSquares+1}})
               }
               audio3.play()
             }
