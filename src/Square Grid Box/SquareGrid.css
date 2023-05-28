@@ -3,12 +3,42 @@
   text-align: center;
   margin: auto;
   justify-content: center;
-  height:'auto';
+  position:relative;
+  height:100vh;
+}
+.main-section{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 10px auto;
+  overflow-y: hidden;
+  height:100%;
+}
+.player-scores{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-items:center;
+  gap:3.125rem;
+  margin-top: 0.6rem;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.player-1-score{
+  background-color:#eb5d5d;border-radius:0.3125rem;
+  padding:0.3125rem;
+}
+.player-2-score{
+  background-color:#42c442;border-radius:0.3125rem;
+  padding:0.3125rem;
 }
 .gridBox{
-  --height:600px;
+  display:grid;
+  --height:450px;
   --width:500px;
-  margin: 0 auto;
+  justify-content:flex-start;
+  margin: auto;
   padding: 0.3125rem;
   gap: 0;
   position:relative;
@@ -21,38 +51,47 @@
     margin: 0; 
     padding: 0;
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     /* aspect-ratio: 1; */
   }
   .twobox{
+    display:flex;
     margin: 0; 
     padding: 0;
   }
-  
   .innerBox{
     width: 80%;
-    height:100%;
+    height:80%;
     margin: 0; 
     padding: 0;
+    border-radius:0.3125rem;
   }
-  
+  .dot{
+    width:20%;
+    height:20%;
+    background-color:black;
+  }
   .upperbtn{
-    height:100%;
+    height:20%;
     width: 80%;
+    border-radius:0.9375rem;
   }
   .lowerbtn{
     height:20%;
     width: 80%;
+    border-radius:0.9375rem;
   }
   
   .sidebtn{ 
     width: 20%;
-    height: 100%;
+    height: 80%;
+    border-radius:15px;
   }
   
   .sidelastbtn{
     width: 20%;
     height:80% ;
+    border-radius:0.9375rem;
   }
   button{
     border:0;
@@ -63,7 +102,7 @@
     min-width:9.375rem;
     /* max-width:200px; */
     max-width:12.5rem;
-    margin:auto;
+    /* margin:auto; */
     padding:0.3125rem;
     animation:chance 2000ms infinite linear;
   }
@@ -135,15 +174,15 @@
   @media all and (min-width:80px) and (max-width:450px){ 
     /* Mobile */
     .gridBox{
-      --height:600px;
-      --width:280px;
+      --height:400px;
+      --width:350px;
     }
   }
   
   @media all and (min-width:451px) and (max-width:600px){
     /* Tablet */
     .gridBox{
-      --height:653px;
+      --height:453px;
       --width:450px;
     }
   }
@@ -151,7 +190,7 @@
   @media all and (min-width:601px) and (max-width:850px){
     /* Tablet */
     .gridBox{
-      --height:653px;
+      --height:453px;
       --width:600px;
     }
   }
