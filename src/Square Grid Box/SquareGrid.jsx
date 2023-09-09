@@ -1,10 +1,12 @@
-import React,{useContext,useEffect,useRef} from 'react'
+import React,{useContext,useEffect,useRef, useState} from 'react'
 import './SquareGrid.css'
 import { GridContext } from '../Contexts';
 import ButtonSound2 from '../NewNavbar/ButtonSound/button1.mp3'
 import background from '../background.jpg'
 
 function SquareGrid() {
+  const [gridWidth,setGridWidth] = useState()
+  const [gridHeight,setGridHeight] = useState()
     const {state,dispatch,areAllClicked,setClick} = useContext(GridContext)
     const InitialRender1 = useRef(true)//Initial Render 1 for initial render of first useEffect and so on for others useEffect
     const InitialRender2 = useRef(true)
@@ -53,7 +55,8 @@ function SquareGrid() {
         else if(!state.Routed && !InitialRender2.current){
           dispatch({type:'SetStates',payload:{horizontalButtons:horizontal,verticalButtons:vertical,squaresColors:squares,Box:arr,numberOfSquares:0,player1Score:0,player2Score:0,player:'1'}})
         }
-        
+        setGridWidth(80*(state.col+1))
+        setGridHeight(80*(state.row+1))
       },[state.row,state.col])  
       
     useEffect(()=>{
@@ -112,13 +115,21 @@ function SquareGrid() {
         <div className='chance' style={{backgroundColor:state.player==='1'?'#eb5d5d':'#42c442'}}>
           {state.player==='1'?state.player1Name:state.player2Name} chance
         </div>
-        <div className='gridBox' style={{
-
+        
+        <div className='gridBox' id="grid-box" style={{
+          
           //for fixing grid size-->
-          height: 'var(--height)',
-          width: 'var(--width)',
-          gridTemplateColumns:`repeat(${state.col+1},calc(var(--width)/${state.col+1}))`,
-          gridTemplateRows:`repeat(${state.row+1},calc(var(--width)/${state.col+1}))`,
+          //calc(${state.row+1} * var(--square_height)=(state.row+1)*80, where var(--square_height)=80px
+          height: (gridWidth>document.getElementsByClassName("main-section")[0]?.getBoundingClientRect()?.width ||gridHeight>document.getElementsByClassName("main-section")[0]?.getBoundingClientRect()?.height)?
+          'var(--height)':`calc(${state.row+1} * var(--square_height))`,
+
+          width: (gridWidth>document.getElementsByClassName("main-section")[0]?.getBoundingClientRect()?.width)?'var(--width)':`calc(${state.col+1} * var(--square_width))`,
+
+          gridTemplateColumns:(gridWidth>document.getElementsByClassName("main-section")[0]?.getBoundingClientRect()?.width)?
+          `repeat(${state.col+1},calc(var(--width) / ${state.col+1}))`:`repeat(${state.col+1},1fr)`,
+
+          gridTemplateRows:(gridWidth>document.getElementsByClassName("main-section")[0]?.getBoundingClientRect()?.width || gridHeight>document.getElementsByClassName("main-section")[0]?.getBoundingClientRect()?.height)?
+          `repeat(${state.row+1},calc(var(--width) / ${state.col+1}))`:`repeat(${state.row+1},1fr)`,
           
           //for fixing square(onebox, twobox) in grid size-->
           // height:`calc(${state.row+1}*var(--height))`,
@@ -128,7 +139,14 @@ function SquareGrid() {
 
           // transform: `translateX(-calc(var(--width)/${state.col+1}))`
           // transform: `translateX(-calc(var(--width) / 2))`
-        }}>
+         
+        }}
+        onFocus={()=>{
+          const elem= document.getElementById("#grid-box")
+          console.log("calculation width:",(state.col+1)*(80),
+          " client width ",document.getElementsByClassName("main-section")[0]?.getBoundingClientRect()?.width)
+        }}
+        >
         {
           (state.Box).map((item)=>(item%(state.col+1) ===state.col && item<state.row*state.col+state.row+state.col?
             <div className='twobox' style={{flexDirection:'column'}}>

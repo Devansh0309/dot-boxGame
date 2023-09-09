@@ -4,7 +4,7 @@
   margin: auto;
   justify-content: center;
   position:relative;
-  height:100vh;
+  height:calc(100vh - 70px);
 }
 .main-section{
   display: flex;
@@ -35,8 +35,10 @@
 }
 .gridBox{
   display:grid;
-  --height:450px;
-  --width:500px;
+  --height:500px;
+  --width:600px;
+  --square_height:80px;
+    --square_width:80px;
   justify-content:flex-start;
   margin: auto;
   padding: 0.3125rem;
@@ -52,12 +54,14 @@
     padding: 0;
     display: flex;
     flex-wrap: wrap;
+    
     /* aspect-ratio: 1; */
   }
   .twobox{
     display:flex;
     margin: 0; 
     padding: 0;
+    
   }
   .innerBox{
     width: 80%;
@@ -171,27 +175,43 @@
       border-radius: .3125rem;
     }
   }
-  @media all and (min-width:80px) and (max-width:450px){ 
+  @media all and (min-width:320px) and (max-width:374px){ 
     /* Mobile */
     .gridBox{
-      --height:400px;
-      --width:350px;
+      --height:200px;
+      --width:300px;
+      --square_height:80px;
+      --square_width:80px;
+    }
+  }
+  @media all and (min-width:375px) and (max-width:424px){ 
+    /* Mobile */
+    .gridBox{
+      --height:270px;
+      --width:370px;
+      --square_height:80px;
+      --square_width:80px;
     }
   }
   
-  @media all and (min-width:451px) and (max-width:600px){
+  @media all and (min-width:425px) and (max-width:768px){
     /* Tablet */
     .gridBox{
-      --height:453px;
-      --width:450px;
+      --height:300px;
+      --width:400px;
+      --square_height:80px;
+      --square_width:80px;
     }
   }
   
   @media all and (min-width:601px) and (max-width:850px){
     /* Tablet */
     .gridBox{
-      --height:453px;
-      --width:600px;
+      --height:501px;
+
+      --width:550px;
+      --square_height:80px;
+      --square_width:80px;
     }
   }
   /* .App{
