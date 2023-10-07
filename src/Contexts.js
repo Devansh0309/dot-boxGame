@@ -1,10 +1,13 @@
-import React,{useReducer} from 'react'
+import React,{useEffect, useReducer, useState} from 'react'
 import SquareSound from './NewNavbar/ButtonSound/shortSuccess.mp3'
 export const GridContext=React.createContext()
 
-const states=JSON.parse(localStorage.getItem('states'))
+const dataFromLocal = typeof window !== 'undefined' && window.localStorage?localStorage.getItem('states'):'{}'
+const states= JSON.parse(dataFromLocal)
+
 //States
-// const notInitialRender = useRef(false)
+
+console.log("contexts line 8: ",states.sel)
 const initialState={
   sel:states?states.sel:'Select size here',
   row:states?states.row:'0',
@@ -23,9 +26,10 @@ const initialState={
   modalShow:states?states.modalShow:false,
   modalShow2:states?states.modalShow2:true,
   start:states?states.start:false,
-  Routed:states?states.Routed:false //Routed means route changed
+  Routed:states?states.Routed:false, //Routed means route changed
 }
 function reducer(state, action){
+  console.log("line 34 in context",state)
   switch(action.type){
       // case 'SaveGame':
       //     localStorage.setItem('saves',JSON.stringify(action.payload))
@@ -34,13 +38,14 @@ function reducer(state, action){
       //     }
       case 'SetStates':
         localStorage.setItem('states',JSON.stringify({...state,...action.payload}))
+        console.log("contexts line 38: ",states.sel)
         return {...state,...action.payload}
       default:
           throw new Error()      
   }
 }
 function Contexts(props) {
-
+  
     const [state, dispatch] = useReducer(reducer,initialState);
     
     const audio3=new Audio(SquareSound)

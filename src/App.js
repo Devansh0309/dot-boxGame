@@ -10,13 +10,14 @@ import NewNavbar2 from "./NewNavbar/AboutNavbar";
 import NewNavbar from "./NewNavbar/NewNavbar";
 
 function App() {
+  
   return (
     <div className="App" style={{
       minHeight:'100vh',minWidth:'100vw'}}>
       <Routes>
       <Route path="/" 
       element={<Contexts>
-         <NewNavbar />
+         <NewNavbar/>
          <VerticallyCenteredModal/>
          <MyVerticallyCenteredModal/>
          <SquareGrid />

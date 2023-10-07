@@ -151,13 +151,17 @@ function NewNavbar() {
     component="div" title='New Game' onClick={(e)=>{audio2.play();handleNavClicks(e.target.title);}} >New Game
   </Typography>
   {state.start?
-    <select value={state.sel}  onChange={(e)=>dispatch({type:'SetStates',payload:{Box:[],sel:e.target.value}})
+    <select value={state.sel}
+    onChange={(e)=>{
+      console.log("line 157 ", state.sel)
+      dispatch({type:'SetStates',payload:{Box:[],sel:e.target.value}})}
      } style={{color:'white',border:'none',background:'#4A00E0'}}>
       <option value='Select size here'>Select Size</option>
       <option value="2*3">2 x 3</option>
       <option value="3*4">3 x 4</option>
       <option value="4*5">4 x 5</option>
-      <option value="5*6">6 x 7</option>
+      <option value="5*6">5 x 6</option>
+      <option value="6*7">6 x 7</option>
       <option value="7*8">7 x 8</option>
     </select>:
     <Typography sx={{ display: { xs: 'block', sm: 'block'  },overflow:'visible' }} className="Navbartxt" variant="h6" noWrap 
