@@ -7,7 +7,7 @@ const states= JSON.parse(dataFromLocal)
 
 //States
 
-console.log("contexts line 8: ",states.sel)
+// console.log("contexts line 8: ",states.sel)
 const initialState={
   sel:states?states.sel:'Select size here',
   row:states?states.row:'0',
@@ -38,7 +38,7 @@ function reducer(state, action){
       //     }
       case 'SetStates':
         localStorage.setItem('states',JSON.stringify({...state,...action.payload}))
-        console.log("contexts line 38: ",states.sel)
+        // console.log("contexts line 38: ",states.sel)
         return {...state,...action.payload}
       default:
           throw new Error()      
