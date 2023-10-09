@@ -27,6 +27,8 @@ const initialState={
   modalShow2:states?states.modalShow2:true,
   start:states?states.start:false,
   Routed:states?states.Routed:false, //Routed means route changed
+  roomId:states?states.roomId:"",
+  enterRoom:states?states.enterRoom:false
 }
 function reducer(state, action){
   console.log("line 34 in context",state)
