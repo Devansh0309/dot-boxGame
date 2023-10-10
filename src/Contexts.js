@@ -1,6 +1,6 @@
 import React, { useReducer, createContext } from "react";
 import SquareSound from "./NewNavbar/ButtonSound/shortSuccess.mp3";
-import { collection, doc, getDoc, onSnapshot, query } from "firebase/firestore";
+import { collection, doc, getDoc, onSnapshot, query, updateDoc } from "firebase/firestore";
 import { db } from "./firebaseConfig";
 export const GridContext = createContext();
 
@@ -161,13 +161,15 @@ function Contexts(props) {
       const unsub2 = onSnapshot(
         q,
         (querySnapshot) => {
-          querySnapshot
+          changes=querySnapshot
             .docChanges()
-            .filter(
-              (item) =>
-                item["Document ID"] === (state?.enterRoomId || state?.roomId)
-            );
-          console.log("changes", changes);
+
+            // .filter(
+            //   (item) =>{
+            //     console.log("line 168",item)
+            //     return item["Document ID"] === (state?.enterRoomId || state?.roomId)
+            //   });
+          console.log("changes", changes[0].doc.data());
         },
         (error) => {
           console.log(error);
@@ -261,31 +263,42 @@ function Contexts(props) {
           }
           if (state.player === "1") {
             temp[id].squarecolor = "#eb5d5d";
-            dispatch({
-              type: "SetStates",
-              payload: {
-                player1Score: state.player1Score + 1,
-                squaresColors: temp,
-                numberOfSquares: state.numberOfSquares + 1,
-              },
-            });
           } else {
             temp[id].squarecolor = "#42c442";
-            dispatch({
-              type: "SetStates",
-              payload: {
-                player2Score: state.player2Score + 1,
-                squaresColors: temp,
-                numberOfSquares: state.numberOfSquares + 1,
-              },
-            });
           }
+          const player = `player${state.player}Score`
+          dispatch({
+            type: "SetStates",
+            payload: {
+              [player]: state[player] + 1,
+              squaresColors: temp,
+              numberOfSquares: state.numberOfSquares + 1,
+            },
+          });
+          let updateDocState = async()=>{
+            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+              [player]: state[player],
+              squaresColors: temp,
+              numberOfSquares: state.numberOfSquares 
+            }).then((res)=>{
+              console.log(res,"updated")
+            }).catch((err)=>{console.log(err)})
+          }
+          if(state.playerEnteredRoom) updateDocState()
           audio3.play();
         } else {
           dispatch({
             type: "SetStates",
             payload: { player: state.player === "1" ? "2" : "1" },
           });
+          let updateDocState = async()=>{
+            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+              player: state.player
+            }).then((res)=>{
+              console.log(res,"updated")
+            }).catch((err)=>{console.log(err)})
+          }
+          if(state.playerEnteredRoom) updateDocState()
         }
       } else if (Math.floor(id / state.col) === state.row) {
         if (
@@ -304,31 +317,42 @@ function Contexts(props) {
           }
           if (state.player === "1") {
             temp[id - state.col].squarecolor = "#eb5d5d";
-            dispatch({
-              type: "SetStates",
-              payload: {
-                player1Score: state.player1Score + 1,
-                squaresColors: temp,
-                numberOfSquares: state.numberOfSquares + 1,
-              },
-            });
           } else {
             temp[id - state.col].squarecolor = "#42c442";
-            dispatch({
-              type: "SetStates",
-              payload: {
-                player2Score: state.player2Score + 1,
-                squaresColors: temp,
-                numberOfSquares: state.numberOfSquares + 1,
-              },
-            });
           }
+          const player=`player${state.player}Score`
+          dispatch({
+            type: "SetStates",
+            payload: {
+              [player]: state[player] + 1,
+              squaresColors: temp,
+              numberOfSquares: state.numberOfSquares + 1,
+            },
+          });
+          let updateDocState = async()=>{
+            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+              [player]: state[player],
+              squaresColors: temp,
+              numberOfSquares: state.numberOfSquares 
+            }).then((res)=>{
+              console.log(res,"updated")
+            }).catch((err)=>{console.log(err)})
+          }
+          if(state.playerEnteredRoom) updateDocState()
           audio3.play();
         } else {
           dispatch({
             type: "SetStates",
             payload: { player: state.player === "1" ? "2" : "1" },
           });
+          let updateDocState = async()=>{
+            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+              player: state.player
+            }).then((res)=>{
+              console.log(res,"updated")
+            }).catch((err)=>{console.log(err)})
+          }
+          if(state.playerEnteredRoom) updateDocState()
         }
       } else {
         if (
@@ -355,25 +379,28 @@ function Contexts(props) {
           }
           if (state.player === "1") {
             temp[id - state.col].squarecolor = "#eb5d5d";
-            dispatch({
-              type: "SetStates",
-              payload: {
-                player1Score: state.player1Score + 1,
-                squaresColors: temp,
-                numberOfSquares: state.numberOfSquares + 1,
-              },
-            });
           } else {
             temp[id - state.col].squarecolor = "#42c442";
-            dispatch({
-              type: "SetStates",
-              payload: {
-                player2Score: state.player2Score + 1,
-                squaresColors: temp,
-                numberOfSquares: state.numberOfSquares + 1,
-              },
-            });
           }
+          const player=`player${state.player}Score`
+          dispatch({
+            type: "SetStates",
+            payload: {
+              [player]: state[player] + 1,
+              squaresColors: temp,
+              numberOfSquares: state.numberOfSquares + 1,
+            },
+          });
+          let updateDocState = async()=>{
+            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+              [player]: state[player],
+              squaresColors: temp,
+              numberOfSquares: state.numberOfSquares 
+            }).then((res)=>{
+              console.log(res,"updated")
+            }).catch((err)=>{console.log(err)})
+          }
+          if(state.playerEnteredRoom) updateDocState()
           audio3.play();
         } else if (
           (!state.horizontalButtons[id - state.col].isClicked ||
@@ -399,25 +426,28 @@ function Contexts(props) {
           }
           if (state.player === "1") {
             temp[id].squarecolor = "#eb5d5d";
-            dispatch({
-              type: "SetStates",
-              payload: {
-                player1Score: state.player1Score + 1,
-                squaresColors: temp,
-                numberOfSquares: state.numberOfSquares + 1,
-              },
-            });
           } else {
             temp[id].squarecolor = "#42c442";
-            dispatch({
-              type: "SetStates",
-              payload: {
-                player2Score: state.player2Score + 1,
-                squaresColors: temp,
-                numberOfSquares: state.numberOfSquares + 1,
-              },
-            });
           }
+          const player=`player${state.player}Score`
+          dispatch({
+            type: "SetStates",
+            payload: {
+              [player]: state[player] + 1,
+              squaresColors: temp,
+              numberOfSquares: state.numberOfSquares + 1,
+            },
+          });
+          let updateDocState = async()=>{
+            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+              [player]: state[player],
+              squaresColors: temp,
+              numberOfSquares: state.numberOfSquares 
+            }).then((res)=>{
+              console.log(res,"updated")
+            }).catch((err)=>{console.log(err)})
+          }
+          if(state.playerEnteredRoom) updateDocState()
           audio3.play();
         } else if (
           state.horizontalButtons[id - state.col].isClicked &&
@@ -445,32 +475,43 @@ function Contexts(props) {
           if (state.player === "1") {
             temp[id].squarecolor = "#eb5d5d";
             temp[id - state.col].squarecolor = "#eb5d5d";
-            dispatch({
-              type: "SetStates",
-              payload: {
-                player1Score: state.player1Score + 2,
-                squaresColors: temp,
-                numberOfSquares: state.numberOfSquares + 2,
-              },
-            });
           } else {
             temp[id].squarecolor = "#42c442";
             temp[id - state.col].squarecolor = "#42c442";
-            dispatch({
-              type: "SetStates",
-              payload: {
-                player2Score: state.player2Score + 2,
-                squaresColors: temp,
-                numberOfSquares: state.numberOfSquares + 2,
-              },
-            });
           }
+          const player=`player${state.player}Score`
+          dispatch({
+            type: "SetStates",
+            payload: {
+              [player]: state[player] + 2,
+              squaresColors: temp,
+              numberOfSquares: state.numberOfSquares + 2,
+            },
+          });
+          let updateDocState = async()=>{
+            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+              [player]: state[player],
+              squaresColors: temp,
+              numberOfSquares: state.numberOfSquares 
+            }).then((res)=>{
+              console.log(res,"updated")
+            }).catch((err)=>{console.log(err)})
+          }
+          if(state.playerEnteredRoom) updateDocState()
           audio3.play();
         } else {
           dispatch({
             type: "SetStates",
             payload: { player: state.player === "1" ? "2" : "1" },
           });
+          let updateDocState = async()=>{
+            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+              player: state.player
+            }).then((res)=>{
+              console.log(res,"updated")
+            }).catch((err)=>{console.log(err)})
+          }
+          if(state.playerEnteredRoom) updateDocState()
         }
       }
     } else {
@@ -495,31 +536,42 @@ function Contexts(props) {
           }
           if (state.player === "1") {
             temp[id - Math.floor(id / (state.col + 1))].squarecolor = "#eb5d5d";
-            dispatch({
-              type: "SetStates",
-              payload: {
-                player1Score: state.player1Score + 1,
-                squaresColors: temp,
-                numberOfSquares: state.numberOfSquares + 1,
-              },
-            });
           } else {
             temp[id - Math.floor(id / (state.col + 1))].squarecolor = "#42c442";
-            dispatch({
-              type: "SetStates",
-              payload: {
-                player2Score: state.player2Score + 1,
-                squaresColors: temp,
-                numberOfSquares: state.numberOfSquares + 1,
-              },
-            });
           }
           audio3.play();
+          const player=`player${state.player}Score`
+          dispatch({
+            type: "SetStates",
+            payload: {
+              [player]: state[player] + 1,
+              squaresColors: temp,
+              numberOfSquares: state.numberOfSquares + 1,
+            },
+          });
+          let updateDocState = async()=>{
+            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+              [player]: state[player],
+              squaresColors: temp,
+              numberOfSquares: state.numberOfSquares 
+            }).then((res)=>{
+              console.log(res,"updated")
+            }).catch((err)=>{console.log(err)})
+          }
+          if(state.playerEnteredRoom) updateDocState()
         } else {
           dispatch({
             type: "SetStates",
             payload: { player: state.player === "1" ? "2" : "1" },
           });
+          let updateDocState = async()=>{
+            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+              player: state.player
+            }).then((res)=>{
+              console.log(res,"updated")
+            }).catch((err)=>{console.log(err)})
+          }
+          if(state.playerEnteredRoom) updateDocState()
         }
       } else if (id % (state.col + 1) === state.col) {
         //last column right vertical btn id provided
@@ -542,31 +594,42 @@ function Contexts(props) {
           }
           if (state.player === "1") {
             temp[id - Math.ceil(id / (state.col + 1))].squarecolor = "#eb5d5d";
-            dispatch({
-              type: "SetStates",
-              payload: {
-                player1Score: state.player1Score + 1,
-                squaresColors: temp,
-                numberOfSquares: state.numberOfSquares + 1,
-              },
-            });
           } else {
             temp[id - Math.ceil(id / (state.col + 1))].squarecolor = "#42c442";
-            dispatch({
-              type: "SetStates",
-              payload: {
-                player2Score: state.player2Score + 1,
-                squaresColors: temp,
-                numberOfSquares: state.numberOfSquares + 1,
-              },
-            });
           }
           audio3.play();
+          const player=`player${state.player}Score`
+          dispatch({
+            type: "SetStates",
+            payload: {
+              [player]: state[player] + 1,
+              squaresColors: temp,
+              numberOfSquares: state.numberOfSquares + 1,
+            },
+          });
+          let updateDocState = async()=>{
+            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+              [player]: state[player],
+              squaresColors: temp,
+              numberOfSquares: state.numberOfSquares 
+            }).then((res)=>{
+              console.log(res,"updated")
+            }).catch((err)=>{console.log(err)})
+          }
+          if(state.playerEnteredRoom) updateDocState()
         } else {
           dispatch({
             type: "SetStates",
             payload: { player: state.player === "1" ? "2" : "1" },
           });
+          let updateDocState = async()=>{
+            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+              player: state.player
+            }).then((res)=>{
+              console.log(res,"updated")
+            }).catch((err)=>{console.log(err)})
+          }
+          if(state.playerEnteredRoom) updateDocState()
         }
       } else {
         //middle column (not first and not last) btn id provided
@@ -597,26 +660,29 @@ function Contexts(props) {
           }
           if (state.player === "1") {
             temp[id - Math.floor(id / (state.col + 1))].squarecolor = "#eb5d5d";
-            dispatch({
-              type: "SetStates",
-              payload: {
-                player1Score: state.player1Score + 1,
-                squaresColors: temp,
-                numberOfSquares: state.numberOfSquares + 1,
-              },
-            });
           } else {
             temp[id - Math.floor(id / (state.col + 1))].squarecolor = "#42c442";
-            dispatch({
-              type: "SetStates",
-              payload: {
-                player2Score: state.player2Score + 1,
-                squaresColors: temp,
-                numberOfSquares: state.numberOfSquares + 1,
-              },
-            });
           }
           audio3.play();
+          const player=`player${state.player}Score`
+          dispatch({
+            type: "SetStates",
+            payload: {
+              [player]: state[player] + 1,
+              squaresColors: temp,
+              numberOfSquares: state.numberOfSquares + 1,
+            },
+          });
+          let updateDocState = async()=>{
+            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+              [player]: state[player],
+              squaresColors: temp,
+              numberOfSquares: state.numberOfSquares 
+            }).then((res)=>{
+              console.log(res,"updated")
+            }).catch((err)=>{console.log(err)})
+          }
+          if(state.playerEnteredRoom) updateDocState()
         } else if (
           (!state.horizontalButtons[id - Math.floor(id / (state.col + 1))]
             .isClicked ||
@@ -644,26 +710,29 @@ function Contexts(props) {
           }
           if (state.player === "1") {
             temp[id - Math.ceil(id / (state.col + 1))].squarecolor = "#eb5d5d";
-            dispatch({
-              type: "SetStates",
-              payload: {
-                player1Score: state.player1Score + 1,
-                squaresColors: temp,
-                numberOfSquares: state.numberOfSquares + 1,
-              },
-            });
           } else {
             temp[id - Math.ceil(id / (state.col + 1))].squarecolor = "#42c442";
-            dispatch({
-              type: "SetStates",
-              payload: {
-                player2Score: state.player2Score + 1,
-                squaresColors: temp,
-                numberOfSquares: state.numberOfSquares + 1,
-              },
-            });
           }
           audio3.play();
+          const player=`player${state.player}Score`
+          dispatch({
+            type: "SetStates",
+            payload: {
+              [player]: state[player] + 1,
+              squaresColors: temp,
+              numberOfSquares: state.numberOfSquares + 1,
+            },
+          });
+          let updateDocState = async()=>{
+            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+              [player]: state[player],
+              squaresColors: temp,
+              numberOfSquares: state.numberOfSquares 
+            }).then((res)=>{
+              console.log(res,"updated")
+            }).catch((err)=>{console.log(err)})
+          }
+          if(state.playerEnteredRoom) updateDocState()
         } else if (
           state.horizontalButtons[id - Math.floor(id / (state.col + 1))]
             .isClicked &&
@@ -697,32 +766,43 @@ function Contexts(props) {
           if (state.player === "1") {
             temp[id - Math.floor(id / (state.col + 1))].squarecolor = "#eb5d5d";
             temp[id - Math.ceil(id / (state.col + 1))].squarecolor = "#eb5d5d";
-            dispatch({
-              type: "SetStates",
-              payload: {
-                player1Score: state.player1Score + 2,
-                squaresColors: temp,
-                numberOfSquares: state.numberOfSquares + 2,
-              },
-            });
           } else {
             temp[id - Math.floor(id / (state.col + 1))].squarecolor = "#42c442";
             temp[id - Math.ceil(id / (state.col + 1))].squarecolor = "#42c442";
-            dispatch({
-              type: "SetStates",
-              payload: {
-                player2Score: state.player2Score + 2,
-                squaresColors: temp,
-                numberOfSquares: state.numberOfSquares + 2,
-              },
-            });
           }
           audio3.play();
+          const player=`player${state.player}Score`
+          dispatch({
+            type: "SetStates",
+            payload: {
+              [player]: state[player] + 2,
+              squaresColors: temp,
+              numberOfSquares: state.numberOfSquares + 2,
+            },
+          });
+          let updateDocState = async()=>{
+            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+              [player]: state[player],
+              squaresColors: temp,
+              numberOfSquares: state.numberOfSquares 
+            }).then((res)=>{
+              console.log(res,"updated")
+            }).catch((err)=>{console.log(err)})
+          }
+          if(state.playerEnteredRoom) updateDocState()
         } else {
           dispatch({
             type: "SetStates",
             payload: { player: state.player === "1" ? "2" : "1" },
           });
+          let updateDocState = async()=>{
+            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+              player: state.player
+            }).then((res)=>{
+              console.log(res,"updated")
+            }).catch((err)=>{console.log(err)})
+          }
+          if(state.playerEnteredRoom) updateDocState()
         }
       }
     }
@@ -748,6 +828,14 @@ function Contexts(props) {
         temp[id].btncolor = "green";
       }
       dispatch({ type: "SetStates", payload: { horizontalButtons: temp } });
+      let updateDocState = async()=>{
+        await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+          horizontalButtons: temp 
+        }).then((res)=>{
+          console.log(res,"updated")
+        }).catch((err)=>{console.log(err)})
+      }
+      if(state.playerEnteredRoom) updateDocState()
       // setHorizontalButtons(temp)
       //or this?
       // setHorizontalButtons(...horizontalButtons,{key:id,type:'horizontal',isClicked:true})
@@ -770,6 +858,14 @@ function Contexts(props) {
         temp[id].btncolor = "green";
       }
       dispatch({ type: "SetStates", payload: { verticalButtons: temp } });
+      let updateDocState = async()=>{
+        await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+          verticalButtons: temp
+        }).then((res)=>{
+          console.log(res,"updated")
+        }).catch((err)=>{console.log(err)})
+      }
+      if(state.playerEnteredRoom) updateDocState()
       // setVerticalButtons(temp)
       //or this?
       // setHorizontalButtons(...horizontalButtons,{key:id,type:'horizontal',isClicked:true})

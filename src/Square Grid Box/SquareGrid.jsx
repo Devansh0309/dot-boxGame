@@ -109,7 +109,7 @@ function SquareGrid() {
           console.log(res,"updated")
         }).catch((err)=>{console.log(err)})
       }
-      updateDocState()
+      if(state.playerEnteredRoom) {updateDocState()}
     }
     setGridWidth(80 * (state.col + 1));
     setGridHeight(80 * (state.row + 1));
@@ -138,6 +138,25 @@ function SquareGrid() {
               : "",
         },
       });
+      let updateDocState = async()=>{
+        await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+          sel: "Select size here",
+          won:
+            state.player1Score > 0 || state.player2Score > 0
+              ? `${
+                  state.player1Score > state.player2Score
+                    ? state.player1Name
+                    : state.player1Score === state.player2Score &&
+                      state.player1Score > 0
+                    ? " Tied and no one"
+                    : state.player2Name
+                } won!`
+              : "",
+        }).then((res)=>{
+          console.log(res,"updated")
+        }).catch((err)=>{console.log(err)})
+      }
+      if(state.playerEnteredRoom) updateDocState()
     }
   }, [
     state.numberOfSquares > 0 &&
@@ -151,6 +170,14 @@ function SquareGrid() {
       InitialRender4.current = false;
     } else if (!state.Routed && !InitialRender5.current) {
       dispatch({ type: "SetStates", payload: { start: false } });
+      let updateDocState = async()=>{
+        await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+          start: false 
+        }).then((res)=>{
+          console.log(res,"updated")
+        }).catch((err)=>{console.log(err)})
+      } 
+      if(state.playerEnteredRoom) updateDocState()
     }
   }, [state.sel === "Select size here" && state.won]);
 
@@ -168,6 +195,14 @@ function SquareGrid() {
       InitialRender5.current = false;
     } else if (!state.Routed && !InitialRender5.current) {
       dispatch({ type: "SetStates", payload: { won: "" } });
+      let updateDocState = async()=>{
+        await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+          won: ""
+        }).then((res)=>{
+          console.log(res,"updated")
+        }).catch((err)=>{console.log(err)})
+      }
+      if(state.playerEnteredRoom) updateDocState()
     }
   }, [state.sel !== "Select size here" && state.won]);
 
@@ -202,9 +237,17 @@ function SquareGrid() {
       ) : (
         <button
           type="button"
-          onClick={() =>
+          onClick={() =>{
             dispatch({ type: "SetStates", payload: { sel: "2*3" } })
-          }
+            let updateDocState = async()=>{
+              await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+                sel: "2*3"
+              }).then((res)=>{
+                console.log(res,"updated")
+              }).catch((err)=>{console.log(err)})
+            }
+            if(state.playerEnteredRoom) updateDocState()
+          }}
           style={{
             backgroundColor: "inherit",
             fontSize: "large",

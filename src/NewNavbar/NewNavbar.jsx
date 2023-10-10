@@ -113,6 +113,14 @@ function NewNavbar() {
         type: "SetStates",
         payload: { sel: "Select size here", enterRoom: false, roomId: "",enterRoomId:"" },
       });
+      let updateDocState = async()=>{
+        await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+          sel: "Select size here", enterRoom: false
+        }).then((res)=>{
+          console.log(res,"updated")
+        }).catch((err)=>{console.log(err)})
+      }
+      if(state.playerEnteredRoom) updateDocState()
     } else if (title === "New Game" && state.sel === "Select size here") {
       alert("Select size or Start Game");
     } else if (title === "Home") {
@@ -121,8 +129,24 @@ function NewNavbar() {
       window.close();
     } else if (title === "Options") {
       dispatch({ type: "SetStates", payload: { modalShow: true } });
+      let updateDocState = async()=>{
+        await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+          modalShow: true
+        }).then((res)=>{
+          console.log(res,"updated")
+        }).catch((err)=>{console.log(err)})
+      }
+      if(state.playerEnteredRoom) updateDocState()
     } else {
       dispatch({ type: "SetStates", payload: { Routed: true } });
+      let updateDocState = async()=>{
+        await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+          Routed: true
+        }).then((res)=>{
+          console.log(res,"updated")
+        }).catch((err)=>{console.log(err)})
+      }
+      if(state.playerEnteredRoom) updateDocState()
       navigate("/aboutgame");
     }
   };
@@ -222,6 +246,7 @@ function NewNavbar() {
                       // enterRoomId:""
                     },
                   });
+                  
                 }}
                 style={{
                   color: "white",
@@ -248,9 +273,17 @@ function NewNavbar() {
                 noWrap
                 component="div"
                 title="Start Game"
-                onClick={() =>
+                onClick={() =>{
                   dispatch({ type: "SetStates", payload: { start: true } })
-                }
+                  let updateDocState = async()=>{
+                    await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+                      start: true
+                    }).then((res)=>{
+                      console.log(res,"updated")
+                    }).catch((err)=>{console.log(err)})
+                  }
+                  if(state.playerEnteredRoom) updateDocState()
+                }}
               >
                 Start Game
               </Typography>
