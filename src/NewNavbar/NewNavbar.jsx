@@ -31,7 +31,8 @@ import { v4 as uuidv4 } from "uuid";
 import { Button, Input } from "@mui/material";
 import clipboardCopy from "clipboard-copy";
 import { useEffect } from "react";
-import { doc, onSnapshot, setDoc } from "firebase/firestore";
+import { doc, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
+import { db } from "../firebaseConfig";
 
 const drawerWidth = 190;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -96,7 +97,7 @@ function NewNavbar() {
 
   const { state, dispatch } = useContext(GridContext);
   // const [roomId, setRoomId] = useState("");
-  // const [enterRoom,setEnterRoom] = useState(false)
+  // const [enterRoomId,setEnterRoomId] = useState("")
 
   const navItems = [
     { title: "Home", icon: <HomeIcon /> },
@@ -110,7 +111,7 @@ function NewNavbar() {
     if (title === "New Game" && state.sel !== "Select size here") {
       dispatch({
         type: "SetStates",
-        payload: { sel: "Select size here", enterRoom: false, roomId: "" },
+        payload: { sel: "Select size here", enterRoom: false, roomId: "",enterRoomId:"" },
       });
     } else if (title === "New Game" && state.sel === "Select size here") {
       alert("Select size or Start Game");
@@ -126,11 +127,29 @@ function NewNavbar() {
     }
   };
 
-  useEffect(() => {
-    const unsub = onSnapshot(doc(db, "users", "SF"), (doc) => {
-      console.log("Current data: ", doc.data());
+  const createRoom = async (enterRoomId) => {
+    await setDoc(doc(db, "users", enterRoomId), {
+      sel:'Select size here' ,
+      row: '0',
+      col: '0',
+      Box: [],
+      horizontalButtons: [],
+      verticalButtons: [],
+      squaresColors: [],
+      numberOfSquares: '0',
+      player1Score: '0',
+      player2Score: '0',
+      player: '1',
+      player1Name: 'Player 1',
+      player2Name: 'Player 2',
+      won: '',
+      modalShow: false,
+      modalShow2: true,
+      start: false,
+      Routed: false,
+      playerEnteredRoom:false
     });
-  }, []);
+  };
   return (
     <Box sx={{ display: "flex", minWidth: "100vw", height: "65px" }}>
       <CssBaseline />
@@ -198,8 +217,9 @@ function NewNavbar() {
                     payload: {
                       Box: [],
                       sel: e.target.value,
-                      enterRoom: false,
-                      roomId: "",
+                      // enterRoom: false,
+                      // roomId: "",
+                      // enterRoomId:""
                     },
                   });
                 }}
@@ -267,6 +287,7 @@ function NewNavbar() {
                     type: "SetStates",
                     payload: { roomId: enterRoomId, sel: "Select size here" },
                   });
+                  createRoom(enterRoomId);
                   // setRoomId(enterRoomId)
                   //here write logic to
                   //  create room / object in firebase db for players with id roomId
@@ -277,15 +298,35 @@ function NewNavbar() {
                 Create Room
               </Typography>
             )}
-            {state.roomId ? null : // <div>
-            //   {/* <span>{roomId} </span> */}
-            //   <Button variant="contained" onClick={()=>{
+            {state.roomId ? null : //   <Button variant="contained" onClick={()=>{ //   {/* <span>{roomId} </span> */} // <div>
             //     clipboardCopy(roomId)
             //   }}>CopyId</Button>
 
             // </div>
             state.enterRoom ? (
-              <input placeholder="Enter id" />
+              <form onSubmit={(e)=>{
+                e.preventDefault()
+                console.log("line 314 newnavbar",state.enterRoomId)
+                let updateRoom=async()=>{
+                  await updateDoc(doc(db, "users", state.enterRoomId),{
+                    playerEnteredRoom: true
+                  }).then((res)=>{
+                    console.log(res,"updated")
+                  }).catch((err)=>{console.log(err)})
+                  
+                }
+                updateRoom() 
+              }}>
+                <input placeholder="Enter id" onChange={(e)=>{
+                  dispatch({
+                    type: "SetStates",
+                    payload: { enterRoomId:e.target.value },
+                  });
+                  // setEnterRoomId(e.target.value)
+                  }}/>
+                <Button variant="contained" type="submit">Enter room</Button>
+              </form>
+              
             ) : (
               <Typography
                 sx={{
