@@ -109,7 +109,7 @@ function SquareGrid() {
           console.log(res,"updated")
         }).catch((err)=>{console.log(err)})
       }
-      if(state.playerEnteredRoom) {updateDocState()}
+      if(state.roomId || state.enterRoomId || state.playerEnteredRoom) {updateDocState()}
     }
     setGridWidth(80 * (state.col + 1));
     setGridHeight(80 * (state.row + 1));

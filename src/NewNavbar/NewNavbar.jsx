@@ -96,7 +96,7 @@ function NewNavbar() {
   };
 
   const { state, dispatch } = useContext(GridContext);
-  // const [roomId, setRoomId] = useState("");
+  const [roomId, setRoomId] = useState("");
   // const [enterRoomId,setEnterRoomId] = useState("")
 
   const navItems = [
@@ -111,16 +111,26 @@ function NewNavbar() {
     if (title === "New Game" && state.sel !== "Select size here") {
       dispatch({
         type: "SetStates",
-        payload: { sel: "Select size here", enterRoom: false, roomId: "",enterRoomId:"" },
+        payload: {
+          sel: "Select size here",
+          enterRoom: false,
+          roomId: "",
+          enterRoomId: "",
+        },
       });
-      let updateDocState = async()=>{
-        await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
-          sel: "Select size here", enterRoom: false
-        }).then((res)=>{
-          console.log(res,"updated")
-        }).catch((err)=>{console.log(err)})
-      }
-      if(state.playerEnteredRoom) updateDocState()
+      let updateDocState = async () => {
+        await updateDoc(doc(db, "users", state.enterRoomId || state.roomId), {
+          sel: "Select size here",
+          enterRoom: false,
+        })
+          .then((res) => {
+            console.log(res, "updated");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+      if (state.playerEnteredRoom) updateDocState();
     } else if (title === "New Game" && state.sel === "Select size here") {
       alert("Select size or Start Game");
     } else if (title === "Home") {
@@ -129,49 +139,57 @@ function NewNavbar() {
       window.close();
     } else if (title === "Options") {
       dispatch({ type: "SetStates", payload: { modalShow: true } });
-      let updateDocState = async()=>{
-        await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
-          modalShow: true
-        }).then((res)=>{
-          console.log(res,"updated")
-        }).catch((err)=>{console.log(err)})
-      }
-      if(state.playerEnteredRoom) updateDocState()
+      let updateDocState = async () => {
+        await updateDoc(doc(db, "users", state.enterRoomId || state.roomId), {
+          modalShow: true,
+        })
+          .then((res) => {
+            console.log(res, "updated");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+      if (state.playerEnteredRoom) updateDocState();
     } else {
       dispatch({ type: "SetStates", payload: { Routed: true } });
-      let updateDocState = async()=>{
-        await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
-          Routed: true
-        }).then((res)=>{
-          console.log(res,"updated")
-        }).catch((err)=>{console.log(err)})
-      }
-      if(state.playerEnteredRoom) updateDocState()
+      let updateDocState = async () => {
+        await updateDoc(doc(db, "users", state.enterRoomId || state.roomId), {
+          Routed: true,
+        })
+          .then((res) => {
+            console.log(res, "updated");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+      if (state.playerEnteredRoom) updateDocState();
       navigate("/aboutgame");
     }
   };
 
   const createRoom = async (enterRoomId) => {
     await setDoc(doc(db, "users", enterRoomId), {
-      sel:'Select size here' ,
-      row: '0',
-      col: '0',
+      sel: "Select size here",
+      row: "0",
+      col: "0",
       Box: [],
       horizontalButtons: [],
       verticalButtons: [],
       squaresColors: [],
-      numberOfSquares: '0',
-      player1Score: '0',
-      player2Score: '0',
-      player: '1',
-      player1Name: 'Player 1',
-      player2Name: 'Player 2',
-      won: '',
+      numberOfSquares: "0",
+      player1Score: "0",
+      player2Score: "0",
+      player: "1",
+      player1Name: "Player 1",
+      player2Name: "Player 2",
+      won: "",
       modalShow: false,
       modalShow2: true,
       start: false,
       Routed: false,
-      playerEnteredRoom:false
+      playerEnteredRoom: false,
     });
   };
   return (
@@ -241,12 +259,31 @@ function NewNavbar() {
                     payload: {
                       Box: [],
                       sel: e.target.value,
+                      roomId: roomId,
                       // enterRoom: false,
                       // roomId: "",
                       // enterRoomId:""
                     },
                   });
-                  
+                  createRoom(roomId);
+                  // let updateDocState = async () => {
+                  //   await updateDoc(
+                  //     doc(db, "users", state.enterRoomId || state.roomId),
+                  //     {
+                  //       Box: [],
+                  //       sel: e.target.value,
+                  //     }
+                  //   )
+                  //     .then((res) => {
+                  //       console.log(res, "updated");
+                  //     })
+                  //     .catch((err) => {
+                  //       console.log(err);
+                  //     });
+                  // };
+                  // if (state.playerEnteredRoom) {
+                  //   updateDocState();
+                  // }
                 }}
                 style={{
                   color: "white",
@@ -273,16 +310,23 @@ function NewNavbar() {
                 noWrap
                 component="div"
                 title="Start Game"
-                onClick={() =>{
-                  dispatch({ type: "SetStates", payload: { start: true } })
-                  let updateDocState = async()=>{
-                    await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
-                      start: true
-                    }).then((res)=>{
-                      console.log(res,"updated")
-                    }).catch((err)=>{console.log(err)})
-                  }
-                  if(state.playerEnteredRoom) updateDocState()
+                onClick={() => {
+                  dispatch({ type: "SetStates", payload: { start: true } });
+                  // let updateDocState = async () => {
+                  //   await updateDoc(
+                  //     doc(db, "users", state.enterRoomId || state.roomId),
+                  //     {
+                  //       start: true,
+                  //     }
+                  //   )
+                  //     .then((res) => {
+                  //       console.log(res, "updated");
+                  //     })
+                  //     .catch((err) => {
+                  //       console.log(err);
+                  //     });
+                  // };
+                  // if (state.playerEnteredRoom) updateDocState();
                 }}
               >
                 Start Game
@@ -303,7 +347,7 @@ function NewNavbar() {
                   CopyId
                 </Button>
               </div>
-            ) : state.enterRoom ? null : (
+            ) : state.enterRoom ? null : roomId ? null : (
               <Typography
                 sx={{
                   display: { xs: "none", sm: "block" },
@@ -316,51 +360,52 @@ function NewNavbar() {
                 title="Create Room"
                 onClick={(e) => {
                   const enterRoomId = uuidv4();
-                  dispatch({
-                    type: "SetStates",
-                    payload: { roomId: enterRoomId, sel: "Select size here" },
-                  });
-                  createRoom(enterRoomId);
-                  // setRoomId(enterRoomId)
-                  //here write logic to
-                  //  create room / object in firebase db for players with id roomId
-                  // handleNavClicks(e.target.title);
+                  setRoomId(enterRoomId);
+                  dispatch({ type: "SetStates", payload: { start: true } });
+                  alert("Select size to start creating room")
                   audio2.play();
                 }}
               >
                 Create Room
               </Typography>
             )}
-            {state.roomId ? null : //   <Button variant="contained" onClick={()=>{ //   {/* <span>{roomId} </span> */} // <div>
-            //     clipboardCopy(roomId)
-            //   }}>CopyId</Button>
+            {state.roomId ? null : //   }}>CopyId</Button> //     clipboardCopy(roomId) //   <Button variant="contained" onClick={()=>{ //   {/* <span>{roomId} </span> */} // <div>
 
             // </div>
             state.enterRoom ? (
-              <form onSubmit={(e)=>{
-                e.preventDefault()
-                console.log("line 314 newnavbar",state.enterRoomId)
-                let updateRoom=async()=>{
-                  await updateDoc(doc(db, "users", state.enterRoomId),{
-                    playerEnteredRoom: true
-                  }).then((res)=>{
-                    console.log(res,"updated")
-                  }).catch((err)=>{console.log(err)})
-                  
-                }
-                updateRoom() 
-              }}>
-                <input placeholder="Enter id" onChange={(e)=>{
-                  dispatch({
-                    type: "SetStates",
-                    payload: { enterRoomId:e.target.value },
-                  });
-                  // setEnterRoomId(e.target.value)
-                  }}/>
-                <Button variant="contained" type="submit">Enter room</Button>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  console.log("line 314 newnavbar", state.enterRoomId);
+                  let updateRoom = async () => {
+                    await updateDoc(doc(db, "users", state.enterRoomId), {
+                      playerEnteredRoom: true,
+                    })
+                      .then((res) => {
+                        console.log(res, "updated");
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                      });
+                  };
+                  updateRoom();
+                }}
+              >
+                <input
+                  placeholder="Enter id"
+                  onChange={(e) => {
+                    dispatch({
+                      type: "SetStates",
+                      payload: { enterRoomId: e.target.value },
+                    });
+                    // setEnterRoomId(e.target.value)
+                  }}
+                />
+                <Button variant="contained" type="submit">
+                  Enter room
+                </Button>
               </form>
-              
-            ) : (
+            ) : roomId ? null : (
               <Typography
                 sx={{
                   display: { xs: "none", sm: "block" },
@@ -376,10 +421,6 @@ function NewNavbar() {
                     type: "SetStates",
                     payload: { enterRoom: true, sel: "Select size here" },
                   });
-                  // setEnterRoom(true)
-                  //here write logic to
-                  //  create room / object in firebase db for players with id roomId
-                  // handleNavClicks(e.target.title);
                   audio2.play();
                 }}
               >
