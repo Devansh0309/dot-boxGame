@@ -58,185 +58,44 @@ function reducer(state, action) {
 }
 function Contexts(props) {
   const [state, dispatch] = useReducer(reducer, initialState);
-
   const audio3 = new Audio(SquareSound);
-
   //Functions
   if (state?.enterRoomId || state?.roomId) {
-    console.log("line 63");
-    // const unsub = onSnapshot(
-    //   doc(db, "users", state?.enterRoomId || state?.roomId), (doc) => {
-    //   console.log("Current data: ", doc.data());
-    //   const data=doc.data()
-    //   dispatch({type: "SetStates",
-    //   payload: {
-    //     sel:data.sel || "Select size here" ,
-    //     row: data.rel || '0',
-    //     col: data.col || '0',
-    //     Box: data.Box || [],
-    //     horizontalButtons: data.horizontalButtons || [],
-    //     verticalButtons: data.verticalButtons || [],
-    //     squaresColors: data.squaresColors || [],
-    //     numberOfSquares: data.numberOfSquares || '0',
-    //     player1Score: data.player1Score || '0',
-    //     player2Score: data.player2Score || '0',
-    //     player: data.player || '1',
-    //     player1Name: data.player1Name || 'Player 1',
-    //     player2Name: data.player2Name || 'Player 2',
-    //     won: data.won || '',
-    //     modalShow: data.modalShow || false,
-    //     modalShow2: data.modalShow2 || true,
-    //     start: data.start || false,
-    //     Routed: data.Routed || false,
-    //     playerEnteredRoom: data.playerEnteredRoom || false,
-    //     roomId:state?state.roomId:"",
-    //     enterRoom:state?state.enterRoom:false,
-    //     enterRoomId:state?state.enterRoomId:""
-    //   }})
-    // },(error) => {
-    //   console.log(error)
-    // });
-    // unsub()
-    let docSnap;
-    // let temp=async()=>{
-    //   docSnap = await getDoc(doc(db, "users", state?.enterRoomId || state?.roomId))
-    //   return docSnap
-
-    // }
-    // temp().then((res)=>{
-    //   if (res?.exists()) {
-    //     console.log("Document data:", docSnap.data());
-    //   } else {
-    //     // docSnap.data() will be undefined in this case
-    //     console.log("No such document!");
-    //   }
-    //  })
+    console.log("line 64");
     let interval = setInterval(() => {
-      // const unsub = onSnapshot(
-      //   doc(db, "users", state?.enterRoomId || state?.roomId),
-      //   (doc) => {
-      //     console.log(doc)
-      //     const changes=doc.metadata
-      //     console.log(changes)
-      //     const source = doc.metadata.hasPendingWrites ? "Local" : "Server";
-      //     console.log("Current data: ", doc.data());
-      //     const data = doc.data();
-      //     // if (source === "Server") {
-      //     //   dispatch({
-      //     //     type: "SetStates",
-      //     //     payload: {
-      //     //       sel: data.sel || "Select size here",
-      //     //       row: data.rel || "0",
-      //     //       col: data.col || "0",
-      //     //       Box: data.Box || [],
-      //     //       horizontalButtons: data.horizontalButtons || [],
-      //     //       verticalButtons: data.verticalButtons || [],
-      //     //       squaresColors: data.squaresColors || [],
-      //     //       numberOfSquares: data.numberOfSquares || "0",
-      //     //       player1Score: data.player1Score || "0",
-      //     //       player2Score: data.player2Score || "0",
-      //     //       player: data.player || "1",
-      //     //       player1Name: data.player1Name || "Player 1",
-      //     //       player2Name: data.player2Name || "Player 2",
-      //     //       won: data.won || "",
-      //     //       modalShow: data.modalShow || false,
-      //     //       modalShow2: data.modalShow2 || true,
-      //     //       start: data.start || false,
-      //     //       Routed: data.Routed || false,
-      //     //       playerEnteredRoom: data.playerEnteredRoom || false,
-      //     //       roomId: state ? state.roomId : "",
-      //     //       enterRoom: state ? state.enterRoom : false,
-      //     //       enterRoomId: state ? state.enterRoomId : "",
-      //     //     },
-      //     //   });
-      //     // }
-      //   },
-      //   (error) => {
-      //     console.log(error);
-      //   },
-      //   unsub()
-      // );
       let changes = [];
       const q = query(collection(db, "users"));
       const unsub2 = onSnapshot(
         q,
         (querySnapshot) => {
-          changes=querySnapshot
+          changes = querySnapshot //changes is array of docs added or modified in collection
             .docChanges()
-
-            // .filter(
-            //   (item) =>{
-            //     console.log("line 168",item)
-            //     return item["Document ID"] === (state?.enterRoomId || state?.roomId)
-            //   });
-          console.log("changes", changes[0].doc.data());
+          
+          let targetDoc  
+          for(let i=0;i<changes.length;i++){
+            // const idArr=changes[i]?.doc["_key"]?.path?.segments
+            const id=changes[i].doc.id
+            if(id===(state.roomId || state.enterRoomId)){
+              targetDoc=changes[i].doc.data()
+              break
+            }
+          }
+          console.log("line 176",targetDoc,typeof targetDoc)
+          dispatch({type: "SetStates",
+          payload: targetDoc})
+          console.log("line 180",changes) 
+          // console.log("changes", changes[0].doc.data());
         },
         (error) => {
           console.log(error);
         },
         // unsub2()
       );
-      // const unsub2 = db.collection("users")?.onSnapshot((querySnapshot) => {
-      //   //onSnapshot on collection
-      //   changes = querySnapshot
-      //     ?.docChanges()
-      //     ?.filter(
-      //       (item) =>
-      //         item["Document ID"] === (state?.enterRoomId || state?.roomId)
-      //     );
-      //     console.log("changes",changes)
-      // },(error) => {
-      //       console.log(error);
-      //     },
-      //     unsub2());
-
-      //   let temp = async () => {
-      //     docSnap = await getDoc(
-      //       doc(db, "users", state?.enterRoomId || state?.roomId)
-      //     );
-      //     return docSnap;
-      //   };
-      //   temp().then((res) => {
-      //     if (res?.exists()) {
-      //       console.log("Document data:", docSnap.data());
-      //       let data=docSnap.data()
-      //       dispatch({
-      //         type: "SetStates",
-      //         payload: {
-      //           sel: data.sel || "Select size here",
-      //           row: data.rel || "0",
-      //           col: data.col || "0",
-      //           Box: data.Box || [],
-      //           horizontalButtons: data.horizontalButtons || [],
-      //           verticalButtons: data.verticalButtons || [],
-      //           squaresColors: data.squaresColors || [],
-      //           numberOfSquares: data.numberOfSquares || "0",
-      //           player1Score: data.player1Score || "0",
-      //           player2Score: data.player2Score || "0",
-      //           player: data.player || "1",
-      //           player1Name: data.player1Name || "Player 1",
-      //           player2Name: data.player2Name || "Player 2",
-      //           won: data.won || "",
-      //           modalShow: data.modalShow || false,
-      //           modalShow2: data.modalShow2 || true,
-      //           start: data.start || false,
-      //           Routed: data.Routed || false,
-      //           playerEnteredRoom: data.playerEnteredRoom || false,
-      //           roomId: state ? state.roomId : "",
-      //           enterRoom: state ? state.enterRoom : false,
-      //           enterRoomId: state ? state.enterRoomId : "",
-      //         },
-      //       });
-      //     } else {
-      //       // docSnap.data() will be undefined in this case
-      //       console.log("No such document!");
-      //     }
-      //   });
       return () => {
-        clearInterval(interval);
         unsub2();
+        clearInterval(interval);
       };
-    }, [20000]);
+    }, [30000]);
   }
 
   const areAllClicked = (id, type) => {
@@ -295,7 +154,7 @@ function Contexts(props) {
             await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
               player: state.player
             }).then((res)=>{
-              console.log(res,"updated")
+              console.log(res,"updated",state.player)
             }).catch((err)=>{console.log(err)})
           }
           if(state.playerEnteredRoom) updateDocState()
@@ -349,7 +208,7 @@ function Contexts(props) {
             await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
               player: state.player
             }).then((res)=>{
-              console.log(res,"updated")
+              console.log(res,"updated",state.player)
             }).catch((err)=>{console.log(err)})
           }
           if(state.playerEnteredRoom) updateDocState()
@@ -508,7 +367,7 @@ function Contexts(props) {
             await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
               player: state.player
             }).then((res)=>{
-              console.log(res,"updated")
+              console.log(res,"updated",state.player)
             }).catch((err)=>{console.log(err)})
           }
           if(state.playerEnteredRoom) updateDocState()
@@ -568,7 +427,7 @@ function Contexts(props) {
             await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
               player: state.player
             }).then((res)=>{
-              console.log(res,"updated")
+              console.log(res,"updated",state.player)
             }).catch((err)=>{console.log(err)})
           }
           if(state.playerEnteredRoom) updateDocState()
@@ -626,7 +485,7 @@ function Contexts(props) {
             await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
               player: state.player
             }).then((res)=>{
-              console.log(res,"updated")
+              console.log(res,"updated",state.player)
             }).catch((err)=>{console.log(err)})
           }
           if(state.playerEnteredRoom) updateDocState()
@@ -799,7 +658,7 @@ function Contexts(props) {
             await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
               player: state.player
             }).then((res)=>{
-              console.log(res,"updated")
+              console.log(res,"updated",state.player)
             }).catch((err)=>{console.log(err)})
           }
           if(state.playerEnteredRoom) updateDocState()

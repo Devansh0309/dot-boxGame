@@ -21,14 +21,14 @@ function SquareGrid() {
 
   useEffect(() => {
     console.log(1);
-    console.log("line 21: state.sel", state.sel);
+    console.log("line 24: state.sel", state.sel);
     // console.log("line 20",state.sel)
     //Routed means route changed
     if (!state.Routed && InitialRender1.current) {
-      console.log("line 24: state.sel", state.sel);
+      console.log("line 28: state.sel", state.sel);
       InitialRender1.current = false;
     } else if (!state.Routed && !InitialRender1.current) {
-      console.log("line 35: state.sel", state.sel);
+      console.log("line 31: state.sel", state.sel);
       dispatch({
         type: "SetStates",
         payload: {
@@ -36,14 +36,12 @@ function SquareGrid() {
           col: state.sel.split("*").map(Number)[1],
         },
       });
-      
-        
     }
   }, [state.sel]);
 
   useEffect(() => {
     console.log(2);
-    console.log("line 48: state.sel", state.sel);
+    console.log("line 46: state.sel", state.sel);
     let arr = [];
     let horizontal = [];
     let vertical = [];
@@ -109,7 +107,10 @@ function SquareGrid() {
           console.log(res,"updated")
         }).catch((err)=>{console.log(err)})
       }
-      if(state.roomId || state.enterRoomId || state.playerEnteredRoom) {updateDocState()}
+      if(state.roomId || state.enterRoomId || state.playerEnteredRoom) {
+        console.log("line 111","doc updated")
+        updateDocState()
+      }
     }
     setGridWidth(80 * (state.col + 1));
     setGridHeight(80 * (state.row + 1));
@@ -117,7 +118,7 @@ function SquareGrid() {
 
   useEffect(() => {
     console.log(3);
-    console.log("line 117: state.sel", state.sel);
+    console.log("line 123: state.sel", state.sel);
     if (!state.Routed && InitialRender3.current) {
       InitialRender3.current = false;
     } else if (!state.Routed && !InitialRender3.current) {
@@ -156,7 +157,10 @@ function SquareGrid() {
           console.log(res,"updated")
         }).catch((err)=>{console.log(err)})
       }
-      if(state.playerEnteredRoom) updateDocState()
+      if(state.playerEnteredRoom) {
+        console.log("line 163","doc updated")
+        updateDocState()
+      }  
     }
   }, [
     state.numberOfSquares > 0 &&
@@ -165,7 +169,7 @@ function SquareGrid() {
 
   useEffect(() => {
     console.log(4);
-    console.log("line 163: state.sel", state.sel);
+    console.log("line 174: state.sel", state.sel);
     if (!state.Routed && InitialRender4.current) {
       InitialRender4.current = false;
     } else if (!state.Routed && !InitialRender5.current) {
@@ -177,13 +181,16 @@ function SquareGrid() {
           console.log(res,"updated")
         }).catch((err)=>{console.log(err)})
       } 
-      if(state.playerEnteredRoom) updateDocState()
+      if(state.playerEnteredRoom){
+        console.log("line 187","doc updated")
+        updateDocState()
+      }  
     }
   }, [state.sel === "Select size here" && state.won]);
 
   useEffect(() => {
     console.log(5);
-    console.log("line 174: state.sel", state.sel);
+    console.log("line 195: state.sel", state.sel);
     if (!state.Routed && InitialRender5.current) {
       InitialRender5.current = false;
     } else if (state.Routed && InitialRender5.current) {
@@ -202,7 +209,10 @@ function SquareGrid() {
           console.log(res,"updated")
         }).catch((err)=>{console.log(err)})
       }
-      if(state.playerEnteredRoom) updateDocState()
+      if(state.playerEnteredRoom){
+        updateDocState()
+        console.log("line 216","doc updated")
+      }  
     }
   }, [state.sel !== "Select size here" && state.won]);
 

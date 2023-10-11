@@ -170,6 +170,7 @@ function NewNavbar() {
   };
 
   const createRoom = async (enterRoomId) => {
+    console.log("line 173", "room created")
     await setDoc(doc(db, "users", enterRoomId), {
       sel: "Select size here",
       row: "0",
@@ -185,10 +186,6 @@ function NewNavbar() {
       player1Name: "Player 1",
       player2Name: "Player 2",
       won: "",
-      modalShow: false,
-      modalShow2: true,
-      start: false,
-      Routed: false,
       playerEnteredRoom: false,
     });
   };
@@ -265,7 +262,7 @@ function NewNavbar() {
                       // enterRoomId:""
                     },
                   });
-                  createRoom(roomId);
+                  if(roomId){createRoom(roomId)}
                   // let updateDocState = async () => {
                   //   await updateDoc(
                   //     doc(db, "users", state.enterRoomId || state.roomId),

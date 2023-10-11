@@ -18,14 +18,14 @@ function App() {
       <Route path="/" 
       element={<Contexts>
          <NewNavbar/>
-         <VerticallyCenteredModal/>
-         <MyVerticallyCenteredModal/>
+         {/* <VerticallyCenteredModal/> */}
+         {/* <MyVerticallyCenteredModal/> */}
          <SquareGrid />
         </Contexts>}/>
       <Route path="/aboutgame" 
       element={<Contexts>
         <NewNavbar2 />
-        <MyVerticallyCenteredModal/>
+        {/* <MyVerticallyCenteredModal/> */}
         <HowToPlay/>
       </Contexts>}/>  
       {/* <Route path="/signIn"  element={<Auth/>}/> 
