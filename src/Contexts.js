@@ -36,7 +36,7 @@ const initialState = {
   enterRoom: states ? states.enterRoom : false,
   playerEnteredRoom: states ? states.playerEnteredRoom : false,
   enterRoomId: states ? states.enterRoomId : "",
-  changesAdded: states ? states.changesAdded : false,
+  changesAdded: states ? states.changesAdded : false
 };
 function reducer(state, action) {
   // console.log("line 34 in context",state)

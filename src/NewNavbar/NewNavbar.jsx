@@ -106,7 +106,15 @@ function NewNavbar() {
     { title: "Options", icon: <SettingsIcon /> },
     { title: "Exit", icon: <LogoutIcon /> },
   ];
-
+  const updateDocState = async (obj) => {
+    await updateDoc(doc(db, "users", state.enterRoomId || state.roomId), obj)
+      .then((res) => {
+        console.log(res, "updated");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const handleNavClicks = (title) => {
     if (title === "New Game" && state.sel !== "Select size here") {
       dispatch({
@@ -118,19 +126,10 @@ function NewNavbar() {
           enterRoomId: "",
         },
       });
-      let updateDocState = async () => {
-        await updateDoc(doc(db, "users", state.enterRoomId || state.roomId), {
-          sel: "Select size here",
-          enterRoom: false,
-        })
-          .then((res) => {
-            console.log(res, "updated");
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      };
-      if (state.playerEnteredRoom) updateDocState();
+      if (state.playerEnteredRoom) updateDocState({
+        sel: "Select size here",
+        enterRoom: false,
+      });
     } else if (title === "New Game" && state.sel === "Select size here") {
       alert("Select size or Start Game");
     } else if (title === "Home") {
@@ -139,32 +138,8 @@ function NewNavbar() {
       window.close();
     } else if (title === "Options") {
       dispatch({ type: "SetStates", payload: { modalShow: true } });
-      let updateDocState = async () => {
-        await updateDoc(doc(db, "users", state.enterRoomId || state.roomId), {
-          modalShow: true,
-        })
-          .then((res) => {
-            console.log(res, "updated");
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      };
-      if (state.playerEnteredRoom) updateDocState();
     } else {
       dispatch({ type: "SetStates", payload: { Routed: true } });
-      let updateDocState = async () => {
-        await updateDoc(doc(db, "users", state.enterRoomId || state.roomId), {
-          Routed: true,
-        })
-          .then((res) => {
-            console.log(res, "updated");
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      };
-      if (state.playerEnteredRoom) updateDocState();
       navigate("/aboutgame");
     }
   };
@@ -257,9 +232,7 @@ function NewNavbar() {
                       Box: [],
                       sel: e.target.value,
                       roomId: roomId,
-                      // enterRoom: false,
-                      // roomId: "",
-                      // enterRoomId:""
+                      start:false
                     },
                   });
                   if(roomId){createRoom(roomId)}
@@ -374,18 +347,10 @@ function NewNavbar() {
                 onSubmit={(e) => {
                   e.preventDefault();
                   console.log("line 314 newnavbar", state.enterRoomId);
-                  let updateRoom = async () => {
-                    await updateDoc(doc(db, "users", state.enterRoomId), {
-                      playerEnteredRoom: true,
-                    })
-                      .then((res) => {
-                        console.log(res, "updated");
-                      })
-                      .catch((err) => {
-                        console.log(err);
-                      });
-                  };
-                  updateRoom();
+                  dispatch({ type: "SetStates", payload: { playerEnteredRoom: true } });
+                  updateDocState( {
+                    playerEnteredRoom: true,
+                  });
                 }}
               >
                 <input
