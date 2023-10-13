@@ -1,6 +1,6 @@
 import React, { useReducer, createContext } from "react";
 import SquareSound from "./NewNavbar/ButtonSound/shortSuccess.mp3";
-import { collection, doc, getDoc, onSnapshot, query, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "./firebaseConfig";
 export const GridContext = createContext();
 
@@ -36,6 +36,7 @@ const initialState = {
   enterRoom: states ? states.enterRoom : false,
   playerEnteredRoom: states ? states.playerEnteredRoom : false,
   enterRoomId: states ? states.enterRoomId : "",
+  changesAdded: states ? states.changesAdded : false,
 };
 function reducer(state, action) {
   // console.log("line 34 in context",state)
@@ -60,44 +61,15 @@ function Contexts(props) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const audio3 = new Audio(SquareSound);
   //Functions
-  if (state?.enterRoomId || state?.roomId) {
-    console.log("line 64");
-    let interval = setInterval(() => {
-      let changes = [];
-      const q = query(collection(db, "users"));
-      const unsub2 = onSnapshot(
-        q,
-        (querySnapshot) => {
-          changes = querySnapshot //changes is array of docs added or modified in collection
-            .docChanges()
-          
-          let targetDoc  
-          for(let i=0;i<changes.length;i++){
-            // const idArr=changes[i]?.doc["_key"]?.path?.segments
-            const id=changes[i].doc.id
-            if(id===(state.roomId || state.enterRoomId)){
-              targetDoc=changes[i].doc.data()
-              break
-            }
-          }
-          console.log("line 176",targetDoc,typeof targetDoc)
-          dispatch({type: "SetStates",
-          payload: targetDoc})
-          console.log("line 180",changes) 
-          // console.log("changes", changes[0].doc.data());
-        },
-        (error) => {
-          console.log(error);
-        },
-        // unsub2()
-      );
-      return () => {
-        unsub2();
-        clearInterval(interval);
-      };
-    }, [30000]);
-  }
-
+  const updateDocState = async (obj) => {
+    await updateDoc(doc(db, "users", state.enterRoomId || state.roomId), obj)
+      .then((res) => {
+        console.log(res, "updated");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const areAllClicked = (id, type) => {
     //type:'vertical' or 'horizontal'
     // id : key of buttons
@@ -125,7 +97,10 @@ function Contexts(props) {
           } else {
             temp[id].squarecolor = "#42c442";
           }
-          const player = `player${state.player}Score`
+          const player = `player${state.player}Score`;
+          const playerScore = state[player];
+          const noOfSquares = state.numberOfSquares;
+          console.log("line 130 ", state[player], state.numberOfSquares);
           dispatch({
             type: "SetStates",
             payload: {
@@ -134,30 +109,24 @@ function Contexts(props) {
               numberOfSquares: state.numberOfSquares + 1,
             },
           });
-          let updateDocState = async()=>{
-            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
-              [player]: state[player],
+          console.log("line 138 ", state[player], state.numberOfSquares);
+          if (state.playerEnteredRoom)
+            updateDocState({
+              [player]: playerScore + 1,
               squaresColors: temp,
-              numberOfSquares: state.numberOfSquares 
-            }).then((res)=>{
-              console.log(res,"updated")
-            }).catch((err)=>{console.log(err)})
-          }
-          if(state.playerEnteredRoom) updateDocState()
+              numberOfSquares: noOfSquares + 1,
+            });
           audio3.play();
         } else {
+          const playerChance = state.player === "1" ? "2" : "1";
           dispatch({
             type: "SetStates",
             payload: { player: state.player === "1" ? "2" : "1" },
           });
-          let updateDocState = async()=>{
-            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
-              player: state.player
-            }).then((res)=>{
-              console.log(res,"updated",state.player)
-            }).catch((err)=>{console.log(err)})
+
+          if (state.playerEnteredRoom) {
+            updateDocState({ player: playerChance });
           }
-          if(state.playerEnteredRoom) updateDocState()
         }
       } else if (Math.floor(id / state.col) === state.row) {
         if (
@@ -179,7 +148,9 @@ function Contexts(props) {
           } else {
             temp[id - state.col].squarecolor = "#42c442";
           }
-          const player=`player${state.player}Score`
+          const player = `player${state.player}Score`;
+          const playerScore = state[player];
+          const noOfSquares = state.numberOfSquares;
           dispatch({
             type: "SetStates",
             payload: {
@@ -188,30 +159,23 @@ function Contexts(props) {
               numberOfSquares: state.numberOfSquares + 1,
             },
           });
-          let updateDocState = async()=>{
-            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
-              [player]: state[player],
+          if (state.playerEnteredRoom)
+            updateDocState({
+              [player]: playerScore + 1,
               squaresColors: temp,
-              numberOfSquares: state.numberOfSquares 
-            }).then((res)=>{
-              console.log(res,"updated")
-            }).catch((err)=>{console.log(err)})
-          }
-          if(state.playerEnteredRoom) updateDocState()
+              numberOfSquares: noOfSquares + 1,
+            });
           audio3.play();
         } else {
+          const playerChance = state.player === "1" ? "2" : "1";
           dispatch({
             type: "SetStates",
             payload: { player: state.player === "1" ? "2" : "1" },
           });
-          let updateDocState = async()=>{
-            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
-              player: state.player
-            }).then((res)=>{
-              console.log(res,"updated",state.player)
-            }).catch((err)=>{console.log(err)})
+
+          if (state.playerEnteredRoom) {
+            updateDocState({ player: playerChance });
           }
-          if(state.playerEnteredRoom) updateDocState()
         }
       } else {
         if (
@@ -241,7 +205,9 @@ function Contexts(props) {
           } else {
             temp[id - state.col].squarecolor = "#42c442";
           }
-          const player=`player${state.player}Score`
+          const player = `player${state.player}Score`;
+          const playerScore = state[player];
+          const noOfSquares = state.numberOfSquares;
           dispatch({
             type: "SetStates",
             payload: {
@@ -250,16 +216,12 @@ function Contexts(props) {
               numberOfSquares: state.numberOfSquares + 1,
             },
           });
-          let updateDocState = async()=>{
-            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
-              [player]: state[player],
+          if (state.playerEnteredRoom)
+            updateDocState({
+              [player]: playerScore + 1,
               squaresColors: temp,
-              numberOfSquares: state.numberOfSquares 
-            }).then((res)=>{
-              console.log(res,"updated")
-            }).catch((err)=>{console.log(err)})
-          }
-          if(state.playerEnteredRoom) updateDocState()
+              numberOfSquares: noOfSquares + 1,
+            });
           audio3.play();
         } else if (
           (!state.horizontalButtons[id - state.col].isClicked ||
@@ -288,7 +250,9 @@ function Contexts(props) {
           } else {
             temp[id].squarecolor = "#42c442";
           }
-          const player=`player${state.player}Score`
+          const player = `player${state.player}Score`;
+          const playerScore = state[player];
+          const noOfSquares = state.numberOfSquares;
           dispatch({
             type: "SetStates",
             payload: {
@@ -297,16 +261,12 @@ function Contexts(props) {
               numberOfSquares: state.numberOfSquares + 1,
             },
           });
-          let updateDocState = async()=>{
-            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
-              [player]: state[player],
+          if (state.playerEnteredRoom)
+            updateDocState({
+              [player]: playerScore + 1,
               squaresColors: temp,
-              numberOfSquares: state.numberOfSquares 
-            }).then((res)=>{
-              console.log(res,"updated")
-            }).catch((err)=>{console.log(err)})
-          }
-          if(state.playerEnteredRoom) updateDocState()
+              numberOfSquares: noOfSquares + 1,
+            });
           audio3.play();
         } else if (
           state.horizontalButtons[id - state.col].isClicked &&
@@ -338,7 +298,9 @@ function Contexts(props) {
             temp[id].squarecolor = "#42c442";
             temp[id - state.col].squarecolor = "#42c442";
           }
-          const player=`player${state.player}Score`
+          const player = `player${state.player}Score`;
+          const playerScore = state[player];
+          const noOfSquares = state.numberOfSquares;
           dispatch({
             type: "SetStates",
             payload: {
@@ -347,30 +309,23 @@ function Contexts(props) {
               numberOfSquares: state.numberOfSquares + 2,
             },
           });
-          let updateDocState = async()=>{
-            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
-              [player]: state[player],
+          if (state.playerEnteredRoom)
+            updateDocState({
+              [player]: playerScore + 2,
               squaresColors: temp,
-              numberOfSquares: state.numberOfSquares 
-            }).then((res)=>{
-              console.log(res,"updated")
-            }).catch((err)=>{console.log(err)})
-          }
-          if(state.playerEnteredRoom) updateDocState()
+              numberOfSquares: noOfSquares + 2,
+            });
           audio3.play();
         } else {
+          const playerChance = state.player === "1" ? "2" : "1";
           dispatch({
             type: "SetStates",
             payload: { player: state.player === "1" ? "2" : "1" },
           });
-          let updateDocState = async()=>{
-            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
-              player: state.player
-            }).then((res)=>{
-              console.log(res,"updated",state.player)
-            }).catch((err)=>{console.log(err)})
+
+          if (state.playerEnteredRoom) {
+            updateDocState({ player: playerChance });
           }
-          if(state.playerEnteredRoom) updateDocState()
         }
       }
     } else {
@@ -399,7 +354,9 @@ function Contexts(props) {
             temp[id - Math.floor(id / (state.col + 1))].squarecolor = "#42c442";
           }
           audio3.play();
-          const player=`player${state.player}Score`
+          const player = `player${state.player}Score`;
+          const playerScore = state[player];
+          const noOfSquares = state.numberOfSquares;
           dispatch({
             type: "SetStates",
             payload: {
@@ -408,29 +365,22 @@ function Contexts(props) {
               numberOfSquares: state.numberOfSquares + 1,
             },
           });
-          let updateDocState = async()=>{
-            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
-              [player]: state[player],
+          if (state.playerEnteredRoom)
+            updateDocState({
+              [player]: playerScore + 1,
               squaresColors: temp,
-              numberOfSquares: state.numberOfSquares 
-            }).then((res)=>{
-              console.log(res,"updated")
-            }).catch((err)=>{console.log(err)})
-          }
-          if(state.playerEnteredRoom) updateDocState()
+              numberOfSquares: noOfSquares + 1,
+            });
         } else {
+          const playerChance = state.player === "1" ? "2" : "1";
           dispatch({
             type: "SetStates",
             payload: { player: state.player === "1" ? "2" : "1" },
           });
-          let updateDocState = async()=>{
-            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
-              player: state.player
-            }).then((res)=>{
-              console.log(res,"updated",state.player)
-            }).catch((err)=>{console.log(err)})
+
+          if (state.playerEnteredRoom) {
+            updateDocState({ player: playerChance });
           }
-          if(state.playerEnteredRoom) updateDocState()
         }
       } else if (id % (state.col + 1) === state.col) {
         //last column right vertical btn id provided
@@ -457,7 +407,9 @@ function Contexts(props) {
             temp[id - Math.ceil(id / (state.col + 1))].squarecolor = "#42c442";
           }
           audio3.play();
-          const player=`player${state.player}Score`
+          const player = `player${state.player}Score`;
+          const playerScore = state[player];
+          const noOfSquares = state.numberOfSquares;
           dispatch({
             type: "SetStates",
             payload: {
@@ -466,29 +418,22 @@ function Contexts(props) {
               numberOfSquares: state.numberOfSquares + 1,
             },
           });
-          let updateDocState = async()=>{
-            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
-              [player]: state[player],
+          if (state.playerEnteredRoom)
+            updateDocState({
+              [player]: playerScore + 1,
               squaresColors: temp,
-              numberOfSquares: state.numberOfSquares 
-            }).then((res)=>{
-              console.log(res,"updated")
-            }).catch((err)=>{console.log(err)})
-          }
-          if(state.playerEnteredRoom) updateDocState()
+              numberOfSquares: noOfSquares + 1,
+            });
         } else {
+          const playerChance = state.player === "1" ? "2" : "1";
           dispatch({
             type: "SetStates",
             payload: { player: state.player === "1" ? "2" : "1" },
           });
-          let updateDocState = async()=>{
-            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
-              player: state.player
-            }).then((res)=>{
-              console.log(res,"updated",state.player)
-            }).catch((err)=>{console.log(err)})
+
+          if (state.playerEnteredRoom) {
+            updateDocState({ player: playerChance });
           }
-          if(state.playerEnteredRoom) updateDocState()
         }
       } else {
         //middle column (not first and not last) btn id provided
@@ -523,7 +468,9 @@ function Contexts(props) {
             temp[id - Math.floor(id / (state.col + 1))].squarecolor = "#42c442";
           }
           audio3.play();
-          const player=`player${state.player}Score`
+          const player = `player${state.player}Score`;
+          const playerScore = state[player];
+          const noOfSquares = state.numberOfSquares;
           dispatch({
             type: "SetStates",
             payload: {
@@ -532,16 +479,12 @@ function Contexts(props) {
               numberOfSquares: state.numberOfSquares + 1,
             },
           });
-          let updateDocState = async()=>{
-            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
-              [player]: state[player],
+          if (state.playerEnteredRoom)
+            updateDocState({
+              [player]: playerScore + 1,
               squaresColors: temp,
-              numberOfSquares: state.numberOfSquares 
-            }).then((res)=>{
-              console.log(res,"updated")
-            }).catch((err)=>{console.log(err)})
-          }
-          if(state.playerEnteredRoom) updateDocState()
+              numberOfSquares: noOfSquares + 1,
+            });
         } else if (
           (!state.horizontalButtons[id - Math.floor(id / (state.col + 1))]
             .isClicked ||
@@ -573,7 +516,9 @@ function Contexts(props) {
             temp[id - Math.ceil(id / (state.col + 1))].squarecolor = "#42c442";
           }
           audio3.play();
-          const player=`player${state.player}Score`
+          const player = `player${state.player}Score`;
+          const playerScore = state[player];
+          const noOfSquares = state.numberOfSquares;
           dispatch({
             type: "SetStates",
             payload: {
@@ -582,16 +527,12 @@ function Contexts(props) {
               numberOfSquares: state.numberOfSquares + 1,
             },
           });
-          let updateDocState = async()=>{
-            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
-              [player]: state[player],
+          if (state.playerEnteredRoom)
+            updateDocState({
+              [player]: playerScore + 1,
               squaresColors: temp,
-              numberOfSquares: state.numberOfSquares 
-            }).then((res)=>{
-              console.log(res,"updated")
-            }).catch((err)=>{console.log(err)})
-          }
-          if(state.playerEnteredRoom) updateDocState()
+              numberOfSquares: noOfSquares + 1,
+            });
         } else if (
           state.horizontalButtons[id - Math.floor(id / (state.col + 1))]
             .isClicked &&
@@ -630,7 +571,9 @@ function Contexts(props) {
             temp[id - Math.ceil(id / (state.col + 1))].squarecolor = "#42c442";
           }
           audio3.play();
-          const player=`player${state.player}Score`
+          const player = `player${state.player}Score`;
+          const playerScore = state[player];
+          const noOfSquares = state.numberOfSquares;
           dispatch({
             type: "SetStates",
             payload: {
@@ -639,29 +582,22 @@ function Contexts(props) {
               numberOfSquares: state.numberOfSquares + 2,
             },
           });
-          let updateDocState = async()=>{
-            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
-              [player]: state[player],
+          if (state.playerEnteredRoom)
+            updateDocState({
+              [player]: playerScore + 2,
               squaresColors: temp,
-              numberOfSquares: state.numberOfSquares 
-            }).then((res)=>{
-              console.log(res,"updated")
-            }).catch((err)=>{console.log(err)})
-          }
-          if(state.playerEnteredRoom) updateDocState()
+              numberOfSquares: noOfSquares + 2,
+            });
         } else {
+          const playerChance = state.player === "1" ? "2" : "1";
           dispatch({
             type: "SetStates",
             payload: { player: state.player === "1" ? "2" : "1" },
           });
-          let updateDocState = async()=>{
-            await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
-              player: state.player
-            }).then((res)=>{
-              console.log(res,"updated",state.player)
-            }).catch((err)=>{console.log(err)})
+
+          if (state.playerEnteredRoom) {
+            updateDocState({ player: playerChance });
           }
-          if(state.playerEnteredRoom) updateDocState()
         }
       }
     }
@@ -687,14 +623,10 @@ function Contexts(props) {
         temp[id].btncolor = "green";
       }
       dispatch({ type: "SetStates", payload: { horizontalButtons: temp } });
-      let updateDocState = async()=>{
-        await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
-          horizontalButtons: temp 
-        }).then((res)=>{
-          console.log(res,"updated")
-        }).catch((err)=>{console.log(err)})
-      }
-      if(state.playerEnteredRoom) updateDocState()
+      if (state.playerEnteredRoom)
+        updateDocState({
+          horizontalButtons: temp,
+        });
       // setHorizontalButtons(temp)
       //or this?
       // setHorizontalButtons(...horizontalButtons,{key:id,type:'horizontal',isClicked:true})
@@ -717,14 +649,10 @@ function Contexts(props) {
         temp[id].btncolor = "green";
       }
       dispatch({ type: "SetStates", payload: { verticalButtons: temp } });
-      let updateDocState = async()=>{
-        await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
-          verticalButtons: temp
-        }).then((res)=>{
-          console.log(res,"updated")
-        }).catch((err)=>{console.log(err)})
-      }
-      if(state.playerEnteredRoom) updateDocState()
+      if (state.playerEnteredRoom)
+        updateDocState({
+          verticalButtons: temp,
+        });
       // setVerticalButtons(temp)
       //or this?
       // setHorizontalButtons(...horizontalButtons,{key:id,type:'horizontal',isClicked:true})

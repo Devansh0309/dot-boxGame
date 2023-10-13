@@ -4,12 +4,14 @@ import { GridContext } from "../Contexts";
 import ButtonSound2 from "../NewNavbar/ButtonSound/button1.mp3";
 import background from "../background.jpg";
 import GridComponent from "./GridComponent";
-import { doc, updateDoc } from "firebase/firestore";
+import { collection, doc, onSnapshot, query, updateDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 
 function SquareGrid() {
   const [gridWidth, setGridWidth] = useState();
   const [gridHeight, setGridHeight] = useState();
+  // const [typeOfChange, setTypeOfChange] = useState("")
+  const typeOfChange = useRef("")
   const { state, dispatch } = useContext(GridContext);
 
   const InitialRender1 = useRef(true); //Initial Render 1 for initial render of first useEffect and so on for others useEffect
@@ -17,7 +19,78 @@ function SquareGrid() {
   const InitialRender3 = useRef(true);
   const InitialRender4 = useRef(true);
   const InitialRender5 = useRef(true);
+
   // const audio2 = new Audio(ButtonSound2);
+  let updateDocState = async (obj) => {
+    console.log("line 25",obj, typeof obj)
+    await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),obj)
+      .then((res) => {
+        console.log(res, "updated");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+
+  useEffect(() => {
+    console.log("0")
+    let interval
+    let unsub
+    if (state?.enterRoomId || state?.roomId) {
+      console.log("line 44");
+      // interval = setTimeout(() => {
+        let changes = [];
+        const q = query(collection(db, "users"));
+        return onSnapshot(  //unsub = onSnapshot
+          q,
+          (querySnapshot) => {
+            changes = querySnapshot //changes is array of docs added or modified in collection
+              .docChanges();
+
+            let targetDoc;
+            for (let i = 0; i < changes.length; i++) {
+              // const idArr=changes[i]?.doc["_key"]?.path?.segments
+              const id = changes[i].doc.id;
+              if (id === (state.roomId || state.enterRoomId)) {
+                targetDoc = changes[i].doc.data();
+                typeOfChange.current=changes[i].type
+                // setTypeOfChange(changes[i].type)
+                break;
+              }
+            }
+            console.log("line 176", targetDoc, typeof targetDoc);
+            if(!state.changesAdded){
+              dispatch({ type: "SetStates", payload: {...targetDoc,changesAdded:true }});
+            }
+            else if(typeOfChange.current === "modified" || typeOfChange.current ==="deleted"){
+              // setTypeOfChange("")
+              typeOfChange.current=""
+              dispatch({ type: "SetStates", payload: targetDoc });
+            }
+           
+            console.log("line 180", changes);
+            // console.log("changes", changes[0].doc.data());
+          },
+          (error) => {
+            console.log(error);
+          },
+        );
+      // }, [2000]);
+    }
+    // return () => {
+    //   // unsub();
+    //   clearTimeout(interval);
+    // };
+  }, 
+  // []
+  [state.sel,state.horizontalButtons,
+    state.verticalButtons,state.squaresColors,state.numberOfSquares,
+    state.player1Score,state.player2Score,state.player,state.player1Name,
+    state.player2Name,state.won,state.start,state.roomId,state.enterRoomId,
+    state.playerEnteredRoom]
+  );
+
 
   useEffect(() => {
     console.log(1);
@@ -77,6 +150,7 @@ function SquareGrid() {
     if (!state.Routed && InitialRender2.current) {
       InitialRender2.current = false;
     } else if (!state.Routed && !InitialRender2.current) {
+      console.log("line 153, inside 2nd useEffect of row,col dependency")
       dispatch({
         type: "SetStates",
         payload: {
@@ -90,8 +164,10 @@ function SquareGrid() {
           player: "1",
         },
       });
-      let updateDocState = async()=>{
-        await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+      
+      if (state.roomId || state.enterRoomId || state.playerEnteredRoom) {
+        console.log("line 111", "doc updated");
+        updateDocState( {
           horizontalButtons: horizontal,
           verticalButtons: vertical,
           squaresColors: squares,
@@ -100,16 +176,10 @@ function SquareGrid() {
           player1Score: 0,
           player2Score: 0,
           player: "1",
-          sel:state.sel,
-          row:state.row,
-          col:state.col
-        }).then((res)=>{
-          console.log(res,"updated")
-        }).catch((err)=>{console.log(err)})
-      }
-      if(state.roomId || state.enterRoomId || state.playerEnteredRoom) {
-        console.log("line 111","doc updated")
-        updateDocState()
+          sel: state.sel,
+          row: state.row,
+          col: state.col,
+        });
       }
     }
     setGridWidth(80 * (state.col + 1));
@@ -139,8 +209,9 @@ function SquareGrid() {
               : "",
         },
       });
-      let updateDocState = async()=>{
-        await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
+      if (state.playerEnteredRoom) {
+        console.log("line 163", "doc updated");
+        updateDocState({
           sel: "Select size here",
           won:
             state.player1Score > 0 || state.player2Score > 0
@@ -152,15 +223,9 @@ function SquareGrid() {
                     ? " Tied and no one"
                     : state.player2Name
                 } won!`
-              : "",
-        }).then((res)=>{
-          console.log(res,"updated")
-        }).catch((err)=>{console.log(err)})
+              : ""
+        });
       }
-      if(state.playerEnteredRoom) {
-        console.log("line 163","doc updated")
-        updateDocState()
-      }  
     }
   }, [
     state.numberOfSquares > 0 &&
@@ -174,17 +239,10 @@ function SquareGrid() {
       InitialRender4.current = false;
     } else if (!state.Routed && !InitialRender5.current) {
       dispatch({ type: "SetStates", payload: { start: false } });
-      let updateDocState = async()=>{
-        await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
-          start: false 
-        }).then((res)=>{
-          console.log(res,"updated")
-        }).catch((err)=>{console.log(err)})
-      } 
-      if(state.playerEnteredRoom){
-        console.log("line 187","doc updated")
-        updateDocState()
-      }  
+      if (state.playerEnteredRoom) {
+        console.log("line 187", "doc updated");
+        updateDocState( {start: false});
+      }
     }
   }, [state.sel === "Select size here" && state.won]);
 
@@ -202,17 +260,10 @@ function SquareGrid() {
       InitialRender5.current = false;
     } else if (!state.Routed && !InitialRender5.current) {
       dispatch({ type: "SetStates", payload: { won: "" } });
-      let updateDocState = async()=>{
-        await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
-          won: ""
-        }).then((res)=>{
-          console.log(res,"updated")
-        }).catch((err)=>{console.log(err)})
+      if (state.playerEnteredRoom) {
+        updateDocState({won: ""});
+        console.log("line 216", "doc updated");
       }
-      if(state.playerEnteredRoom){
-        updateDocState()
-        console.log("line 216","doc updated")
-      }  
     }
   }, [state.sel !== "Select size here" && state.won]);
 
@@ -232,7 +283,7 @@ function SquareGrid() {
         }}
       />
       {state.sel !== "Select size here" && !state.won ? (
-        <GridComponent gridWidth={gridWidth} gridHeight={gridHeight}/>
+        <GridComponent gridWidth={gridWidth} gridHeight={gridHeight} />
       ) : state.sel === "Select size here" && state.won ? (
         <div>
           <br />
@@ -243,20 +294,27 @@ function SquareGrid() {
       ) : state.roomId ? (
         <p>Creating Room</p>
       ) : state?.playerEnteredRoom ? (
-        <GridComponent gridWidth={gridWidth} gridHeight={gridHeight}/>
+        <GridComponent gridWidth={gridWidth} gridHeight={gridHeight} />
       ) : (
         <button
           type="button"
-          onClick={() =>{
-            dispatch({ type: "SetStates", payload: { sel: "2*3" } })
-            let updateDocState = async()=>{
-              await updateDoc(doc(db, "users", state.enterRoomId || state.roomId),{
-                sel: "2*3"
-              }).then((res)=>{
-                console.log(res,"updated")
-              }).catch((err)=>{console.log(err)})
-            }
-            if(state.playerEnteredRoom) updateDocState()
+          onClick={() => {
+            dispatch({ type: "SetStates", payload: { sel: "2*3" } });
+            let updateDocState = async () => {
+              await updateDoc(
+                doc(db, "users", state.enterRoomId || state.roomId),
+                {
+                  sel: "2*3",
+                }
+              )
+                .then((res) => {
+                  console.log(res, "updated");
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            };
+            if (state.playerEnteredRoom) updateDocState();
           }}
           style={{
             backgroundColor: "inherit",
