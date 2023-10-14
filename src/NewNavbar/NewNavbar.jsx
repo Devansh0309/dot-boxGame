@@ -231,11 +231,11 @@ function NewNavbar() {
                     payload: {
                       Box: [],
                       sel: e.target.value,
-                      roomId: roomId,
+                      // roomId: roomId,
                       start:false
                     },
                   });
-                  if(roomId){createRoom(roomId)}
+                  if(state.roomId){createRoom(state.roomId)}
                   // let updateDocState = async () => {
                   //   await updateDoc(
                   //     doc(db, "users", state.enterRoomId || state.roomId),
@@ -317,7 +317,7 @@ function NewNavbar() {
                   CopyId
                 </Button>
               </div>
-            ) : state.enterRoom ? null : roomId ? null : (
+            ) : state.enterRoom ? null : (
               <Typography
                 sx={{
                   display: { xs: "none", sm: "block" },
@@ -330,8 +330,8 @@ function NewNavbar() {
                 title="Create Room"
                 onClick={(e) => {
                   const enterRoomId = uuidv4();
-                  setRoomId(enterRoomId);
-                  dispatch({ type: "SetStates", payload: { start: true } });
+                  // setRoomId(enterRoomId);
+                  dispatch({ type: "SetStates", payload: { start: true, roomId: enterRoomId } });
                   alert("Select size to start creating room")
                   audio2.play();
                 }}
@@ -339,9 +339,7 @@ function NewNavbar() {
                 Create Room
               </Typography>
             )}
-            {state.roomId ? null : //   }}>CopyId</Button> //     clipboardCopy(roomId) //   <Button variant="contained" onClick={()=>{ //   {/* <span>{roomId} </span> */} // <div>
-
-            // </div>
+            {state.roomId ? null : 
             state.enterRoom ? (
               <form
                 onSubmit={(e) => {
@@ -367,7 +365,7 @@ function NewNavbar() {
                   Enter room
                 </Button>
               </form>
-            ) : roomId ? null : (
+            ) :  (
               <Typography
                 sx={{
                   display: { xs: "none", sm: "block" },
