@@ -56,7 +56,6 @@ function SquareGrid() {
           (querySnapshot) => {
             changes = querySnapshot //changes is array of docs added or modified in collection
               .docChanges();
-
             let targetDoc;
             for (let i = 0; i < changes.length; i++) {
               // const idArr=changes[i]?.doc["_key"]?.path?.segments
@@ -84,7 +83,7 @@ function SquareGrid() {
               dataFetched.current = true;
             }
 
-            console.log("line 180", changes);
+            console.log("line 180", changes[0]);
             // console.log("changes", changes[0].doc.data());
           },
           (error) => {
@@ -92,6 +91,8 @@ function SquareGrid() {
           }
         );
         // }, [2000]);
+        
+        
       }
       // return () => {
       //   // unsub();
@@ -100,7 +101,6 @@ function SquareGrid() {
     },
     // []
     [
-      state.sel,
       state.horizontalButtons,
       state.verticalButtons,
       state.squaresColors,
@@ -108,8 +108,6 @@ function SquareGrid() {
       state.player1Score,
       state.player2Score,
       state.player,
-      state.player1Name,
-      state.player2Name,
       state.won,
       state.playerEnteredRoom,
     ]
@@ -195,10 +193,10 @@ function SquareGrid() {
           verticalButtons: vertical,
           squaresColors: squares,
           Box: arr,
-          numberOfSquares: 0,
-          player1Score: 0,
-          player2Score: 0,
-          player: "1",
+          // numberOfSquares: 0,
+          // player1Score: 0,
+          // player2Score: 0,
+          // player: "1",
           sel: state.sel,
           row: state.row,
           col: state.col,

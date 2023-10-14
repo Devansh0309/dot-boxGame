@@ -126,10 +126,11 @@ function NewNavbar() {
           enterRoomId: "",
         },
       });
-      if (state.playerEnteredRoom) updateDocState({
-        sel: "Select size here",
-        enterRoom: false,
-      });
+      if (state.playerEnteredRoom)
+        updateDocState({
+          sel: "Select size here",
+          enterRoom: false,
+        });
     } else if (title === "New Game" && state.sel === "Select size here") {
       alert("Select size or Start Game");
     } else if (title === "Home") {
@@ -145,7 +146,7 @@ function NewNavbar() {
   };
 
   const createRoom = async (enterRoomId) => {
-    console.log("line 173", "room created")
+    console.log("line 173", "room created");
     await setDoc(doc(db, "users", enterRoomId), {
       sel: "Select size here",
       row: "0",
@@ -162,6 +163,8 @@ function NewNavbar() {
       player2Name: "Player 2",
       won: "",
       playerEnteredRoom: false,
+    }).then(() => {
+      setRoomId(enterRoomId);
     });
   };
   return (
@@ -232,10 +235,12 @@ function NewNavbar() {
                       Box: [],
                       sel: e.target.value,
                       // roomId: roomId,
-                      start:false
+                      start: false,
                     },
                   });
-                  if(state.roomId){createRoom(state.roomId)}
+                  if (state.roomId) {
+                    createRoom(state.roomId);
+                  }
                   // let updateDocState = async () => {
                   //   await updateDoc(
                   //     doc(db, "users", state.enterRoomId || state.roomId),
@@ -306,17 +311,19 @@ function NewNavbar() {
             {/* <button type="button" onClick={()=>{navigate("/signIn")}}   className='Navbartxt'>Load Game</button>
     <button onClick={()=>{navigate("/signIn")}}  className='Navbartxt'>Save Game</button> */}
             {state.roomId ? (
-              <div>
-                {/* <span>{roomId} </span> */}
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    clipboardCopy(state.roomId);
-                  }}
-                >
-                  CopyId
-                </Button>
-              </div>
+              roomId ? (
+                <div>
+                  {/* <span>{roomId} </span> */}
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      clipboardCopy(state.roomId);
+                    }}
+                  >
+                    CopyId
+                  </Button>
+                </div>
+              ) : null
             ) : state.enterRoom ? null : (
               <Typography
                 sx={{
@@ -330,23 +337,28 @@ function NewNavbar() {
                 title="Create Room"
                 onClick={(e) => {
                   const enterRoomId = uuidv4();
-                  // setRoomId(enterRoomId);
-                  dispatch({ type: "SetStates", payload: { start: true, roomId: enterRoomId } });
-                  alert("Select size to start creating room")
+
+                  dispatch({
+                    type: "SetStates",
+                    payload: { start: true, roomId: enterRoomId },
+                  });
+                  alert("Select size to start creating room");
                   audio2.play();
                 }}
               >
                 Create Room
               </Typography>
             )}
-            {state.roomId ? null : 
-            state.enterRoom ? (
+            {state.roomId ? null : state.enterRoom ? (
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
                   console.log("line 314 newnavbar", state.enterRoomId);
-                  dispatch({ type: "SetStates", payload: { playerEnteredRoom: true } });
-                  updateDocState( {
+                  dispatch({
+                    type: "SetStates",
+                    payload: { playerEnteredRoom: true },
+                  });
+                  updateDocState({
                     playerEnteredRoom: true,
                   });
                 }}
@@ -365,7 +377,7 @@ function NewNavbar() {
                   Enter room
                 </Button>
               </form>
-            ) :  (
+            ) : (
               <Typography
                 sx={{
                   display: { xs: "none", sm: "block" },
