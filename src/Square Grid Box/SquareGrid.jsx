@@ -23,21 +23,57 @@ function SquareGrid() {
 
   const InitialRender1 = useRef(true); //Initial Render 1 for initial render of first useEffect and so on for others useEffect
   const InitialRender2 = useRef(true);
-  const InitialRender3 = useRef(true);
-  const InitialRender4 = useRef(true);
-  const InitialRender5 = useRef(true);
   const dataFetched = useRef(false);
 
   // const audio2 = new Audio(ButtonSound2);
   let updateDocState = async (obj) => {
-    console.log("line 25", obj, typeof obj);
+    console.log("line 33", obj, typeof obj);
     await updateDoc(doc(db, "users", state.enterRoomId || state.roomId), obj)
       .then((res) => {
-        console.log(res, "updated");
+        console.log("line 36", "updated");
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+  const setStatesAfterSel = (row, col) => {
+    let arr = [];
+    let horizontal = [];
+    let vertical = [];
+    let squares = [];
+    for (let i = 0; i <= row * col + row + col; i++) {
+      arr.push(i);
+    }
+
+    for (let i = 0; i < row * col + col; i++) {
+      horizontal.push({
+        key: i,
+        type: "horizontal",
+        isClicked: false,
+        btncolor: "lightgrey",
+        active: false,
+      });
+    }
+
+    for (let i = 0; i < row * col + row; i++) {
+      vertical.push({
+        key: i,
+        type: "vertical",
+        isClicked: false,
+        btncolor: "lightgrey",
+        active: false,
+      });
+    }
+
+    for (let i = 0; i < row * col; i++) {
+      squares.push({ allClicked: false, squarecolor: "grey", active: false });
+    }
+    return {
+      horizontalButtons: horizontal,
+      verticalButtons: vertical,
+      squaresColors: squares,
+      Box: arr,
+    };
   };
 
   useEffect(
@@ -46,11 +82,11 @@ function SquareGrid() {
       let interval;
       let unsub;
       if (state?.enterRoomId || state?.roomId) {
-        console.log("line 44");
+        console.log("on line 49 for fetching real-time data");
         // interval = setTimeout(() => {
         let changes = [];
         const q = query(collection(db, "users"));
-        return onSnapshot(
+         onSnapshot(
           //unsub = onSnapshot
           q,
           (querySnapshot) => {
@@ -67,7 +103,7 @@ function SquareGrid() {
                 break;
               }
             }
-            console.log("line 176", targetDoc, typeof targetDoc);
+            console.log("line 70", targetDoc, typeof targetDoc);
             if (!state.changesAdded) {
               dispatch({
                 type: "SetStates",
@@ -83,7 +119,7 @@ function SquareGrid() {
               dataFetched.current = true;
             }
 
-            console.log("line 180", changes[0]);
+            console.log("line 86", changes[0]);
             // console.log("changes", changes[0].doc.data());
           },
           (error) => {
@@ -91,8 +127,6 @@ function SquareGrid() {
           }
         );
         // }, [2000]);
-        
-        
       }
       // return () => {
       //   // unsub();
@@ -114,129 +148,35 @@ function SquareGrid() {
   );
 
   useEffect(() => {
-    console.log(1);
-    console.log("line 24: state.sel", state.sel);
-    // console.log("line 20",state.sel)
-    //Routed means route changed
-    if (!state.Routed && InitialRender1.current) {
-      console.log("line 28: state.sel", state.sel);
-      InitialRender1.current = false;
-    } else if (!state.Routed && !InitialRender1.current) {
-      console.log("line 31: state.sel", state.sel);
-      dispatch({
-        type: "SetStates",
-        payload: {
-          row: state.sel.split("*").map(Number)[0],
-          col: state.sel.split("*").map(Number)[1],
-        },
-      });
-    }
-  }, [state.sel]);
-
-  useEffect(() => {
-    console.log(2);
-    console.log("line 46: state.sel", state.sel);
-    let arr = [];
-    let horizontal = [];
-    let vertical = [];
-    let squares = [];
-    for (let i = 0; i <= state.row * state.col + state.row + state.col; i++) {
-      arr.push(i);
-    }
-
-    for (let i = 0; i < state.row * state.col + state.col; i++) {
-      horizontal.push({
-        key: i,
-        type: "horizontal",
-        isClicked: false,
-        btncolor: "lightgrey",
-        active: false,
-      });
-    }
-
-    for (let i = 0; i < state.row * state.col + state.row; i++) {
-      vertical.push({
-        key: i,
-        type: "vertical",
-        isClicked: false,
-        btncolor: "lightgrey",
-        active: false,
-      });
-    }
-
-    for (let i = 0; i < state.row * state.col; i++) {
-      squares.push({ allClicked: false, squarecolor: "grey", active: false });
-    }
-
-    if (!state.Routed && InitialRender2.current) {
-      InitialRender2.current = false;
-    } else if (!state.Routed && !InitialRender2.current) {
-      console.log("line 153, inside 2nd useEffect of row,col dependency");
-      dispatch({
-        type: "SetStates",
-        payload: {
-          horizontalButtons: horizontal,
-          verticalButtons: vertical,
-          squaresColors: squares,
-          Box: arr,
-          numberOfSquares: 0,
-          player1Score: 0,
-          player2Score: 0,
-          player: "1",
-        },
-      });
-
-      if (state.roomId) {
-        console.log("line 111", "doc updated");
-        updateDocState({
-          horizontalButtons: horizontal,
-          verticalButtons: vertical,
-          squaresColors: squares,
-          Box: arr,
-          // numberOfSquares: 0,
-          // player1Score: 0,
-          // player2Score: 0,
-          // player: "1",
-          sel: state.sel,
-          row: state.row,
-          col: state.col,
-        });
-      }
-    }
-    setGridWidth(80 * (state.col + 1));
-    setGridHeight(80 * (state.row + 1));
-  }, [state.row, state.col]);
-
-  useEffect(() => {
     console.log(3);
-    console.log("line 123: state.sel", state.sel);
-    if (!state.Routed && InitialRender3.current) {
-      InitialRender3.current = false;
+    console.log("line 229: state.sel", state.sel);
+    if (!state.Routed && InitialRender1.current) {
+      InitialRender1.current = false;
     } else if (
       !state.Routed &&
-      !InitialRender3.current &&
+      !InitialRender1.current &&
       state.numberOfSquares > 0 &&
       state.numberOfSquares === state.row * state.col
     ) {
-      dispatch({
-        type: "SetStates",
-        payload: {
-          sel: "Select size here",
-          won:
-            state.player1Score > 0 || state.player2Score > 0
-              ? `${
-                  state.player1Score > state.player2Score
-                    ? state.player1Name
-                    : state.player1Score === state.player2Score &&
-                      state.player1Score > 0
-                    ? " Tied and no one"
-                    : state.player2Name
-                } won!`
-              : "",
-        },
-      });
       if (state.playerEnteredRoom) {
-        console.log("line 163", "doc updated");
+        console.log("line 239", "doc updated");
+        dispatch({
+          type: "SetStates",
+          payload: {
+            sel: "Select size here",
+            won:
+              state.player1Score > 0 || state.player2Score > 0
+                ? `${
+                    state.player1Score > state.player2Score
+                      ? state.player1Name
+                      : state.player1Score === state.player2Score &&
+                        state.player1Score > 0
+                      ? " Tied and no one"
+                      : state.player2Name
+                  } won!`
+                : "",
+          },
+        });
         updateDocState({
           sel: "Select size here",
           won:
@@ -250,6 +190,26 @@ function SquareGrid() {
                     : state.player2Name
                 } won!`
               : "",
+        });
+        
+      } else {
+        console.log("dispatching on line 256");
+        dispatch({
+          type: "SetStates",
+          payload: {
+            sel: "Select size here",
+            won:
+              state.player1Score > 0 || state.player2Score > 0
+                ? `${
+                    state.player1Score > state.player2Score
+                      ? state.player1Name
+                      : state.player1Score === state.player2Score &&
+                        state.player1Score > 0
+                      ? " Tied and no one"
+                      : state.player2Name
+                  } won!`
+                : "",
+          },
         });
       }
     }
@@ -257,24 +217,25 @@ function SquareGrid() {
 
   useEffect(() => {
     console.log(4);
-    if (!state.Routed && InitialRender4.current) {
-      InitialRender4.current = false;
-    } else if (state.Routed && InitialRender4.current) {
+    if (!state.Routed && InitialRender2.current) {
+      InitialRender2.current = false;
+    } else if (state.Routed && InitialRender2.current) {
       dispatch({ type: "SetStates", payload: { Routed: false } });
       InitialRender1.current = false;
       InitialRender2.current = false;
-      InitialRender3.current = false;
-      InitialRender4.current = false;
     } else if (
       !state.Routed &&
-      !InitialRender4.current &&
+      !InitialRender2.current &&
       state.won &&
       state.start
     ) {
-      dispatch({ type: "SetStates", payload: { won: "" } });
       if (state.playerEnteredRoom) {
+        dispatch({ type: "SetStates", payload: { won: "" } });
         updateDocState({ won: "" });
-        console.log("line 308", "doc updated");
+        console.log("line 296", "doc updated");
+      } else {
+        console.log("dispatching on line 299");
+        dispatch({ type: "SetStates", payload: { won: "" } });
       }
     }
   }, [state.start]);
@@ -295,7 +256,7 @@ function SquareGrid() {
         }}
       />
       {state.sel !== "Select size here" && !state.won ? (
-        <GridComponent gridWidth={gridWidth} gridHeight={gridHeight} />
+        <GridComponent />
       ) : state.sel === "Select size here" && state.won ? (
         <div>
           <br />
@@ -304,17 +265,38 @@ function SquareGrid() {
       ) : state.sel !== "Select size here" && state.won ? (
         ""
       ) : state?.playerEnteredRoom ? (
-        <GridComponent gridWidth={gridWidth} gridHeight={gridHeight} />
+        <GridComponent/>
       ) : state.roomId || state.enterRoomId ? (
         <p>Creating Room</p>
       ) : (
         <button
           type="button"
           onClick={() => {
-            dispatch({ type: "SetStates", payload: { sel: "2*3" } });
+            let obj = setStatesAfterSel(2, 3);
+            console.log("line 214", obj);
+            if (Object.keys(obj).length > 0) {
+              dispatch({
+                type: "SetStates",
+                payload: {
+                  Box: [],
+                  start: false,
+                  row:2,
+                  col:3,
+                  ...obj,
+                  sel: "2*3",
+                  gridWidth: 320,
+                  gridHeight: 240
+                },
+              });
+            }
             if (state.playerEnteredRoom)
               updateDocState({
+                row:2,
+                col:3,
+                ...obj,
                 sel: "2*3",
+                gridWidth: 320,
+                gridHeight: 240
               });
           }}
           style={{

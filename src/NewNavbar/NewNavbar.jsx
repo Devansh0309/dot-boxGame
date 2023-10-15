@@ -96,7 +96,7 @@ function NewNavbar() {
   };
 
   const { state, dispatch } = useContext(GridContext);
-  const [roomId, setRoomId] = useState("");
+  const [roomCreated, setRoomCreated] = useState(false);
   // const [enterRoomId,setEnterRoomId] = useState("")
 
   const navItems = [
@@ -145,28 +145,61 @@ function NewNavbar() {
     }
   };
 
-  const createRoom = async (enterRoomId) => {
+  const createRoom = async (enterRoomId,tempObj) => {
     console.log("line 173", "room created");
-    await setDoc(doc(db, "users", enterRoomId), {
-      sel: "Select size here",
-      row: "0",
-      col: "0",
-      Box: [],
-      horizontalButtons: [],
-      verticalButtons: [],
-      squaresColors: [],
-      numberOfSquares: "0",
-      player1Score: "0",
-      player2Score: "0",
+    await setDoc(doc(db, "users", enterRoomId), 
+    {
+      ...tempObj,
+      numberOfSquares: 0,
+      player1Score: 0,
+      player2Score: 0,
       player: "1",
       player1Name: "Player 1",
       player2Name: "Player 2",
       won: "",
       playerEnteredRoom: false,
     }).then(() => {
-      setRoomId(enterRoomId);
+      setRoomCreated(true)
     });
   };
+
+  const setStatesAfterSel=(row,col)=>{
+    let arr = [];
+    let horizontal = [];
+    let vertical = [];
+    let squares = [];
+    for (let i = 0; i <= row * col + row + col; i++) {
+      arr.push(i);
+    }
+
+    for (let i = 0; i < row * col + col; i++) {
+      horizontal.push({
+        key: i,
+        type: "horizontal",
+        isClicked: false,
+        btncolor: "lightgrey",
+        active: false,
+      });
+    }
+
+    for (let i = 0; i < row * col + row; i++) {
+      vertical.push({
+        key: i,
+        type: "vertical",
+        isClicked: false,
+        btncolor: "lightgrey",
+        active: false,
+      });
+    }
+
+    for (let i = 0; i < row * col; i++) {
+      squares.push({ allClicked: false, squarecolor: "grey", active: false });
+    }
+    return {horizontalButtons: horizontal,
+      verticalButtons: vertical,
+      squaresColors: squares,
+      Box: arr}
+  }
   return (
     <Box sx={{ display: "flex", minWidth: "100vw", height: "65px" }}>
       <CssBaseline />
@@ -228,19 +261,38 @@ function NewNavbar() {
               <select
                 value={state.sel}
                 onChange={(e) => {
-                  console.log("line 157 ", state.sel);
-                  dispatch({
-                    type: "SetStates",
-                    payload: {
-                      Box: [],
-                      sel: e.target.value,
-                      // roomId: roomId,
-                      start: false,
-                    },
-                  });
-                  if (state.roomId) {
-                    createRoom(state.roomId);
+                  console.log("line 270 ", state.sel);
+                  const selectValue=e.target.value
+                  const row=selectValue.split("*").map(Number)[0]
+                  const col=selectValue.split("*").map(Number)[1]
+                  let obj=setStatesAfterSel(row,col)
+                  console.log("line 275",row,col,obj)
+                  if(row && col && Object.keys(obj).length>0){
+                    dispatch({
+                      type: "SetStates",
+                      payload: { 
+                        Box: [], 
+                        start:false,
+                        row:row,
+                        col:col,
+                        ...obj,
+                        sel: selectValue,
+                        gridWidth: 80*(col+1),
+                        gridHeight: 80*(row+1)
+                     },
+                    });
+                    if (state.roomId) {
+                      createRoom(state.roomId,
+                        {
+                        row:row,
+                        col:col,
+                        ...obj,
+                        sel: selectValue,
+                        gridWidth: 80*(col+1),
+                        gridHeight: 80*(row+1)});
+                    }
                   }
+                  
                   // let updateDocState = async () => {
                   //   await updateDoc(
                   //     doc(db, "users", state.enterRoomId || state.roomId),
@@ -311,7 +363,7 @@ function NewNavbar() {
             {/* <button type="button" onClick={()=>{navigate("/signIn")}}   className='Navbartxt'>Load Game</button>
     <button onClick={()=>{navigate("/signIn")}}  className='Navbartxt'>Save Game</button> */}
             {state.roomId ? (
-              roomId ? (
+              roomCreated ? (
                 <div>
                   {/* <span>{roomId} </span> */}
                   <Button
@@ -356,10 +408,10 @@ function NewNavbar() {
                   console.log("line 314 newnavbar", state.enterRoomId);
                   dispatch({
                     type: "SetStates",
-                    payload: { playerEnteredRoom: true },
+                    payload: { playerEnteredRoom: true, playerFixed: "2" },
                   });
                   updateDocState({
-                    playerEnteredRoom: true,
+                    playerEnteredRoom: true
                   });
                 }}
               >

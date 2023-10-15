@@ -15,15 +15,15 @@ const states = JSON.parse(dataFromLocal);
 // console.log("contexts line 8: ",states.sel)
 const initialState = {
   sel: states ? states.sel : "Select size here",
-  row: states ? states.row : "0",
-  col: states ? states.col : "0",
+  row: states ? states.row : 0,
+  col: states ? states.col : 0,
   Box: states ? states.Box : [],
   horizontalButtons: states ? states.horizontalButtons : [],
   verticalButtons: states ? states.verticalButtons : [],
   squaresColors: states ? states.squaresColors : [],
-  numberOfSquares: states ? states.numberOfSquares : "0",
-  player1Score: states ? states.player1Score : "0",
-  player2Score: states ? states.player2Score : "0",
+  numberOfSquares: states ? states.numberOfSquares : 0,
+  player1Score: states ? states.player1Score : 0,
+  player2Score: states ? states.player2Score : 0,
   player: states ? states.player : "1",
   player1Name: states ? states.player1Name : "Player 1",
   player2Name: states ? states.player2Name : "Player 2",
@@ -36,7 +36,10 @@ const initialState = {
   enterRoom: states ? states.enterRoom : false,
   playerEnteredRoom: states ? states.playerEnteredRoom : false,
   enterRoomId: states ? states.enterRoomId : "",
-  changesAdded: states ? states.changesAdded : false
+  changesAdded: states ? states.changesAdded : false,
+  gridWidth: states ? states.gridWidth : 0,
+  gridHeight: states ? states.gridHeight : 0,
+  playerFixed: states ? states.playerFixed : "1"
 };
 function reducer(state, action) {
   // console.log("line 34 in context",state)
@@ -93,9 +96,9 @@ function Contexts(props) {
             }
           }
           if (state.player === "1") {
-            temp[id].squarecolor = "#eb5d5d";
+            temp[id].squarecolor = "red";
           } else {
-            temp[id].squarecolor = "#42c442";
+            temp[id].squarecolor = "green";
           }
           const player = `player${state.player}Score`;
           const playerScore = state[player];
@@ -144,9 +147,9 @@ function Contexts(props) {
             }
           }
           if (state.player === "1") {
-            temp[id - state.col].squarecolor = "#eb5d5d";
+            temp[id - state.col].squarecolor = "red";
           } else {
-            temp[id - state.col].squarecolor = "#42c442";
+            temp[id - state.col].squarecolor = "green";
           }
           const player = `player${state.player}Score`;
           const playerScore = state[player];
@@ -201,9 +204,9 @@ function Contexts(props) {
             }
           }
           if (state.player === "1") {
-            temp[id - state.col].squarecolor = "#eb5d5d";
+            temp[id - state.col].squarecolor = "red";
           } else {
-            temp[id - state.col].squarecolor = "#42c442";
+            temp[id - state.col].squarecolor = "green";
           }
           const player = `player${state.player}Score`;
           const playerScore = state[player];
@@ -246,9 +249,9 @@ function Contexts(props) {
             }
           }
           if (state.player === "1") {
-            temp[id].squarecolor = "#eb5d5d";
+            temp[id].squarecolor = "red";
           } else {
-            temp[id].squarecolor = "#42c442";
+            temp[id].squarecolor = "green";
           }
           const player = `player${state.player}Score`;
           const playerScore = state[player];
@@ -292,11 +295,11 @@ function Contexts(props) {
             }
           }
           if (state.player === "1") {
-            temp[id].squarecolor = "#eb5d5d";
-            temp[id - state.col].squarecolor = "#eb5d5d";
+            temp[id].squarecolor = "red";
+            temp[id - state.col].squarecolor = "red";
           } else {
-            temp[id].squarecolor = "#42c442";
-            temp[id - state.col].squarecolor = "#42c442";
+            temp[id].squarecolor = "green";
+            temp[id - state.col].squarecolor = "green";
           }
           const player = `player${state.player}Score`;
           const playerScore = state[player];
@@ -349,9 +352,9 @@ function Contexts(props) {
             }
           }
           if (state.player === "1") {
-            temp[id - Math.floor(id / (state.col + 1))].squarecolor = "#eb5d5d";
+            temp[id - Math.floor(id / (state.col + 1))].squarecolor = "red";
           } else {
-            temp[id - Math.floor(id / (state.col + 1))].squarecolor = "#42c442";
+            temp[id - Math.floor(id / (state.col + 1))].squarecolor = "green";
           }
           audio3.play();
           const player = `player${state.player}Score`;
@@ -402,9 +405,9 @@ function Contexts(props) {
             }
           }
           if (state.player === "1") {
-            temp[id - Math.ceil(id / (state.col + 1))].squarecolor = "#eb5d5d";
+            temp[id - Math.ceil(id / (state.col + 1))].squarecolor = "red";
           } else {
-            temp[id - Math.ceil(id / (state.col + 1))].squarecolor = "#42c442";
+            temp[id - Math.ceil(id / (state.col + 1))].squarecolor = "green";
           }
           audio3.play();
           const player = `player${state.player}Score`;
@@ -463,9 +466,9 @@ function Contexts(props) {
             }
           }
           if (state.player === "1") {
-            temp[id - Math.floor(id / (state.col + 1))].squarecolor = "#eb5d5d";
+            temp[id - Math.floor(id / (state.col + 1))].squarecolor = "red";
           } else {
-            temp[id - Math.floor(id / (state.col + 1))].squarecolor = "#42c442";
+            temp[id - Math.floor(id / (state.col + 1))].squarecolor = "green";
           }
           audio3.play();
           const player = `player${state.player}Score`;
@@ -511,9 +514,9 @@ function Contexts(props) {
             }
           }
           if (state.player === "1") {
-            temp[id - Math.ceil(id / (state.col + 1))].squarecolor = "#eb5d5d";
+            temp[id - Math.ceil(id / (state.col + 1))].squarecolor = "red";
           } else {
-            temp[id - Math.ceil(id / (state.col + 1))].squarecolor = "#42c442";
+            temp[id - Math.ceil(id / (state.col + 1))].squarecolor = "green";
           }
           audio3.play();
           const player = `player${state.player}Score`;
@@ -564,11 +567,11 @@ function Contexts(props) {
             }
           }
           if (state.player === "1") {
-            temp[id - Math.floor(id / (state.col + 1))].squarecolor = "#eb5d5d";
-            temp[id - Math.ceil(id / (state.col + 1))].squarecolor = "#eb5d5d";
+            temp[id - Math.floor(id / (state.col + 1))].squarecolor = "red";
+            temp[id - Math.ceil(id / (state.col + 1))].squarecolor = "red";
           } else {
-            temp[id - Math.floor(id / (state.col + 1))].squarecolor = "#42c442";
-            temp[id - Math.ceil(id / (state.col + 1))].squarecolor = "#42c442";
+            temp[id - Math.floor(id / (state.col + 1))].squarecolor = "green";
+            temp[id - Math.ceil(id / (state.col + 1))].squarecolor = "green";
           }
           audio3.play();
           const player = `player${state.player}Score`;
@@ -618,9 +621,11 @@ function Contexts(props) {
         temp2[i].active = false;
       }
       if (state.player === "1") {
-        temp[id].btncolor = "red";
+        temp[id].btncolor = "#eb5d5d";
+        // red
       } else {
-        temp[id].btncolor = "green";
+        temp[id].btncolor = "#42c442";
+        // green
       }
       dispatch({ type: "SetStates", payload: { horizontalButtons: temp } });
       if (state.playerEnteredRoom)
@@ -644,9 +649,9 @@ function Contexts(props) {
         temp2[i].active = false;
       }
       if (state.player === "1") {
-        temp[id].btncolor = "red";
+        temp[id].btncolor = "#eb5d5d";
       } else {
-        temp[id].btncolor = "green";
+        temp[id].btncolor = "#42c442";
       }
       dispatch({ type: "SetStates", payload: { verticalButtons: temp } });
       if (state.playerEnteredRoom)
