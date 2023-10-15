@@ -22,7 +22,7 @@ const initialState = {
   numberOfSquares: states ? states.numberOfSquares : 0,
   player1Score: states ? states.player1Score : 0,
   player2Score: states ? states.player2Score : 0,
-  player: states ? states.player : 1,
+  player: states ? states.player : "1",
   player1Name: states ? states.player1Name : "Player 1",
   player2Name: states ? states.player2Name : "Player 2",
   won: states ? states.won : "",
