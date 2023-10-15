@@ -632,9 +632,6 @@ function Contexts(props) {
         updateDocState({
           horizontalButtons: temp,
         });
-      // setHorizontalButtons(temp)
-      //or this?
-      // setHorizontalButtons(...horizontalButtons,{key:id,type:'horizontal',isClicked:true})
     } else {
       let temp = [...state.verticalButtons];
       let temp2 = [...state.horizontalButtons];
@@ -658,9 +655,6 @@ function Contexts(props) {
         updateDocState({
           verticalButtons: temp,
         });
-      // setVerticalButtons(temp)
-      //or this?
-      // setHorizontalButtons(...horizontalButtons,{key:id,type:'horizontal',isClicked:true})
     }
   };
   return (

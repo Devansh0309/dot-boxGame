@@ -28,10 +28,9 @@ import ButtonSound1 from "./ButtonSound/buttons.mp3";
 import ButtonSound2 from "./ButtonSound/button1.mp3";
 import background from "../background.jpg";
 import { v4 as uuidv4 } from "uuid";
-import { Button, Input } from "@mui/material";
+import { Button } from "@mui/material";
 import clipboardCopy from "clipboard-copy";
-import { useEffect } from "react";
-import { doc, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 
 const drawerWidth = 190;
@@ -97,7 +96,6 @@ function NewNavbar() {
 
   const { state, dispatch } = useContext(GridContext);
   const [roomCreated, setRoomCreated] = useState(false);
-  // const [enterRoomId,setEnterRoomId] = useState("")
 
   const navItems = [
     { title: "Home", icon: <HomeIcon /> },
@@ -293,24 +291,6 @@ function NewNavbar() {
                     }
                   }
                   
-                  // let updateDocState = async () => {
-                  //   await updateDoc(
-                  //     doc(db, "users", state.enterRoomId || state.roomId),
-                  //     {
-                  //       Box: [],
-                  //       sel: e.target.value,
-                  //     }
-                  //   )
-                  //     .then((res) => {
-                  //       console.log(res, "updated");
-                  //     })
-                  //     .catch((err) => {
-                  //       console.log(err);
-                  //     });
-                  // };
-                  // if (state.playerEnteredRoom) {
-                  //   updateDocState();
-                  // }
                 }}
                 style={{
                   color: "white",
@@ -339,29 +319,11 @@ function NewNavbar() {
                 title="Start Game"
                 onClick={() => {
                   dispatch({ type: "SetStates", payload: { start: true } });
-                  // let updateDocState = async () => {
-                  //   await updateDoc(
-                  //     doc(db, "users", state.enterRoomId || state.roomId),
-                  //     {
-                  //       start: true,
-                  //     }
-                  //   )
-                  //     .then((res) => {
-                  //       console.log(res, "updated");
-                  //     })
-                  //     .catch((err) => {
-                  //       console.log(err);
-                  //     });
-                  // };
-                  // if (state.playerEnteredRoom) updateDocState();
                 }}
               >
                 Start Game
               </Typography>
             )}
-
-            {/* <button type="button" onClick={()=>{navigate("/signIn")}}   className='Navbartxt'>Load Game</button>
-    <button onClick={()=>{navigate("/signIn")}}  className='Navbartxt'>Save Game</button> */}
             {state.roomId ? (
               roomCreated ? (
                 <div>
