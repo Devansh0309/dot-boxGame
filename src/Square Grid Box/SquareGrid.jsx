@@ -5,49 +5,23 @@ import background from "../background.jpg";
 import GridComponent from "./GridComponent";
 
 function SquareGrid() {
-  const [gridWidth, setGridWidth] = useState();
-  const [gridHeight, setGridHeight] = useState();
+  // const [gridWidth, setGridWidth] = useState();
+  // const [gridHeight, setGridHeight] = useState();
   const { state, dispatch } = useContext(GridContext);
 
   const InitialRender1 = useRef(true); //Initial Render 1 for initial render of first useEffect and so on for others useEffect
   const InitialRender2 = useRef(true);
-  const InitialRender3 = useRef(true);
-  const InitialRender4 = useRef(true);
 
-  // const audio2 = new Audio(ButtonSound2);
-
-  useEffect(() => {
-    console.log(1);
-    console.log("line 118: state.sel", state.sel);
-    // console.log("line 20",state.sel)
-    //Routed means route changed
-    if (!state.Routed && InitialRender1.current) {
-      console.log("line 122: state.sel", state.sel);
-      InitialRender1.current = false;
-    } else if (!state.Routed && !InitialRender1.current) {
-      console.log("dispatching on line 125: state.sel", state.sel);
-      dispatch({
-        type: "SetStates",
-        payload: {
-          row: state.sel.split("*").map(Number)[0],
-          col: state.sel.split("*").map(Number)[1],
-        },
-      });
-    }
-  }, [state.sel]);
-
-  useEffect(() => {
-    console.log(2);
-    console.log("line 138: state.sel", state.sel);
+  const setStatesAfterSel = (row, col) => {
     let arr = [];
     let horizontal = [];
     let vertical = [];
     let squares = [];
-    for (let i = 0; i <= state.row * state.col + state.row + state.col; i++) {
+    for (let i = 0; i <= row * col + row + col; i++) {
       arr.push(i);
     }
 
-    for (let i = 0; i < state.row * state.col + state.col; i++) {
+    for (let i = 0; i < row * col + col; i++) {
       horizontal.push({
         key: i,
         type: "horizontal",
@@ -57,7 +31,7 @@ function SquareGrid() {
       });
     }
 
-    for (let i = 0; i < state.row * state.col + state.row; i++) {
+    for (let i = 0; i < row * col + row; i++) {
       vertical.push({
         key: i,
         type: "vertical",
@@ -67,41 +41,25 @@ function SquareGrid() {
       });
     }
 
-    for (let i = 0; i < state.row * state.col; i++) {
+    for (let i = 0; i < row * col; i++) {
       squares.push({ allClicked: false, squarecolor: "grey", active: false });
     }
-
-    if (!state.Routed && InitialRender2.current) {
-      InitialRender2.current = false;
-    } else if (!state.Routed && !InitialRender2.current) {
-      console.log("line 174, inside 2nd useEffect of row,col dependency");
-      console.log("dispatching on line 207");
-      dispatch({
-        type: "SetStates",
-        payload: {
-          horizontalButtons: horizontal,
-          verticalButtons: vertical,
-          squaresColors: squares,
-          Box: arr,
-          numberOfSquares: 0,
-          player1Score: 0,
-          player2Score: 0,
-          player: "1",
-        },
-      });
-    }
-    setGridWidth(80 * (state.col + 1));
-    setGridHeight(80 * (state.row + 1));
-  }, [state.row, state.col]);
+    return {
+      horizontalButtons: horizontal,
+      verticalButtons: vertical,
+      squaresColors: squares,
+      Box: arr,
+    };
+  };
 
   useEffect(() => {
-    console.log(3);
+    console.log(1);
     console.log("line 229: state.sel", state.sel);
-    if (!state.Routed && InitialRender3.current) {
-      InitialRender3.current = false;
+    if (!state.Routed && InitialRender1.current) {
+      InitialRender1.current = false;
     } else if (
       !state.Routed &&
-      !InitialRender3.current &&
+      !InitialRender1.current &&
       state.numberOfSquares > 0 &&
       state.numberOfSquares === state.row * state.col
     ) {
@@ -120,27 +78,23 @@ function SquareGrid() {
                     ? " Tied and no one"
                     : state.player2Name
                 } won!`
-              : ""   
+              : "",
         },
       });
     }
   }, [state.numberOfSquares]);
 
   useEffect(() => {
-    console.log(4);
-    if (!state.Routed && InitialRender4.current) {
-      InitialRender4.current = false;
-    } else if (state.Routed && InitialRender4.current) {
+    console.log(2);
+    if (!state.Routed && InitialRender2.current) {
+      InitialRender2.current = false;
+    } else if (state.Routed && InitialRender2.current) {
       dispatch({ type: "SetStates", payload: { Routed: false } });
+      // InitialRender1.current = false;
+      // InitialRender2.current = false;
       InitialRender1.current = false;
       InitialRender2.current = false;
-      InitialRender3.current = false;
-      InitialRender4.current = false;
-    } else if (
-      !state.Routed &&
-      !InitialRender4.current &&
-      state.won
-    ) {
+    } else if (!state.Routed && !InitialRender2.current && state.won) {
       console.log("dispatching on line 299");
       dispatch({ type: "SetStates", payload: { won: "" } });
     }
@@ -162,7 +116,7 @@ function SquareGrid() {
         }}
       />
       {state.sel !== "Select size here" && !state.won ? (
-        <GridComponent gridWidth={gridWidth} gridHeight={gridHeight} />
+        <GridComponent/>
       ) : state.sel === "Select size here" && state.won ? (
         <div>
           <br />
@@ -170,11 +124,27 @@ function SquareGrid() {
         </div>
       ) : state.sel !== "Select size here" && state.won ? (
         ""
-      ) :  (
+      ) : (
         <button
           type="button"
           onClick={() => {
-            dispatch({ type: "SetStates", payload: { sel: "2*3" } });
+            let obj = setStatesAfterSel(2, 3);
+            console.log("line 214", obj);
+            if (Object.keys(obj).length > 0) {
+              dispatch({
+                type: "SetStates",
+                payload: {
+                  Box: [],
+                  start: false,
+                  row:2,
+                  col:3,
+                  ...obj,
+                  sel: "2*3",
+                  gridWidth: 320,
+                  gridHeight: 240
+                },
+              });
+            }
           }}
           style={{
             backgroundColor: "inherit",

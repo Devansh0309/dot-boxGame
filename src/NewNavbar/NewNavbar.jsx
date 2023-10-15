@@ -115,6 +115,43 @@ function NewNavbar() {
       navigate("/aboutgame");
     }
   };
+  const setStatesAfterSel=(row,col)=>{
+    let arr = [];
+    let horizontal = [];
+    let vertical = [];
+    let squares = [];
+    for (let i = 0; i <= row * col + row + col; i++) {
+      arr.push(i);
+    }
+
+    for (let i = 0; i < row * col + col; i++) {
+      horizontal.push({
+        key: i,
+        type: "horizontal",
+        isClicked: false,
+        btncolor: "lightgrey",
+        active: false,
+      });
+    }
+
+    for (let i = 0; i < row * col + row; i++) {
+      vertical.push({
+        key: i,
+        type: "vertical",
+        isClicked: false,
+        btncolor: "lightgrey",
+        active: false,
+      });
+    }
+
+    for (let i = 0; i < row * col; i++) {
+      squares.push({ allClicked: false, squarecolor: "grey", active: false });
+    }
+    return {horizontalButtons: horizontal,
+      verticalButtons: vertical,
+      squaresColors: squares,
+      Box: arr}
+  }
   return (
     <Box sx={{ display: "flex", minWidth: "100vw", height: "65px" }}>
       <CssBaseline />
@@ -177,10 +214,26 @@ function NewNavbar() {
                 value={state.sel}
                 onChange={(e) => {
                   console.log("line 157 ", state.sel);
-                  dispatch({
-                    type: "SetStates",
-                    payload: { Box: [], sel: e.target.value,start:false },
-                  });
+                  const selectValue=e.target.value
+                  const row=selectValue.split("*").map(Number)[0]
+                  const col=selectValue.split("*").map(Number)[1]
+                  let obj=setStatesAfterSel(row,col)
+                  console.log("line 221",row,col,obj)
+                  if(row && col && Object.keys(obj).length>0){
+                    dispatch({
+                      type: "SetStates",
+                      payload: { 
+                        Box: [], 
+                        start:false,
+                        row:row,
+                        col:col,
+                        ...obj,
+                        sel: selectValue,
+                        gridWidth: 80*(col+1),
+                        gridHeight: 80*(row+1)
+                     },
+                    });
+                  }
                 }}
                 style={{
                   color: "white",

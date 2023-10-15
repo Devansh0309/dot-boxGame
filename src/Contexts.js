@@ -13,16 +13,16 @@ const states = JSON.parse(dataFromLocal);
 // console.log("contexts line 8: ",states.sel)
 const initialState = {
   sel: states ? states.sel : "Select size here",
-  row: states ? states.row : "0",
-  col: states ? states.col : "0",
+  row: states ? states.row : 0,
+  col: states ? states.col : 0,
   Box: states ? states.Box : [],
   horizontalButtons: states ? states.horizontalButtons : [],
   verticalButtons: states ? states.verticalButtons : [],
   squaresColors: states ? states.squaresColors : [],
-  numberOfSquares: states ? states.numberOfSquares : "0",
-  player1Score: states ? states.player1Score : "0",
-  player2Score: states ? states.player2Score : "0",
-  player: states ? states.player : "1",
+  numberOfSquares: states ? states.numberOfSquares : 0,
+  player1Score: states ? states.player1Score : 0,
+  player2Score: states ? states.player2Score : 0,
+  player: states ? states.player : 1,
   player1Name: states ? states.player1Name : "Player 1",
   player2Name: states ? states.player2Name : "Player 2",
   won: states ? states.won : "",
@@ -30,6 +30,8 @@ const initialState = {
   modalShow2: states ? states.modalShow2 : true,
   start: states ? states.start : false,
   Routed: states ? states.Routed : false, //Routed means route changed
+  gridWidth: states ? states.gridWidth : 0,
+  gridHeight: states ? states.gridHeight : 0
 };
 function reducer(state, action) {
   // console.log("line 34 in context",state)

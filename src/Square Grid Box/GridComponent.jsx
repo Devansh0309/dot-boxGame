@@ -1,10 +1,10 @@
-import React,{ useContext } from "react";
+import React, { useContext } from "react";
 import { GridContext } from "../Contexts";
 import ButtonSound2 from "../NewNavbar/ButtonSound/button1.mp3";
 
-function GridComponent({gridWidth,gridHeight}) {
-    const { state,  areAllClicked, setClick } = useContext(GridContext);
-    const audio2 = new Audio(ButtonSound2);
+function GridComponent() {
+  const { state, areAllClicked, setClick } = useContext(GridContext);
+  const audio2 = new Audio(ButtonSound2);
   return (
     <div className="main-section">
       <div className="player-scores">
@@ -31,11 +31,11 @@ function GridComponent({gridWidth,gridHeight}) {
           //for fixing grid size-->
           //calc(${state.row+1} * var(--square_height)=(state.row+1)*80, where var(--square_height)=80px
           height:
-            gridWidth >
+            state.gridWidth >
               document
                 .getElementsByClassName("main-section")[0]
                 ?.getBoundingClientRect()?.width ||
-            gridHeight >
+            state.gridHeight >
               document
                 .getElementsByClassName("main-section")[0]
                 ?.getBoundingClientRect()?.height
@@ -43,7 +43,7 @@ function GridComponent({gridWidth,gridHeight}) {
               : `calc(${state.row + 1} * var(--square_height))`,
 
           width:
-            gridWidth >
+            state.gridWidth >
             document
               .getElementsByClassName("main-section")[0]
               ?.getBoundingClientRect()?.width
@@ -51,7 +51,7 @@ function GridComponent({gridWidth,gridHeight}) {
               : `calc(${state.col + 1} * var(--square_width))`,
 
           gridTemplateColumns:
-            gridWidth >
+            state.gridWidth >
             document
               .getElementsByClassName("main-section")[0]
               ?.getBoundingClientRect()?.width
@@ -59,11 +59,11 @@ function GridComponent({gridWidth,gridHeight}) {
               : `repeat(${state.col + 1},1fr)`,
 
           gridTemplateRows:
-            gridWidth >
+            state.gridWidth >
               document
                 .getElementsByClassName("main-section")[0]
                 ?.getBoundingClientRect()?.width ||
-            gridHeight >
+            state.gridHeight >
               document
                 .getElementsByClassName("main-section")[0]
                 ?.getBoundingClientRect()?.height
