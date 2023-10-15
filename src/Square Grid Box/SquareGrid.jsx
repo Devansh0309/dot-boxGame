@@ -5,8 +5,6 @@ import background from "../background.jpg";
 import GridComponent from "./GridComponent";
 
 function SquareGrid() {
-  // const [gridWidth, setGridWidth] = useState();
-  // const [gridHeight, setGridHeight] = useState();
   const { state, dispatch } = useContext(GridContext);
 
   const InitialRender1 = useRef(true); //Initial Render 1 for initial render of first useEffect and so on for others useEffect
