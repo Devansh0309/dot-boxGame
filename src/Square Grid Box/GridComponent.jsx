@@ -94,7 +94,7 @@ function GridComponent() {
         {state.Box.map((item) =>
           item % (state.col + 1) === state.col &&
           item < state.row * state.col + state.row + state.col ? (
-            <div className="twobox" style={{ flexDirection: "column" }}>
+            <div className="twobox" style={{ flexDirection: "column" }} key={item}>
               <div className="dot"></div>
               <button
                 className="sidelastbtn"
@@ -106,7 +106,7 @@ function GridComponent() {
                       : "none"
                   }`,
                 }}
-                key={item}
+                
                 disabled={state.playerFixed!= state.player || state.verticalButtons[item].isClicked}
                 onClick={() => {
                   setClick(item, "vertical");
@@ -117,7 +117,7 @@ function GridComponent() {
             </div>
           ) : item >= state.row * (state.col + 1) ? (
             item < state.row * state.col + state.row + state.col ? (
-              <div className="twobox">
+              <div className="twobox"  key={item}>
                 <div className="dot"></div>
                 <button
                   className="lowerbtn"
@@ -135,7 +135,6 @@ function GridComponent() {
                         : "none"
                     }`,
                   }}
-                  key={item - Math.floor(item / (state.col + 1))}
                   disabled={
                     state.playerFixed!= state.player || 
                     state.horizontalButtons[
@@ -156,10 +155,10 @@ function GridComponent() {
                 ></button>
               </div>
             ) : (
-              <div className="dot"></div>
+              <div className="dot" key={item}></div>
             )
           ) : (
-            <div key={item} className="onebox">
+            <div className="onebox" key={item}>
               <div className="dot"></div>
               <button
                 className="upperbtn"
@@ -177,7 +176,7 @@ function GridComponent() {
                       : "none"
                   }`,
                 }}
-                key={item - Math.floor(item / (state.col + 1))}
+                
                 disabled={
                   state.playerFixed!= state.player || 
                   state.horizontalButtons[
@@ -206,7 +205,6 @@ function GridComponent() {
                       : "none"
                   }`,
                 }}
-                key={item}
                 disabled={state.playerFixed!= state.player || state.verticalButtons[item].isClicked}
                 onClick={() => {
                   setClick(item, "vertical");

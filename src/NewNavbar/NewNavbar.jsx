@@ -102,6 +102,8 @@ function NewNavbar() {
     { title: "New Game", icon: <SportsEsportsIcon /> },
     { title: "How to Play?", icon: <LightbulbIcon /> },
     { title: "Options", icon: <SettingsIcon /> },
+    { title: "Create Room", icon: <HomeIcon /> },
+    { title: "Enter Room", icon: <HomeIcon /> },
     { title: "Exit", icon: <LogoutIcon /> },
   ];
   const updateDocState = async (obj) => {
@@ -127,7 +129,7 @@ function NewNavbar() {
       if (state.playerEnteredRoom)
         updateDocState({
           sel: "Select size here",
-          enterRoom: false,
+          playerEnteredRoom: false,
         });
     } else if (title === "New Game" && state.sel === "Select size here") {
       alert("Select size or Start Game");
@@ -137,16 +139,29 @@ function NewNavbar() {
       window.close();
     } else if (title === "Options") {
       dispatch({ type: "SetStates", payload: { modalShow: true } });
+    } else if (title === "Create Room") {
+      const enterRoomId = uuidv4();
+      dispatch({
+        type: "SetStates",
+        payload: { start: true, roomId: enterRoomId },
+      });
+      alert("Select size to start creating room");
+      audio2.play();
+    } else if (title === "Enter Room") {
+      dispatch({
+        type: "SetStates",
+        payload: { enterRoom: true, sel: "Select size here" },
+      });
+      audio2.play();
     } else {
       dispatch({ type: "SetStates", payload: { Routed: true } });
       navigate("/aboutgame");
     }
   };
 
-  const createRoom = async (enterRoomId,tempObj) => {
+  const createRoom = async (enterRoomId, tempObj) => {
     console.log("line 173", "room created");
-    await setDoc(doc(db, "users", enterRoomId), 
-    {
+    await setDoc(doc(db, "users", enterRoomId), {
       ...tempObj,
       numberOfSquares: 0,
       player1Score: 0,
@@ -157,11 +172,11 @@ function NewNavbar() {
       won: "",
       playerEnteredRoom: false,
     }).then(() => {
-      setRoomCreated(true)
+      setRoomCreated(true);
     });
   };
 
-  const setStatesAfterSel=(row,col)=>{
+  const setStatesAfterSel = (row, col) => {
     let arr = [];
     let horizontal = [];
     let vertical = [];
@@ -193,11 +208,13 @@ function NewNavbar() {
     for (let i = 0; i < row * col; i++) {
       squares.push({ allClicked: false, squarecolor: "grey", active: false });
     }
-    return {horizontalButtons: horizontal,
+    return {
+      horizontalButtons: horizontal,
       verticalButtons: vertical,
       squaresColors: squares,
-      Box: arr}
-  }
+      Box: arr,
+    };
+  };
   return (
     <Box sx={{ display: "flex", minWidth: "100vw", height: "65px" }}>
       <CssBaseline />
@@ -260,37 +277,36 @@ function NewNavbar() {
                 value={state.sel}
                 onChange={(e) => {
                   console.log("line 270 ", state.sel);
-                  const selectValue=e.target.value
-                  const row=selectValue.split("*").map(Number)[0]
-                  const col=selectValue.split("*").map(Number)[1]
-                  let obj=setStatesAfterSel(row,col)
-                  console.log("line 275",row,col,obj)
-                  if(row && col && Object.keys(obj).length>0){
+                  const selectValue = e.target.value;
+                  const row = selectValue.split("*").map(Number)[0];
+                  const col = selectValue.split("*").map(Number)[1];
+                  let obj = setStatesAfterSel(row, col);
+                  console.log("line 275", row, col, obj);
+                  if (row && col && Object.keys(obj).length > 0) {
                     dispatch({
                       type: "SetStates",
-                      payload: { 
-                        Box: [], 
-                        start:false,
-                        row:row,
-                        col:col,
+                      payload: {
+                        Box: [],
+                        start: false,
+                        row: row,
+                        col: col,
                         ...obj,
                         sel: selectValue,
-                        gridWidth: 80*(col+1),
-                        gridHeight: 80*(row+1)
-                     },
+                        gridWidth: 80 * (col + 1),
+                        gridHeight: 80 * (row + 1),
+                      },
                     });
                     if (state.roomId) {
-                      createRoom(state.roomId,
-                        {
-                        row:row,
-                        col:col,
+                      createRoom(state.roomId, {
+                        row: row,
+                        col: col,
                         ...obj,
                         sel: selectValue,
-                        gridWidth: 80*(col+1),
-                        gridHeight: 80*(row+1)});
+                        gridWidth: 80 * (col + 1),
+                        gridHeight: 80 * (row + 1),
+                      });
                     }
                   }
-                  
                 }}
                 style={{
                   color: "white",
@@ -318,6 +334,12 @@ function NewNavbar() {
                 component="div"
                 title="Start Game"
                 onClick={() => {
+                  if (state.playerEnteredRoom) {
+                    alert(
+                      "Either click on new game or exit, cannot change size in between!"
+                    );
+                    return;
+                  }
                   dispatch({ type: "SetStates", payload: { start: true } });
                 }}
               >
@@ -373,12 +395,13 @@ function NewNavbar() {
                     payload: { playerEnteredRoom: true, playerFixed: "2" },
                   });
                   updateDocState({
-                    playerEnteredRoom: true
+                    playerEnteredRoom: true,
                   });
                 }}
               >
                 <input
                   placeholder="Enter id"
+                  value={state.enterRoomId}
                   onChange={(e) => {
                     dispatch({
                       type: "SetStates",

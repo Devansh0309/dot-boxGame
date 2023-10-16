@@ -10,6 +10,7 @@ import {
   onSnapshot,
   query,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 
@@ -86,7 +87,7 @@ function SquareGrid() {
         // interval = setTimeout(() => {
         let changes = [];
         const q = query(collection(db, "users"));
-         onSnapshot(
+        onSnapshot(
           //unsub = onSnapshot
           q,
           (querySnapshot) => {
@@ -137,10 +138,6 @@ function SquareGrid() {
     [
       state.horizontalButtons,
       state.verticalButtons,
-      state.squaresColors,
-      state.numberOfSquares,
-      state.player1Score,
-      state.player2Score,
       state.player,
       state.won,
       state.playerEnteredRoom,
@@ -160,23 +157,6 @@ function SquareGrid() {
     ) {
       if (state.playerEnteredRoom) {
         console.log("line 239", "doc updated");
-        dispatch({
-          type: "SetStates",
-          payload: {
-            sel: "Select size here",
-            won:
-              state.player1Score > 0 || state.player2Score > 0
-                ? `${
-                    state.player1Score > state.player2Score
-                      ? state.player1Name
-                      : state.player1Score === state.player2Score &&
-                        state.player1Score > 0
-                      ? " Tied and no one"
-                      : state.player2Name
-                  } won!`
-                : "",
-          },
-        });
         updateDocState({
           sel: "Select size here",
           won:
@@ -191,7 +171,6 @@ function SquareGrid() {
                 } won!`
               : "",
         });
-        
       } else {
         console.log("dispatching on line 256");
         dispatch({
@@ -230,15 +209,50 @@ function SquareGrid() {
       state.start
     ) {
       if (state.playerEnteredRoom) {
-        dispatch({ type: "SetStates", payload: { won: "" } });
         updateDocState({ won: "" });
         console.log("line 296", "doc updated");
       } else {
         console.log("dispatching on line 299");
         dispatch({ type: "SetStates", payload: { won: "" } });
       }
+    } else if (!state.Routed && !InitialRender2.current && state.won) {
+      if (state.playerEnteredRoom) {
+        setTimeout(() => {
+          const temp = async () => {
+            await deleteDoc(
+              doc(db, "users", state.roomId || state.enterRoomId)
+            ).then(() => {
+              console.log("line 229");
+              dispatch({
+                type: "SetStates",
+                payload: {
+                  won: "",
+                  sel: "Select size here",
+                  playerEnteredRoom: false,
+                  roomId: "",
+                  enterRoomId: "",
+                  enterRoom: false,
+                  horizontalButtons: [],
+                  verticalButtons: [],
+                  squaresColors: [],
+                  numberOfSquares: 0,
+                  player1Score: 0,
+                  player2Score: 0,
+                  player: "1",
+                  playerFixed: "1",
+                  changesAdded: false,
+                },
+              });
+            });
+          };
+          temp();
+        }, [60000]);
+        // dispatch({ type: "SetStates", payload: { won: "" } });
+        // updateDocState({ won: "" });
+        console.log("line 235", "doc updated");
+      }
     }
-  }, [state.start]);
+  }, [state.start, state.won]);
 
   return (
     <div className="Appe">
@@ -265,7 +279,7 @@ function SquareGrid() {
       ) : state.sel !== "Select size here" && state.won ? (
         ""
       ) : state?.playerEnteredRoom ? (
-        <GridComponent/>
+        <GridComponent />
       ) : state.roomId || state.enterRoomId ? (
         <p>Creating Room</p>
       ) : (
@@ -280,23 +294,23 @@ function SquareGrid() {
                 payload: {
                   Box: [],
                   start: false,
-                  row:2,
-                  col:3,
+                  row: 2,
+                  col: 3,
                   ...obj,
                   sel: "2*3",
                   gridWidth: 320,
-                  gridHeight: 240
+                  gridHeight: 240,
                 },
               });
             }
             if (state.playerEnteredRoom)
               updateDocState({
-                row:2,
-                col:3,
+                row: 2,
+                col: 3,
                 ...obj,
                 sel: "2*3",
                 gridWidth: 320,
-                gridHeight: 240
+                gridHeight: 240,
               });
           }}
           style={{
