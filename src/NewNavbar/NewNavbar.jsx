@@ -30,7 +30,15 @@ import background from "../background.jpg";
 import { v4 as uuidv4 } from "uuid";
 import { Button } from "@mui/material";
 import clipboardCopy from "clipboard-copy";
-import { doc, setDoc, updateDoc, getDoc, collection, query, getDocs } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  updateDoc,
+  getDoc,
+  collection,
+  query,
+  getDocs,
+} from "firebase/firestore";
 import { db } from "../firebaseConfig";
 
 const drawerWidth = 190;
@@ -120,26 +128,25 @@ function NewNavbar() {
         });
       });
   };
-  const checkDocs = async(enterRoomId)=>{
-    const q = query(
-      collection(db, "users")
-    );
+  const checkDocs = async (enterRoomId) => {
+    const q = query(collection(db, "users"));
     const querySnapshot = await getDocs(q);
-    console.log("line 129",querySnapshot)
-    if(querySnapshot.docs.length === 10){ //max 10 rooms allowed at a time in db
-      alert("Wait for rooms to be available, try after some time!")
-      return false
+    console.log("line 129", querySnapshot);
+    if (querySnapshot.docs.length === 10) {
+      //max 10 rooms allowed at a time in db
+      alert("Wait for rooms to be available, try after some time!");
+      return false;
     }
     querySnapshot.forEach((doc) => {
-      console.log("line 135",doc)
+      console.log("line 135", doc);
       // doc.data() is never undefined for query doc snapshots
-      if(doc.id === enterRoomId){
-        alert("Room already exits and is filled, again create room")
-        return false
+      if (doc.id === enterRoomId) {
+        alert("Room already exits and is filled, again create room");
+        return false;
       }
     });
-    return true
-  }
+    return true;
+  };
   const handleNavClicks = (title) => {
     if (title === "New Game" && state.sel !== "Select size here") {
       dispatch({
@@ -166,9 +173,13 @@ function NewNavbar() {
       dispatch({ type: "SetStates", payload: { modalShow: true } });
     } else if (title === "Create Room") {
       const enterRoomId = uuidv4();
-      dispatch({
-        type: "SetStates",
-        payload: { start: true, roomId: enterRoomId },
+      checkDocs(enterRoomId).then((create) => {
+        if (create) {
+          dispatch({
+            type: "SetStates",
+            payload: { start: true, roomId: enterRoomId },
+          });
+        }
       });
       alert("Select size to start creating room");
       audio2.play();
@@ -398,14 +409,14 @@ function NewNavbar() {
                 title="Create Room"
                 onClick={(e) => {
                   const enterRoomId = uuidv4();
-                  checkDocs(enterRoomId).then((create)=>{
-                    if(create){
+                  checkDocs(enterRoomId).then((create) => {
+                    if (create) {
                       dispatch({
                         type: "SetStates",
                         payload: { start: true, roomId: enterRoomId },
                       });
                     }
-                  })
+                  });
                   alert("Select size to start creating room");
                   audio2.play();
                 }}
