@@ -15,10 +15,6 @@ import {
 import { db } from "../firebaseConfig";
 
 function SquareGrid() {
-  const [gridWidth, setGridWidth] = useState();
-  const [gridHeight, setGridHeight] = useState();
-  // const [] = useState()
-  // const [typeOfChange, setTypeOfChange] = useState("")
   const typeOfChange = useRef("");
   const { state, dispatch } = useContext(GridContext);
 
@@ -35,6 +31,7 @@ function SquareGrid() {
       })
       .catch((err) => {
         console.log(err);
+
       });
   };
   const setStatesAfterSel = (row, col) => {
@@ -105,7 +102,7 @@ function SquareGrid() {
               }
             }
             console.log("line 70", targetDoc, typeof targetDoc);
-            if (!state.changesAdded) {
+            if (!state.changesAdded && targetDoc) {
               dispatch({
                 type: "SetStates",
                 payload: { ...targetDoc, changesAdded: true },
