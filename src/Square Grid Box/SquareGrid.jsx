@@ -142,7 +142,7 @@ function SquareGrid() {
     [
       state.horizontalButtons,
       state.verticalButtons,
-      state.player,
+      state.squaresColors,
       state.won,
       state.playerEnteredRoom,
     ]
