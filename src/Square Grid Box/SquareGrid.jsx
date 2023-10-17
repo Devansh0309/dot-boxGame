@@ -84,8 +84,8 @@ function SquareGrid() {
       if (!state.Routed && InitialRender0.current) {
         InitialRender0.current = false;
       } else if (!state.Routed && !InitialRender0.current) {
-        if (state?.enterRoomId || state?.roomId) {
-          console.log("on line 49 for fetching real-time data");
+        if (state.playerEnteredRoom) {
+          console.log("on line 88 for fetching real-time data");
           // interval = setTimeout(() => {
           let changes = [];
           const q = query(collection(db, "users"));
@@ -106,15 +106,14 @@ function SquareGrid() {
                   break;
                 }
               }
-              console.log("line 70", targetDoc, typeof targetDoc);
+              console.log("line 109", targetDoc, typeof targetDoc);
               if (!state.changesAdded && targetDoc) {
                 dispatch({
                   type: "SetStates",
                   payload: { ...targetDoc, changesAdded: true },
                 });
               } else if (
-                typeOfChange.current === "modified" ||
-                typeOfChange.current === "deleted"
+                typeOfChange.current === "modified"
               ) {
                 // setTypeOfChange("")
                 typeOfChange.current = "";
@@ -122,7 +121,7 @@ function SquareGrid() {
                 dataFetched.current = true;
               }
   
-              console.log("line 86", changes[0]);
+              console.log("line 124", changes[0]);
               // console.log("changes", changes[0].doc.data());
             },
             (error) => {

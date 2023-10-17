@@ -40,7 +40,8 @@ const initialState = {
   gridWidth: states ? states.gridWidth : 0,
   gridHeight: states ? states.gridHeight : 0,
   playerFixed: states ? states.playerFixed : "1",
-  alertForHome : states? states.alertForHome : {}
+  alertForHome : states? states.alertForHome : {},
+  playerRequesting: states? states.playerRequesting : "1"
 };
 function reducer(state, action) {
   // console.log("line 34 in context",state)

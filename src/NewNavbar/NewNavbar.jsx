@@ -158,15 +158,16 @@ function NewNavbar() {
           enterRoomId: "",
         },
       });
-      if (state.playerEnteredRoom)
+      if (state.playerEnteredRoom) {
         updateDocState({
           sel: "Select size here",
           playerEnteredRoom: false,
+          playerRequesting:state.playerFixed
         });
+      }
     } else if (title === "New Game" && state.sel === "Select size here") {
       alert("Select size or Start Game");
     } else if (title === "Home") {
-      
       navigate("/");
     } else if (title === "Exit") {
       window.close();
@@ -191,10 +192,13 @@ function NewNavbar() {
       });
       audio2.play();
     } else {
-      let alertForHome= setTimeout(()=>{
-        alert("Return to home, waiting for you!")
-      },[10000])
-      dispatch({ type: "SetStates", payload: { Routed: true, alertForHome: alertForHome } });
+      let alertForHome = setTimeout(() => {
+        alert("Return to home, waiting for you!");
+      }, [10000]);
+      dispatch({
+        type: "SetStates",
+        payload: { Routed: true, alertForHome: alertForHome },
+      });
       navigate("/aboutgame");
     }
   };
@@ -460,7 +464,6 @@ function NewNavbar() {
               onClick={(e) => {
                 handleNavClicks(e.target.title);
                 audio2.play();
-                
               }}
             >
               <Link to="/aboutgame">About Game</Link>
