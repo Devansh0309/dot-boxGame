@@ -13,6 +13,7 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig";
+import { Button } from "@mui/material";
 
 function SquareGrid() {
   const typeOfChange = useRef("");
@@ -20,7 +21,9 @@ function SquareGrid() {
 
   const InitialRender1 = useRef(true); //Initial Render 1 for initial render of first useEffect and so on for others useEffect
   const InitialRender2 = useRef(true);
+  const InitialRender0 = useRef(true);
   const dataFetched = useRef(false);
+  let timeOut;
 
   // const audio2 = new Audio(ButtonSound2);
   let updateDocState = async (obj) => {
@@ -31,7 +34,6 @@ function SquareGrid() {
       })
       .catch((err) => {
         console.log(err);
-
       });
   };
   const setStatesAfterSel = (row, col) => {
@@ -79,53 +81,58 @@ function SquareGrid() {
       console.log("0");
       let interval;
       let unsub;
-      if (state?.enterRoomId || state?.roomId) {
-        console.log("on line 49 for fetching real-time data");
-        // interval = setTimeout(() => {
-        let changes = [];
-        const q = query(collection(db, "users"));
-        onSnapshot(
-          //unsub = onSnapshot
-          q,
-          (querySnapshot) => {
-            changes = querySnapshot //changes is array of docs added or modified in collection
-              .docChanges();
-            let targetDoc;
-            for (let i = 0; i < changes.length; i++) {
-              // const idArr=changes[i]?.doc["_key"]?.path?.segments
-              const id = changes[i].doc.id;
-              if (id === (state.roomId || state.enterRoomId)) {
-                targetDoc = changes[i].doc.data();
-                typeOfChange.current = changes[i].type;
-                // setTypeOfChange(changes[i].type)
-                break;
+      if (!state.Routed && InitialRender0.current) {
+        InitialRender0.current = false;
+      } else if (!state.Routed && !InitialRender0.current) {
+        if (state?.enterRoomId || state?.roomId) {
+          console.log("on line 49 for fetching real-time data");
+          // interval = setTimeout(() => {
+          let changes = [];
+          const q = query(collection(db, "users"));
+          onSnapshot(
+            //unsub = onSnapshot
+            q,
+            (querySnapshot) => {
+              changes = querySnapshot //changes is array of docs added or modified in collection
+                .docChanges();
+              let targetDoc;
+              for (let i = 0; i < changes.length; i++) {
+                // const idArr=changes[i]?.doc["_key"]?.path?.segments
+                const id = changes[i].doc.id;
+                if (id === (state.roomId || state.enterRoomId)) {
+                  targetDoc = changes[i].doc.data();
+                  typeOfChange.current = changes[i].type;
+                  // setTypeOfChange(changes[i].type)
+                  break;
+                }
               }
+              console.log("line 70", targetDoc, typeof targetDoc);
+              if (!state.changesAdded && targetDoc) {
+                dispatch({
+                  type: "SetStates",
+                  payload: { ...targetDoc, changesAdded: true },
+                });
+              } else if (
+                typeOfChange.current === "modified" ||
+                typeOfChange.current === "deleted"
+              ) {
+                // setTypeOfChange("")
+                typeOfChange.current = "";
+                dispatch({ type: "SetStates", payload: targetDoc });
+                dataFetched.current = true;
+              }
+  
+              console.log("line 86", changes[0]);
+              // console.log("changes", changes[0].doc.data());
+            },
+            (error) => {
+              console.log(error);
             }
-            console.log("line 70", targetDoc, typeof targetDoc);
-            if (!state.changesAdded && targetDoc) {
-              dispatch({
-                type: "SetStates",
-                payload: { ...targetDoc, changesAdded: true },
-              });
-            } else if (
-              typeOfChange.current === "modified" ||
-              typeOfChange.current === "deleted"
-            ) {
-              // setTypeOfChange("")
-              typeOfChange.current = "";
-              dispatch({ type: "SetStates", payload: targetDoc });
-              dataFetched.current = true;
-            }
-
-            console.log("line 86", changes[0]);
-            // console.log("changes", changes[0].doc.data());
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-        // }, [2000]);
+          );
+          // }, [2000]);
+        }
       }
+      
       // return () => {
       //   // unsub();
       //   clearTimeout(interval);
@@ -197,6 +204,7 @@ function SquareGrid() {
       InitialRender2.current = false;
     } else if (state.Routed && InitialRender2.current) {
       dispatch({ type: "SetStates", payload: { Routed: false } });
+      InitialRender0.current = false;
       InitialRender1.current = false;
       InitialRender2.current = false;
     } else if (
@@ -214,7 +222,7 @@ function SquareGrid() {
       }
     } else if (!state.Routed && !InitialRender2.current && state.won) {
       if (state.playerEnteredRoom) {
-        setTimeout(() => {
+        timeOut = setTimeout(() => {
           const temp = async () => {
             await deleteDoc(
               doc(db, "users", state.roomId || state.enterRoomId)
@@ -244,11 +252,15 @@ function SquareGrid() {
           };
           temp();
         }, [60000]);
+
         // dispatch({ type: "SetStates", payload: { won: "" } });
         // updateDocState({ won: "" });
         console.log("line 235", "doc updated");
       }
     }
+    return () => {
+      if (timeOut && !state.playerEnteredRoom) clearTimeout(timeOut);
+    };
   }, [state.start, state.won]);
 
   return (
@@ -277,6 +289,35 @@ function SquareGrid() {
         ""
       ) : state?.playerEnteredRoom ? (
         <GridComponent />
+      ) : state.enterRoom ? (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            console.log("line 314 newnavbar", state.enterRoomId);
+            dispatch({
+              type: "SetStates",
+              payload: { playerEnteredRoom: true, playerFixed: "2" },
+            });
+            updateDocState({
+              playerEnteredRoom: true,
+            });
+          }}
+        >
+          <input
+            placeholder="Enter id"
+            value={state.enterRoomId}
+            onChange={(e) => {
+              dispatch({
+                type: "SetStates",
+                payload: { enterRoomId: e.target.value },
+              });
+              // setEnterRoomId(e.target.value)
+            }}
+          />
+          <Button variant="contained" type="submit">
+            Enter room
+          </Button>
+        </form>
       ) : state.roomId || state.enterRoomId ? (
         <p>Creating Room</p>
       ) : (

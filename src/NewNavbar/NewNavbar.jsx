@@ -166,6 +166,7 @@ function NewNavbar() {
     } else if (title === "New Game" && state.sel === "Select size here") {
       alert("Select size or Start Game");
     } else if (title === "Home") {
+      
       navigate("/");
     } else if (title === "Exit") {
       window.close();
@@ -190,7 +191,10 @@ function NewNavbar() {
       });
       audio2.play();
     } else {
-      dispatch({ type: "SetStates", payload: { Routed: true } });
+      let alertForHome= setTimeout(()=>{
+        alert("Return to home, waiting for you!")
+      },[10000])
+      dispatch({ type: "SetStates", payload: { Routed: true, alertForHome: alertForHome } });
       navigate("/aboutgame");
     }
   };
@@ -424,36 +428,7 @@ function NewNavbar() {
                 Create Room
               </Typography>
             )}
-            {state.roomId ? null : state.enterRoom ? (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  console.log("line 314 newnavbar", state.enterRoomId);
-                  dispatch({
-                    type: "SetStates",
-                    payload: { playerEnteredRoom: true, playerFixed: "2" },
-                  });
-                  updateDocState({
-                    playerEnteredRoom: true,
-                  });
-                }}
-              >
-                <input
-                  placeholder="Enter id"
-                  value={state.enterRoomId}
-                  onChange={(e) => {
-                    dispatch({
-                      type: "SetStates",
-                      payload: { enterRoomId: e.target.value },
-                    });
-                    // setEnterRoomId(e.target.value)
-                  }}
-                />
-                <Button variant="contained" type="submit">
-                  Enter room
-                </Button>
-              </form>
-            ) : (
+            {state.roomId ? null : state.enterRoom ? null : (
               <Typography
                 sx={{
                   display: { xs: "none", sm: "block" },
@@ -485,6 +460,7 @@ function NewNavbar() {
               onClick={(e) => {
                 handleNavClicks(e.target.title);
                 audio2.play();
+                
               }}
             >
               <Link to="/aboutgame">About Game</Link>

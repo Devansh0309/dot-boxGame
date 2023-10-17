@@ -98,6 +98,8 @@ function NewNavbar2() {
   
   const handleNavClicks=(title)=>{
     if(title==="Home"){
+      console.log("line 101", state.alertForHome)
+      clearTimeout(state.alertForHome)
       navigate("/")
     }
     else if(title==='Exit'){

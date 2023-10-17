@@ -39,7 +39,8 @@ const initialState = {
   changesAdded: states ? states.changesAdded : false,
   gridWidth: states ? states.gridWidth : 0,
   gridHeight: states ? states.gridHeight : 0,
-  playerFixed: states ? states.playerFixed : "1"
+  playerFixed: states ? states.playerFixed : "1",
+  alertForHome : states? states.alertForHome : {}
 };
 function reducer(state, action) {
   // console.log("line 34 in context",state)
