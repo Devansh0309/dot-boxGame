@@ -84,7 +84,7 @@ function SquareGrid() {
       if (!state.Routed && InitialRender0.current) {
         InitialRender0.current = false;
       } else if (!state.Routed && !InitialRender0.current) {
-        if (state.playerEnteredRoom) {
+        if (state.roomId || state.playerEnteredRoom) {
           console.log("on line 88 for fetching real-time data");
           // interval = setTimeout(() => {
           let changes = [];
@@ -133,8 +133,11 @@ function SquareGrid() {
       }
       
       // return () => {
-      //   // unsub();
-      //   clearTimeout(interval);
+      //   if(unsub){
+      //     unsub();
+      //   }
+        
+      //   // clearTimeout(interval);
       // };
     },
     // []

@@ -279,7 +279,7 @@ function NewNavbar() {
           {/* //dot and box name code here  */}
 
           <div className="cont" onClick={() => navigate("/")}>
-            <Typography
+            {/* <Typography
               variant="h4"
               noWrap
               component="div"
@@ -290,7 +290,7 @@ function NewNavbar() {
               }}
             >
               𝕯𝖔𝖙 & 𝕭𝖔𝖝 𝕲𝖆𝖒𝖊
-            </Typography>
+            </Typography> */}
             <img
               width="50"
               height="40"
