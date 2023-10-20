@@ -177,7 +177,7 @@ function NewNavbar() {
                 player: "1",
                 playerFixed: "1",
                 changesAdded: false,
-                playerRequesting: "1",
+                playerRequesting: "",
               },
             });
           });
@@ -237,8 +237,8 @@ function NewNavbar() {
                 player2Score: 0,
                 player: "1",
                 playerFixed: "1",
-                changesAdded: false,
-                playerRequesting: "1",
+                changesAdded: true,
+                playerRequesting: "",
               },
             });
           });

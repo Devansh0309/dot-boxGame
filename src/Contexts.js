@@ -41,7 +41,7 @@ const initialState = {
   gridHeight: states ? states.gridHeight : 0,
   playerFixed: states ? states.playerFixed : "1",
   alertForHome : states? states.alertForHome : {},
-  playerRequesting: states? states.playerRequesting : "1",
+  playerRequesting: states? states.playerRequesting : "",
   changeGame: states? states.changeGame : false,
   player1Live: states? states.player1Live : false
 };

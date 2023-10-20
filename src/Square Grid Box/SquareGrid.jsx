@@ -106,22 +106,24 @@ function SquareGrid() {
                   break;
                 }
               }
-              console.log("line 109", targetDoc, typeof targetDoc);
+              console.log("line 109 changes added= ", state.changesAdded);
               if (!state.changesAdded && targetDoc) {
+                console.log("line 111", targetDoc, typeof targetDoc);
                 dispatch({
                   type: "SetStates",
                   payload: { ...targetDoc, changesAdded: true },
                 });
               } else if (
-                typeOfChange.current === "modified"
+                typeOfChange.current === "modified" || typeOfChange.current === typeOfChange.current === "removed"
               ) {
+                console.log("line 119", targetDoc, typeof targetDoc);
                 // setTypeOfChange("")
                 typeOfChange.current = "";
                 dispatch({ type: "SetStates", payload: targetDoc });
                 dataFetched.current = true;
               }
   
-              console.log("line 124", changes[0]);
+              // console.log("line 124", changes[0]);
               // console.log("changes", changes[0].doc.data());
             },
             (error) => {
