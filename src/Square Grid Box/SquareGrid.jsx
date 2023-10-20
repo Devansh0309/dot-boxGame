@@ -79,8 +79,7 @@ function SquareGrid() {
   useEffect(
     () => {
       console.log("0");
-      let interval;
-      let unsub;
+      // let interval;
       if (!state.Routed && InitialRender0.current) {
         InitialRender0.current = false;
       } else if (!state.Routed && !InitialRender0.current) {
@@ -89,6 +88,7 @@ function SquareGrid() {
           // interval = setTimeout(() => {
           let changes = [];
           const q = query(collection(db, "users"));
+          // unsub=
           onSnapshot(
             //unsub = onSnapshot
             q,
@@ -132,23 +132,20 @@ function SquareGrid() {
         }
       }
       
-      // return () => {
-      //   if(unsub){
-      //     unsub();
-      //   }
-        
-      //   // clearTimeout(interval);
-      // };
     },
-    // []
     [
       state.horizontalButtons,
       state.verticalButtons,
-      state.squaresColors,
-      state.won,
       state.playerEnteredRoom,
     ]
-  );
+  )
+  useEffect(()=>{
+    if((state.roomId || state.enterRoomId) &&  state.playerRequesting!==state.playerFixed){
+      // let changeGame=confirm("Requesting for game change?")
+      // updateDocState({changeGame:changeGame})
+      alert(`Player ${state.playerRequesting} exited game`)
+    }
+  },[state.playerRequesting])
 
   useEffect(() => {
     console.log(3);
@@ -236,6 +233,7 @@ function SquareGrid() {
                   won: "",
                   sel: "Select size here",
                   playerEnteredRoom: false,
+                  player1Live: false,
                   roomId: "",
                   enterRoomId: "",
                   enterRoom: false,

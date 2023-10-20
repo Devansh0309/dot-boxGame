@@ -38,6 +38,7 @@ import {
   collection,
   query,
   getDocs,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 
@@ -115,18 +116,17 @@ function NewNavbar() {
     { title: "Exit", icon: <LogoutIcon /> },
   ];
   const updateDocState = async (obj) => {
-    await updateDoc(doc(db, "users", state.enterRoomId || state.roomId), obj)
-      .then((res) => {
-        console.log(res, "updated");
-      })
-      .catch((err) => {
-        console.log(err);
-        alert("Enter correct id of room");
-        dispatch({
-          type: "SetStates",
-          payload: { playerEnteredRoom: false, changesAdded: false },
-        });
+    await updateDoc(
+      doc(db, "users", state.enterRoomId || state.roomId),
+      obj
+    ).catch((err) => {
+      console.log(err);
+      alert("Enter correct id of room");
+      dispatch({
+        type: "SetStates",
+        payload: { playerEnteredRoom: false, changesAdded: false },
       });
+    });
   };
   const checkDocs = async (enterRoomId) => {
     const q = query(collection(db, "users"));
@@ -149,20 +149,60 @@ function NewNavbar() {
   };
   const handleNavClicks = (title) => {
     if (title === "New Game" && state.sel !== "Select size here") {
-      dispatch({
-        type: "SetStates",
-        payload: {
-          sel: "Select size here",
-          enterRoom: false,
-          roomId: "",
-          enterRoomId: "",
-        },
-      });
-      if (state.playerEnteredRoom) {
-        updateDocState({
-          sel: "Select size here",
-          playerEnteredRoom: false,
-          playerRequesting:state.playerFixed
+      if (
+        (state.roomId || state.enterRoomId) &&
+        state.playerRequesting !== state.playerFixed
+      ) {
+        const temp = async () => {
+          await deleteDoc(
+            doc(db, "users", state.roomId || state.enterRoomId)
+          ).then(() => {
+            console.log("line 229");
+            dispatch({
+              type: "SetStates",
+              payload: {
+                won: "",
+                sel: "Select size here",
+                player1Live: false,
+                playerEnteredRoom: false,
+                roomId: "",
+                enterRoomId: "",
+                enterRoom: false,
+                horizontalButtons: [],
+                verticalButtons: [],
+                squaresColors: [],
+                numberOfSquares: 0,
+                player1Score: 0,
+                player2Score: 0,
+                player: "1",
+                playerFixed: "1",
+                changesAdded: false,
+                playerRequesting: "1",
+              },
+            });
+          });
+        };
+        temp();
+      } else if (!state.roomId && !state.enterRoomId) {
+        dispatch({
+          type: "SetStates",
+          payload: {
+            won: "",
+            sel: "Select size here",
+            playerEnteredRoom: false,
+            roomId: "",
+            enterRoomId: "",
+            enterRoom: false,
+            horizontalButtons: [],
+            verticalButtons: [],
+            squaresColors: [],
+            numberOfSquares: 0,
+            player1Score: 0,
+            player2Score: 0,
+            player: "1",
+            playerFixed: "1",
+            changesAdded: false,
+          },
         });
       }
     } else if (title === "New Game" && state.sel === "Select size here") {
@@ -170,7 +210,42 @@ function NewNavbar() {
     } else if (title === "Home") {
       navigate("/");
     } else if (title === "Exit") {
-      window.close();
+      if (state.playerEnteredRoom) {
+        const temp = async () => {
+          await updateDocState({
+            // sel: "Select size here",
+            [state.playerFixed === "2"
+              ? "playerEnteredRoom"
+              : "player1Live"]: false,
+            playerRequesting: state.playerFixed,
+          }).then(() => {
+            dispatch({
+              type: "SetStates",
+              payload: {
+                won: "",
+                sel: "Select size here",
+                player1Live: false,
+                playerEnteredRoom: false,
+                roomId: "",
+                enterRoomId: "",
+                enterRoom: false,
+                horizontalButtons: [],
+                verticalButtons: [],
+                squaresColors: [],
+                numberOfSquares: 0,
+                player1Score: 0,
+                player2Score: 0,
+                player: "1",
+                playerFixed: "1",
+                changesAdded: false,
+                playerRequesting: "1",
+              },
+            });
+          });
+        };
+        temp();
+      }
+      // window.close();
     } else if (title === "Options") {
       dispatch({ type: "SetStates", payload: { modalShow: true } });
     } else if (title === "Create Room") {
@@ -215,6 +290,7 @@ function NewNavbar() {
       player2Name: "Player 2",
       won: "",
       playerEnteredRoom: false,
+      player1Live: true
     }).then(() => {
       setRoomCreated(true);
     });
@@ -302,94 +378,101 @@ function NewNavbar() {
             component="div"
             sx={{ alignItems: "right", display: "flex", gap: "20px" }}
           >
-            <Typography
-              sx={{ display: { xs: "none", sm: "block" }, overflow: "visible" }}
-              className="Navbartxt"
-              variant="h6"
-              noWrap
-              component="div"
-              title="New Game"
-              onClick={(e) => {
-                audio2.play();
-                handleNavClicks(e.target.title);
-              }}
-            >
-              New Game
-            </Typography>
-            {state.start ? (
-              <select
-                value={state.sel}
-                onChange={(e) => {
-                  console.log("line 270 ", state.sel);
-                  const selectValue = e.target.value;
-                  const row = selectValue.split("*").map(Number)[0];
-                  const col = selectValue.split("*").map(Number)[1];
-                  let obj = setStatesAfterSel(row, col);
-                  console.log("line 275", row, col, obj);
-                  if (row && col && Object.keys(obj).length > 0) {
-                    dispatch({
-                      type: "SetStates",
-                      payload: {
-                        Box: [],
-                        start: false,
-                        row: row,
-                        col: col,
-                        ...obj,
-                        sel: selectValue,
-                        gridWidth: 80 * (col + 1),
-                        gridHeight: 80 * (row + 1),
-                      },
-                    });
-                    if (state.roomId) {
-                      createRoom(state.roomId, {
-                        row: row,
-                        col: col,
-                        ...obj,
-                        sel: selectValue,
-                        gridWidth: 80 * (col + 1),
-                        gridHeight: 80 * (row + 1),
-                      });
-                    }
-                  }
-                }}
-                style={{
-                  color: "white",
-                  border: "none",
-                  background: "#4A00E0",
-                }}
-              >
-                <option value="Select size here">Select Size</option>
-                <option value="2*3">2 x 3</option>
-                <option value="3*4">3 x 4</option>
-                <option value="4*5">4 x 5</option>
-                <option value="5*6">5 x 6</option>
-                <option value="6*7">6 x 7</option>
-                <option value="7*8">7 x 8</option>
-              </select>
-            ) : (
-              <Typography
-                sx={{
-                  display: { xs: "block", sm: "block" },
-                  overflow: "visible",
-                }}
-                className="Navbartxt"
-                variant="h6"
-                noWrap
-                component="div"
-                title="Start Game"
-                onClick={() => {
-                  if (state.playerEnteredRoom) {
-                    alert(
-                      "Either click on new game or exit, cannot change size in between!"
-                    );
-                    return;
-                  }
-                  dispatch({ type: "SetStates", payload: { start: true } });
-                }}
-              >
-                Start Game
-              </Typography>
-            )}
+            {state.player1Live && state.playerEnteredRoom ?null: (
+              <>
+                <Typography
+                  sx={{
+                    display: { xs: "none", sm: "block" },
+                    overflow: "visible",
+                  }}
+                  className="Navbartxt"
+                  variant="h6"
+                  noWrap
+                  component="div"
+                  title="New Game"
+                  onClick={(e) => {
+                    audio2.play();
+                    handleNavClicks(e.target.title);
+                  }}
+                >
+                  New Game
+                </Typography>
+                {state.start ? (
+                  <select
+                    value={state.sel}
+                    onChange={(e) => {
+                      console.log("line 270 ", state.sel);
+                      const selectValue = e.target.value;
+                      const row = selectValue.split("*").map(Number)[0];
+                      const col = selectValue.split("*").map(Number)[1];
+                      let obj = setStatesAfterSel(row, col);
+                      console.log("line 275", row, col, obj);
+                      if (row && col && Object.keys(obj).length > 0) {
+                        dispatch({
+                          type: "SetStates",
+                          payload: {
+                            Box: [],
+                            start: false,
+                            row: row,
+                            col: col,
+                            ...obj,
+                            sel: selectValue,
+                            gridWidth: 80 * (col + 1),
+                            gridHeight: 80 * (row + 1),
+                          },
+                        });
+                        if (state.roomId) {
+                          createRoom(state.roomId, {
+                            row: row,
+                            col: col,
+                            ...obj,
+                            sel: selectValue,
+                            gridWidth: 80 * (col + 1),
+                            gridHeight: 80 * (row + 1),
+                          });
+                        }
+                      }
+                    }}
+                    style={{
+                      color: "white",
+                      border: "none",
+                      background: "#4A00E0",
+                    }}
+                  >
+                    <option value="Select size here">Select Size</option>
+                    <option value="2*3">2 x 3</option>
+                    <option value="3*4">3 x 4</option>
+                    <option value="4*5">4 x 5</option>
+                    <option value="5*6">5 x 6</option>
+                    <option value="6*7">6 x 7</option>
+                    <option value="7*8">7 x 8</option>
+                  </select>
+                ) : (
+                  <Typography
+                    sx={{
+                      display: { xs: "block", sm: "block" },
+                      overflow: "visible",
+                    }}
+                    className="Navbartxt"
+                    variant="h6"
+                    noWrap
+                    component="div"
+                    title="Start Game"
+                    onClick={() => {
+                      if (state.playerEnteredRoom) {
+                        alert(
+                          "Either click on new game or exit, cannot change size in between!"
+                        );
+                        return;
+                      }
+                      dispatch({ type: "SetStates", payload: { start: true } });
+                    }}
+                  >
+                    Start Game
+                  </Typography>
+                )}
+              </>
+            ) }
             {state.roomId ? (
               roomCreated ? (
                 <div>
