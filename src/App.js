@@ -18,7 +18,7 @@ function App() {
       <Route path="/" 
       element={<Contexts>
          <NewNavbar/>
-         {/* <VerticallyCenteredModal/> */}
+         <VerticallyCenteredModal/>
          {/* <MyVerticallyCenteredModal/> */}
          <SquareGrid />
         </Contexts>}/>

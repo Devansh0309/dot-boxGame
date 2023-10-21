@@ -107,7 +107,7 @@ function GridComponent() {
                   }`,
                 }}
                 
-                disabled={state.playerFixed!= state.player || state.verticalButtons[item].isClicked}
+                disabled={(state.player1Live && state.playerEnteredRoom && state.playerFixed!= state.player) || state.verticalButtons[item].isClicked}
                 onClick={() => {
                   setClick(item, "vertical");
                   areAllClicked(item, "vertical");
@@ -136,7 +136,7 @@ function GridComponent() {
                     }`,
                   }}
                   disabled={
-                    state.playerFixed!= state.player || 
+                    (state.player1Live && state.playerEnteredRoom && state.playerFixed!= state.player) || 
                     state.horizontalButtons[
                       item - Math.floor(item / (state.col + 1))
                     ].isClicked
@@ -178,7 +178,7 @@ function GridComponent() {
                 }}
                 
                 disabled={
-                  state.playerFixed!= state.player || 
+                  (state.player1Live && state.playerEnteredRoom && state.playerFixed!= state.player) || 
                   state.horizontalButtons[
                     item - Math.floor(item / (state.col + 1))
                   ].isClicked
@@ -205,7 +205,7 @@ function GridComponent() {
                       : "none"
                   }`,
                 }}
-                disabled={state.playerFixed!= state.player || state.verticalButtons[item].isClicked}
+                disabled={(state.player1Live && state.playerEnteredRoom && state.playerFixed!= state.player) || state.verticalButtons[item].isClicked}
                 onClick={() => {
                   setClick(item, "vertical");
                   areAllClicked(item, "vertical");
