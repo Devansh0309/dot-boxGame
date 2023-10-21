@@ -28,8 +28,7 @@ const initialState = {
   player1Name: states ? states.player1Name : "Player 1",
   player2Name: states ? states.player2Name : "Player 2",
   won: states ? states.won : "",
-  modalShow: states ? states.modalShow : false,
-  modalShow2: states ? states.modalShow2 : true,
+  modalShow: states ? states.modalShow : true,
   start: states ? states.start : false,
   Routed: states ? states.Routed : false, //Routed means route changed
   roomId: states ? states.roomId : "",

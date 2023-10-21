@@ -2,7 +2,6 @@ import Contexts from "./Contexts";
 import SquareGrid from "./Square Grid Box/SquareGrid";
 import { Route, Routes } from "react-router-dom";
 import HowToPlay from "./AboutGame/HowToPlay";
-import MyVerticallyCenteredModal from "./NewNavbar/OptionsDialogBox"
 // import Auth from "./Auth";
 // import Saves from './SavedGames/Saves'
 import VerticallyCenteredModal from './StartDialog/index'
@@ -19,13 +18,11 @@ function App() {
       element={<Contexts>
          <NewNavbar/>
          <VerticallyCenteredModal/>
-         {/* <MyVerticallyCenteredModal/> */}
          <SquareGrid />
         </Contexts>}/>
       <Route path="/aboutgame" 
       element={<Contexts>
         <NewNavbar2 />
-        {/* <MyVerticallyCenteredModal/> */}
         <HowToPlay/>
       </Contexts>}/>  
       {/* <Route path="/signIn"  element={<Auth/>}/> 

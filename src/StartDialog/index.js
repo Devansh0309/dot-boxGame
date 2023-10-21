@@ -19,7 +19,7 @@ function VerticallyCenteredModal() {
   const { state, dispatch } = useContext(GridContext);
   const audio2 = new Audio(ButtonSound2);
   const onHide = () =>
-    dispatch({ type: "SetStates", payload: { ...state, modalShow2: false } });
+    dispatch({ type: "SetStates", payload: {  modalShow: false } });
   const save = () => alert("Changes made successfully");
   const checkDocs = async (enterRoomId) => {
     const q = query(collection(db, "users"));
@@ -43,7 +43,7 @@ function VerticallyCenteredModal() {
 
   return (
     <Modal
-      show={state.modalShow2}
+      show={state.modalShow}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       style={{
