@@ -113,7 +113,7 @@ function NewNavbar() {
     { title: "Options", icon: <SettingsIcon /> },
     { title: "Create Room", icon: <HomeIcon /> },
     { title: "Enter Room", icon: <HomeIcon /> },
-    { title: "Exit", icon: <LogoutIcon /> },
+    { title: "Exit Online Room", icon: <LogoutIcon /> },
   ];
   const updateDocState = async (obj) => {
     await updateDoc(
