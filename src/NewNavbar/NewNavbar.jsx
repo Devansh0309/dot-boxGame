@@ -286,11 +286,11 @@ function NewNavbar() {
       player1Score: 0,
       player2Score: 0,
       player: "1",
-      player1Name: "Player 1",
       player2Name: "Player 2",
       won: "",
       playerEnteredRoom: false,
-      player1Live: true
+      player1Live: true,
+      player1Name: state.player1Name
     }).then(() => {
       setRoomCreated(true);
     });

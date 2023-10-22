@@ -10,7 +10,7 @@ import {
   Button,
 } from "@mui/material";
 import { v4 as uuidv4 } from "uuid";
-import { collection, getDocs, query } from "firebase/firestore";
+import { collection, doc, getDocs, query, updateDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import ButtonSound2 from "../NewNavbar/ButtonSound/button1.mp3";
 import "../NewNavbar/NewNavbar.css";
@@ -40,7 +40,16 @@ function VerticallyCenteredModal() {
     });
     return true;
   };
-
+  let updateDocState = async (obj) => {
+    console.log("line 33", obj, typeof obj);
+    await updateDoc(doc(db, "users", state.enterRoomId || state.roomId), obj)
+      .then((res) => {
+        console.log("line 36", "updated");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <Modal
       show={state.modalShow}
@@ -156,7 +165,7 @@ function VerticallyCenteredModal() {
                   if (create) {
                     dispatch({
                       type: "SetStates",
-                      payload: { start: true, roomId: enterRoomId },
+                      payload: { start: true, roomId: enterRoomId, modalShow:true },
                     });
                   }
                 });
@@ -190,7 +199,12 @@ function VerticallyCenteredModal() {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={save}>Save</Button>
+        <Button onClick={()=>{
+          updateDocState({
+            player2Name: state.player2Name
+          });
+          save()
+        }}>Save</Button>
       </Modal.Footer>
     </Modal>
   );

@@ -301,7 +301,7 @@ function SquareGrid() {
               payload: { playerEnteredRoom: true, playerFixed: "2", modalShow:true },
             });
             updateDocState({
-              playerEnteredRoom: true,
+              playerEnteredRoom: true
             });
           }}
         >
