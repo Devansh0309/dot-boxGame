@@ -198,9 +198,11 @@ function VerticallyCenteredModal() {
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={()=>{
-          updateDocState({
-            player2Name: state.player2Name
-          });
+          if(state.playerEnteredRoom){
+            updateDocState({
+              player2Name: state.player2Name
+            });
+          }
           save()
         }}>Save</Button>
       </Modal.Footer>
