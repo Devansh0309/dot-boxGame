@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef} from "react";
 import "./SquareGrid.css";
 import { GridContext } from "../Contexts";
-import ButtonSound2 from "../NewNavbar/ButtonSound/button1.mp3";
 import background from "../background.jpg";
 import GridComponent from "./GridComponent";
 import {

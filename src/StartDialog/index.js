@@ -1,10 +1,8 @@
 import Modal from "react-bootstrap/Modal";
 import { useContext } from "react";
 import { GridContext } from "../Contexts";
-import GroupIcon from "@mui/icons-material/Group";
 import {
   Grid,
-  ListItemIcon,
   TextField,
   Typography,
   Button,
