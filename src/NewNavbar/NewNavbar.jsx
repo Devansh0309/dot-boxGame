@@ -34,7 +34,6 @@ import {
   doc,
   setDoc,
   updateDoc,
-  getDoc,
   collection,
   query,
   getDocs,
@@ -87,6 +86,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   ...theme.mixins.toolbar,
   justifyContent: "flex-end",
 }));
+
 
 function NewNavbar() {
   const theme = useTheme();
@@ -254,7 +254,7 @@ function NewNavbar() {
         if (create) {
           dispatch({
             type: "SetStates",
-            payload: { start: true, roomId: enterRoomId },
+            payload: { start: true, roomId: enterRoomId,modalShow:true },
           });
         }
       });
@@ -263,7 +263,7 @@ function NewNavbar() {
     } else if (title === "Enter Room") {
       dispatch({
         type: "SetStates",
-        payload: { enterRoom: true, sel: "Select size here" },
+        payload: { enterRoom: true, sel: "Select size here", modalShow:true },
       });
       audio2.play();
     } else {
@@ -504,7 +504,7 @@ function NewNavbar() {
                     if (create) {
                       dispatch({
                         type: "SetStates",
-                        payload: { start: true, roomId: enterRoomId },
+                        payload: { start: true, roomId: enterRoomId,modalShow:true },
                       });
                     }
                   });
@@ -613,4 +613,5 @@ function NewNavbar() {
     </Box>
   );
 }
+
 export default NewNavbar;

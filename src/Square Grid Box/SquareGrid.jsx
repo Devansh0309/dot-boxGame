@@ -298,7 +298,7 @@ function SquareGrid() {
             console.log("line 314 newnavbar", state.enterRoomId);
             dispatch({
               type: "SetStates",
-              payload: { playerEnteredRoom: true, playerFixed: "2" },
+              payload: { playerEnteredRoom: true, playerFixed: "2", modalShow:true },
             });
             updateDocState({
               playerEnteredRoom: true,
