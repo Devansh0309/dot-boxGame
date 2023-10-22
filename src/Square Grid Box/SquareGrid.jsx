@@ -252,7 +252,7 @@ function SquareGrid() {
             });
           };
           temp();
-        }, [60000]);
+        }, [1000]);
 
         // dispatch({ type: "SetStates", payload: { won: "" } });
         // updateDocState({ won: "" });

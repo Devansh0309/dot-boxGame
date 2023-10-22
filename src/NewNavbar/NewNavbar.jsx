@@ -209,7 +209,7 @@ function NewNavbar() {
       alert("Select size or Start Game");
     } else if (title === "Home") {
       navigate("/");
-    } else if (title === "Exit") {
+    } else if (title === "Exit Online Room") {
       if (state.playerEnteredRoom) {
         const temp = async () => {
           await updateDocState({
@@ -245,7 +245,7 @@ function NewNavbar() {
         };
         temp();
       }
-      // window.close();
+      window.close();
     } else if (title === "Options") {
       dispatch({ type: "SetStates", payload: { modalShow: true } });
     } else if (title === "Create Room") {
@@ -378,7 +378,7 @@ function NewNavbar() {
             component="div"
             sx={{ alignItems: "right", display: "flex", gap: "20px" }}
           >
-            {state.player1Live && state.playerEnteredRoom ?null: (
+            {(state.player1Live && state.playerEnteredRoom && !state.won)  ?null: (
               <>
                 <Typography
                   sx={{
