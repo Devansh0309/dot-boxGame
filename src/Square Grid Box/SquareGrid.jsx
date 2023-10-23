@@ -8,7 +8,6 @@ import {
   doc,
   onSnapshot,
   query,
-  updateDoc,
   deleteDoc,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig";
@@ -16,7 +15,7 @@ import { Button } from "@mui/material";
 
 function SquareGrid() {
   const typeOfChange = useRef("");
-  const { state, dispatch } = useContext(GridContext);
+  const { state, dispatch, updateDocState } = useContext(GridContext);
 
   const InitialRender1 = useRef(true); //Initial Render 1 for initial render of first useEffect and so on for others useEffect
   const InitialRender2 = useRef(true);
@@ -25,16 +24,6 @@ function SquareGrid() {
   let timeOut;
 
   // const audio2 = new Audio(ButtonSound2);
-  let updateDocState = async (obj) => {
-    console.log("line 33", obj, typeof obj);
-    await updateDoc(doc(db, "users", state.enterRoomId || state.roomId), obj)
-      .then((res) => {
-        console.log("line 36", "updated");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
   const setStatesAfterSel = (row, col) => {
     let arr = [];
     let horizontal = [];
@@ -106,7 +95,7 @@ function SquareGrid() {
                 }
               }
               console.log("line 109 changes added= ", state.changesAdded);
-              if (!state.changesAdded && targetDoc) {
+              if (!state.changesAdded && targetDoc && !targetDoc.playerRequesting) {
                 console.log("line 111", targetDoc, typeof targetDoc);
                 dispatch({
                   type: "SetStates",
@@ -140,6 +129,7 @@ function SquareGrid() {
       state.playerEnteredRoom,
     ]
   )
+
   useEffect(()=>{
     if((state.roomId || state.enterRoomId) &&  state.playerRequesting!==state.playerFixed){
       // let changeGame=confirm("Requesting for game change?")

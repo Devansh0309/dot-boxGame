@@ -8,46 +8,16 @@ import {
   Button,
 } from "@mui/material";
 import { v4 as uuidv4 } from "uuid";
-import { collection, doc, getDocs, query, updateDoc } from "firebase/firestore";
-import { db } from "../firebaseConfig";
 import ButtonSound2 from "../NewNavbar/ButtonSound/button1.mp3";
 import "../NewNavbar/NewNavbar.css";
 
 function VerticallyCenteredModal() {
-  const { state, dispatch } = useContext(GridContext);
+  const { state, dispatch, updateDocState, checkDocs } = useContext(GridContext);
   const audio2 = new Audio(ButtonSound2);
   const onHide = () =>
     dispatch({ type: "SetStates", payload: { modalShow: false } });
   const save = () => alert("Changes made successfully");
-  const checkDocs = async (enterRoomId) => {
-    const q = query(collection(db, "users"));
-    const querySnapshot = await getDocs(q);
-    console.log("line 129", querySnapshot);
-    if (querySnapshot.docs.length === 10) {
-      //max 10 rooms allowed at a time in db
-      alert("Wait for rooms to be available, try after some time!");
-      return false;
-    }
-    querySnapshot.forEach((doc) => {
-      console.log("line 135", doc);
-      // doc.data() is never undefined for query doc snapshots
-      if (doc.id === enterRoomId) {
-        alert("Room already exits and is filled, again create room");
-        return false;
-      }
-    });
-    return true;
-  };
-  let updateDocState = async (obj) => {
-    console.log("line 33", obj, typeof obj);
-    await updateDoc(doc(db, "users", state.enterRoomId || state.roomId), obj)
-      .then((res) => {
-        console.log("line 36", "updated");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  
   return (
     <Modal
       show={state.modalShow}

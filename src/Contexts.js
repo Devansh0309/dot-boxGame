@@ -2,6 +2,12 @@ import React, { useReducer, createContext } from "react";
 import SquareSound from "./NewNavbar/ButtonSound/shortSuccess.mp3";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "./firebaseConfig";
+import {
+  collection,
+  query,
+  getDocs
+} from "firebase/firestore";
+
 export const GridContext = createContext();
 
 const dataFromLocal =
@@ -73,6 +79,7 @@ function Contexts(props) {
         console.log(res, "updated");
       })
       .catch((err) => {
+        alert("Room does not exits, again enter room id");
         console.log(err);
       });
   };
@@ -660,8 +667,28 @@ function Contexts(props) {
         });
     }
   };
+  const checkDocs = async (enterRoomId) => {
+    const q = query(collection(db, "users"));
+    const querySnapshot = await getDocs(q);
+    console.log("line 129", querySnapshot);
+    if (querySnapshot.docs.length === 10) {
+      //max 10 rooms allowed at a time in db
+      alert("Wait for rooms to be available, try after some time!");
+      return false;
+    }
+    querySnapshot.forEach((doc) => {
+      console.log("line 135", doc);
+      // doc.data() is never undefined for query doc snapshots
+      if (doc.id === enterRoomId) {
+        alert("Room already exits and is filled, again create room");
+        return false;
+      }
+    });
+    return true;
+  };
+
   return (
-    <GridContext.Provider value={{ state, dispatch, areAllClicked, setClick }}>
+    <GridContext.Provider value={{ state, dispatch, areAllClicked, setClick, updateDocState, checkDocs }}>
       {props.children}
     </GridContext.Provider>
   );

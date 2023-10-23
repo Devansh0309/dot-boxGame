@@ -30,15 +30,7 @@ import background from "../background.jpg";
 import { v4 as uuidv4 } from "uuid";
 import { Button } from "@mui/material";
 import clipboardCopy from "clipboard-copy";
-import {
-  doc,
-  setDoc,
-  updateDoc,
-  collection,
-  query,
-  getDocs,
-  deleteDoc,
-} from "firebase/firestore";
+import { doc, setDoc, deleteDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 
 const drawerWidth = 190;
@@ -87,7 +79,6 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-
 function NewNavbar() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -103,7 +94,8 @@ function NewNavbar() {
     setOpen(false);
   };
 
-  const { state, dispatch } = useContext(GridContext);
+  const { state, dispatch, updateDocState, checkDocs } =
+    useContext(GridContext);
   const [roomCreated, setRoomCreated] = useState(false);
 
   const navItems = [
@@ -115,72 +107,67 @@ function NewNavbar() {
     { title: "Enter Room", icon: <HomeIcon /> },
     { title: "Exit Online Room", icon: <LogoutIcon /> },
   ];
-  const updateDocState = async (obj) => {
-    await updateDoc(
-      doc(db, "users", state.enterRoomId || state.roomId),
-      obj
-    ).catch((err) => {
-      console.log(err);
-      alert("Enter correct id of room");
-      dispatch({
-        type: "SetStates",
-        payload: { playerEnteredRoom: false, changesAdded: false },
-      });
-    });
-  };
-  const checkDocs = async (enterRoomId) => {
-    const q = query(collection(db, "users"));
-    const querySnapshot = await getDocs(q);
-    console.log("line 129", querySnapshot);
-    if (querySnapshot.docs.length === 10) {
-      //max 10 rooms allowed at a time in db
-      alert("Wait for rooms to be available, try after some time!");
-      return false;
-    }
-    querySnapshot.forEach((doc) => {
-      console.log("line 135", doc);
-      // doc.data() is never undefined for query doc snapshots
-      if (doc.id === enterRoomId) {
-        alert("Room already exits and is filled, again create room");
-        return false;
-      }
-    });
-    return true;
-  };
+
   const handleNavClicks = (title) => {
     if (title === "New Game" && state.sel !== "Select size here") {
       if (
         (state.roomId || state.enterRoomId) &&
         state.playerRequesting !== state.playerFixed
       ) {
+        console.log("new game clicked", "line 122");
+        setRoomCreated(false)
         const temp = async () => {
-          await deleteDoc(
-            doc(db, "users", state.roomId || state.enterRoomId)
-          ).then(() => {
-            console.log("line 229");
-            dispatch({
-              type: "SetStates",
-              payload: {
-                won: "",
-                sel: "Select size here",
-                player1Live: false,
-                playerEnteredRoom: false,
-                roomId: "",
-                enterRoomId: "",
-                enterRoom: false,
-                horizontalButtons: [],
-                verticalButtons: [],
-                squaresColors: [],
-                numberOfSquares: 0,
-                player1Score: 0,
-                player2Score: 0,
-                player: "1",
-                playerFixed: "1",
-                changesAdded: false,
-                playerRequesting: "",
-              },
-            });
-          });
+          await updateDocState({
+            won: "",
+            sel: "Select size here",
+            player1Live: false,
+            playerEnteredRoom: false,
+            roomId: "",
+            enterRoomId: "",
+            enterRoom: false,
+            horizontalButtons: [],
+            verticalButtons: [],
+            squaresColors: [],
+            numberOfSquares: 0,
+            player1Score: 0,
+            player2Score: 0,
+            player: "1",
+            playerRequesting: state.playerFixed,
+            playerFixed: "1",
+            // changesAdded: false,
+          }).then(()=>{
+            deleteDoc(doc(db, "users", state.roomId || state.enterRoomId))
+          })
+          .then(
+            () => {
+              console.log("docDeleted", "line 127");
+              dispatch({
+                type: "SetStates",
+                payload: {
+                  row: 0,
+                  col: 0,
+                  won: "",
+                  sel: "Select size here",
+                  player1Live: false,
+                  playerEnteredRoom: false,
+                  roomId: "",
+                  enterRoomId: "",
+                  enterRoom: false,
+                  horizontalButtons: [],
+                  verticalButtons: [],
+                  squaresColors: [],
+                  numberOfSquares: 0,
+                  player1Score: 0,
+                  player2Score: 0,
+                  player: "1",
+                  playerFixed: "1",
+                  // changesAdded: false,
+                  playerRequesting: "",
+                },
+              });
+              
+            }
+          );
         };
         temp();
       } else if (!state.roomId && !state.enterRoomId) {
@@ -219,6 +206,7 @@ function NewNavbar() {
               : "player1Live"]: false,
             playerRequesting: state.playerFixed,
           }).then(() => {
+            console.log("line 209", "exited from game")
             dispatch({
               type: "SetStates",
               payload: {
@@ -237,7 +225,7 @@ function NewNavbar() {
                 player2Score: 0,
                 player: "1",
                 playerFixed: "1",
-                changesAdded: true,
+                changesAdded: false,
                 playerRequesting: "",
               },
             });
@@ -245,7 +233,7 @@ function NewNavbar() {
         };
         temp();
       }
-      window.close();
+      // window.close();
     } else if (title === "Options") {
       dispatch({ type: "SetStates", payload: { modalShow: true } });
     } else if (title === "Create Room") {
@@ -254,7 +242,7 @@ function NewNavbar() {
         if (create) {
           dispatch({
             type: "SetStates",
-            payload: { start: true, roomId: enterRoomId,modalShow:true },
+            payload: { start: true, roomId: enterRoomId, modalShow: true },
           });
         }
       });
@@ -263,7 +251,7 @@ function NewNavbar() {
     } else if (title === "Enter Room") {
       dispatch({
         type: "SetStates",
-        payload: { enterRoom: true, sel: "Select size here", modalShow:true },
+        payload: { enterRoom: true, sel: "Select size here", modalShow: true },
       });
       audio2.play();
     } else {
@@ -290,7 +278,7 @@ function NewNavbar() {
       won: "",
       playerEnteredRoom: false,
       player1Live: true,
-      player1Name: state.player1Name
+      player1Name: state.player1Name,
     }).then(() => {
       setRoomCreated(true);
     });
@@ -378,7 +366,9 @@ function NewNavbar() {
             component="div"
             sx={{ alignItems: "right", display: "flex", gap: "20px" }}
           >
-            {(state.player1Live && state.playerEnteredRoom && !state.won)  ?null: (
+            {state.player1Live &&
+            state.playerEnteredRoom &&
+            !state.won ? null : (
               <>
                 <Typography
                   sx={{
@@ -472,7 +462,7 @@ function NewNavbar() {
                   </Typography>
                 )}
               </>
-            ) }
+            )}
             {state.roomId ? (
               roomCreated ? (
                 <div>
@@ -504,7 +494,11 @@ function NewNavbar() {
                     if (create) {
                       dispatch({
                         type: "SetStates",
-                        payload: { start: true, roomId: enterRoomId,modalShow:true },
+                        payload: {
+                          start: true,
+                          roomId: enterRoomId,
+                          modalShow: true,
+                        },
                       });
                     }
                   });
