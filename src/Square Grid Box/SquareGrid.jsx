@@ -136,6 +136,7 @@ function SquareGrid() {
       // updateDocState({changeGame:changeGame})
       alert(`Player ${state.playerRequesting} exited game`)
     }
+   
   },[state.playerRequesting])
 
   useEffect(() => {

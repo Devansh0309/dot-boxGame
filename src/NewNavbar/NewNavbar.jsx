@@ -117,30 +117,9 @@ function NewNavbar() {
         console.log("new game clicked", "line 122");
         setRoomCreated(false)
         const temp = async () => {
-          await updateDocState({
-            won: "",
-            sel: "Select size here",
-            player1Live: false,
-            playerEnteredRoom: false,
-            roomId: "",
-            enterRoomId: "",
-            enterRoom: false,
-            horizontalButtons: [],
-            verticalButtons: [],
-            squaresColors: [],
-            numberOfSquares: 0,
-            player1Score: 0,
-            player2Score: 0,
-            player: "1",
-            playerRequesting: state.playerFixed,
-            playerFixed: "1",
-            // changesAdded: false,
-          }).then(()=>{
-            deleteDoc(doc(db, "users", state.roomId || state.enterRoomId))
-          })
-          .then(
+          await deleteDoc(doc(db, "users", state.roomId || state.enterRoomId)).then(
             () => {
-              console.log("docDeleted", "line 127");
+              console.log("docDeleted", "line 126");
               dispatch({
                 type: "SetStates",
                 payload: {
@@ -161,11 +140,10 @@ function NewNavbar() {
                   player2Score: 0,
                   player: "1",
                   playerFixed: "1",
-                  // changesAdded: false,
+                  changesAdded: false,
                   playerRequesting: "",
                 },
-              });
-              
+              })
             }
           );
         };
@@ -198,6 +176,7 @@ function NewNavbar() {
       navigate("/");
     } else if (title === "Exit Online Room") {
       if (state.playerEnteredRoom) {
+        setRoomCreated(false)
         const temp = async () => {
           await updateDocState({
             // sel: "Select size here",
