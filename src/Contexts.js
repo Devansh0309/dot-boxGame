@@ -686,9 +686,48 @@ function Contexts(props) {
     });
     return true;
   };
+  const setStatesAfterSel = (row, col) => {
+    let arr = [];
+    let horizontal = [];
+    let vertical = [];
+    let squares = [];
+    for (let i = 0; i <= row * col + row + col; i++) {
+      arr.push(i);
+    }
+
+    for (let i = 0; i < row * col + col; i++) {
+      horizontal.push({
+        key: i,
+        type: "horizontal",
+        isClicked: false,
+        btncolor: "#2196f3",
+        active: false,
+      });
+    }
+
+    for (let i = 0; i < row * col + row; i++) {
+      vertical.push({
+        key: i,
+        type: "vertical",
+        isClicked: false,
+        btncolor: "#2196f3",
+        active: false,
+      });
+    }
+
+    for (let i = 0; i < row * col; i++) {
+      squares.push({ allClicked: false, squarecolor: "lightgrey", active: false });
+    }
+    return {
+      horizontalButtons: horizontal,
+      verticalButtons: vertical,
+      squaresColors: squares,
+      Box: arr,
+    };
+  };
 
   return (
-    <GridContext.Provider value={{ state, dispatch, areAllClicked, setClick, updateDocState, checkDocs }}>
+    <GridContext.Provider value={{ state, dispatch, areAllClicked, setClick, updateDocState, checkDocs, setStatesAfterSel }}>
       {props.children}
     </GridContext.Provider>
   );

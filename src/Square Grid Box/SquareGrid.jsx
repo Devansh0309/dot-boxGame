@@ -15,7 +15,7 @@ import { Button } from "@mui/material";
 
 function SquareGrid() {
   const typeOfChange = useRef("");
-  const { state, dispatch, updateDocState } = useContext(GridContext);
+  const { state, dispatch, updateDocState, setStatesAfterSel } = useContext(GridContext);
 
   const InitialRender1 = useRef(true); //Initial Render 1 for initial render of first useEffect and so on for others useEffect
   const InitialRender2 = useRef(true);
@@ -24,45 +24,6 @@ function SquareGrid() {
   let timeOut;
 
   // const audio2 = new Audio(ButtonSound2);
-  const setStatesAfterSel = (row, col) => {
-    let arr = [];
-    let horizontal = [];
-    let vertical = [];
-    let squares = [];
-    for (let i = 0; i <= row * col + row + col; i++) {
-      arr.push(i);
-    }
-
-    for (let i = 0; i < row * col + col; i++) {
-      horizontal.push({
-        key: i,
-        type: "horizontal",
-        isClicked: false,
-        btncolor: "lightgrey",
-        active: false,
-      });
-    }
-
-    for (let i = 0; i < row * col + row; i++) {
-      vertical.push({
-        key: i,
-        type: "vertical",
-        isClicked: false,
-        btncolor: "lightgrey",
-        active: false,
-      });
-    }
-
-    for (let i = 0; i < row * col; i++) {
-      squares.push({ allClicked: false, squarecolor: "grey", active: false });
-    }
-    return {
-      horizontalButtons: horizontal,
-      verticalButtons: vertical,
-      squaresColors: squares,
-      Box: arr,
-    };
-  };
 
   useEffect(
     () => {
