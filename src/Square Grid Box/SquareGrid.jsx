@@ -24,7 +24,7 @@ function SquareGrid() {
         key: i,
         type: "horizontal",
         isClicked: false,
-        btncolor: "lightgrey",
+        btncolor: "#2196f3",
         active: false,
       });
     }
@@ -34,13 +34,13 @@ function SquareGrid() {
         key: i,
         type: "vertical",
         isClicked: false,
-        btncolor: "lightgrey",
+        btncolor: "#2196f3",
         active: false,
       });
     }
 
     for (let i = 0; i < row * col; i++) {
-      squares.push({ allClicked: false, squarecolor: "grey", active: false });
+      squares.push({ allClicked: false, squarecolor: "lightgrey", active: false });
     }
     return {
       horizontalButtons: horizontal,

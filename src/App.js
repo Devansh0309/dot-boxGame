@@ -13,7 +13,7 @@ function App() {
   
   return (
     <div className="App" style={{
-      minHeight:'100vh',minWidth:'100vw'}}>
+      height:'100vh',width:'100vw'}}>
       <Routes>
       <Route path="/" 
       element={<Contexts>

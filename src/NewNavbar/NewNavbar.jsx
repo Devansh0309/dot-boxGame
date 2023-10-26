@@ -129,7 +129,7 @@ function NewNavbar() {
         key: i,
         type: "horizontal",
         isClicked: false,
-        btncolor: "lightgrey",
+        btncolor: "#2196f3",
         active: false,
       });
     }
@@ -139,13 +139,13 @@ function NewNavbar() {
         key: i,
         type: "vertical",
         isClicked: false,
-        btncolor: "lightgrey",
+        btncolor: "#2196f3",
         active: false,
       });
     }
 
     for (let i = 0; i < row * col; i++) {
-      squares.push({ allClicked: false, squarecolor: "grey", active: false });
+      squares.push({ allClicked: false, squarecolor: "lightgrey", active: false });
     }
     return {horizontalButtons: horizontal,
       verticalButtons: vertical,
@@ -243,11 +243,17 @@ function NewNavbar() {
               >
                 <option value="Select size here">Select Size</option>
                 <option value="2*3">2 x 3</option>
+                <option value="3*3">3 x 3</option>
                 <option value="3*4">3 x 4</option>
+                <option value="4*4">4 x 4</option>
                 <option value="4*5">4 x 5</option>
+                <option value="5*5">5 x 5</option>
                 <option value="5*6">5 x 6</option>
+                <option value="6*6">6 x 6</option>
                 <option value="6*7">6 x 7</option>
+                <option value="7*7">7 x 7</option>
                 <option value="7*8">7 x 8</option>
+                <option value="8*8">8 x 8</option>
               </select>
             ) : (
               <Typography
