@@ -1,12 +1,9 @@
 import React, { useReducer, createContext } from "react";
 import SquareSound from "./NewNavbar/ButtonSound/shortSuccess.mp3";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "./firebaseConfig";
-import {
-  collection,
-  query,
-  getDocs
-} from "firebase/firestore";
+import { collection, query, getDocs } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 export const GridContext = createContext();
 
@@ -45,10 +42,10 @@ const initialState = {
   gridWidth: states ? states.gridWidth : 0,
   gridHeight: states ? states.gridHeight : 0,
   playerFixed: states ? states.playerFixed : "1",
-  alertForHome : states? states.alertForHome : {},
-  playerRequesting: states? states.playerRequesting : "",
-  changeGame: states? states.changeGame : false,
-  player1Live: states? states.player1Live : false
+  alertForHome: states ? states.alertForHome : {},
+  playerRequesting: states ? states.playerRequesting : "",
+  changeGame: states ? states.changeGame : false,
+  player1Live: states ? states.player1Live : false,
 };
 function reducer(state, action) {
   // console.log("line 34 in context",state)
@@ -72,6 +69,7 @@ function reducer(state, action) {
 function Contexts(props) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const audio3 = new Audio(SquareSound);
+  const navigate = useNavigate();
   //Functions
   const updateDocState = async (obj) => {
     await updateDoc(doc(db, "users", state.enterRoomId || state.roomId), obj)
@@ -671,6 +669,36 @@ function Contexts(props) {
     const q = query(collection(db, "users"));
     const querySnapshot = await getDocs(q);
     console.log("line 129", querySnapshot);
+    const docSnap = await getDoc(doc(db, "games", "XhxrYcgKoKl9eLoCVFl2"));
+
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      const dataFromLocal =
+        typeof window !== "undefined" && window.localStorage
+          ? localStorage.getItem("player")
+          : null;
+      const playerInfo = JSON.parse(dataFromLocal);
+      if(playerInfo && !data?.players[playerInfo] && !data?.players[playerInfo]===0){
+        //add playerInfo or token or addplayer in db for this day
+        await updateDoc(doc(db,"games", "XhxrYcgKoKl9eLoCVFl2"),{
+          players:{...data.players,[playerInfo]:0}
+        })
+      }
+      else if(!playerInfo){
+        navigate('/signIn')
+      }
+
+      if (
+        data.number_of_games_played_per_day >= 70 ||
+        data.number_of_players >= 12
+      ) {
+        alert(
+          "Visit next day as max games played/day or number of players/day limit exceeded!"
+        );
+        return false;
+      }
+      // console.log("Document data:", docSnap.data());
+    }
     if (querySnapshot.docs.length === 10) {
       //max 10 rooms allowed at a time in db
       alert("Wait for rooms to be available, try after some time!");
@@ -716,7 +744,11 @@ function Contexts(props) {
     }
 
     for (let i = 0; i < row * col; i++) {
-      squares.push({ allClicked: false, squarecolor: "lightgrey", active: false });
+      squares.push({
+        allClicked: false,
+        squarecolor: "lightgrey",
+        active: false,
+      });
     }
     return {
       horizontalButtons: horizontal,
@@ -727,7 +759,17 @@ function Contexts(props) {
   };
 
   return (
-    <GridContext.Provider value={{ state, dispatch, areAllClicked, setClick, updateDocState, checkDocs, setStatesAfterSel }}>
+    <GridContext.Provider
+      value={{
+        state,
+        dispatch,
+        areAllClicked,
+        setClick,
+        updateDocState,
+        checkDocs,
+        setStatesAfterSel,
+      }}
+    >
       {props.children}
     </GridContext.Provider>
   );

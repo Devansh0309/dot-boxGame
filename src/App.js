@@ -7,6 +7,7 @@ import HowToPlay from "./AboutGame/HowToPlay";
 import VerticallyCenteredModal from './StartDialog/index'
 import NewNavbar2 from "./NewNavbar/AboutNavbar";
 import NewNavbar from "./NewNavbar/NewNavbar";
+import Auth from "./Auth/index"
 
 function App() {
   
@@ -25,8 +26,8 @@ function App() {
         <NewNavbar2 />
         <HowToPlay/>
       </Contexts>}/>  
-      {/* <Route path="/signIn"  element={<Auth/>}/> 
-      <Route path="/savedGames"  element={<Saves/>}/> */}
+      <Route path="/signIn"  element={<Auth/>}/> 
+      {/* <Route path="/savedGames"  element={<Saves/>}/> */}
       </Routes>
     </div>
   );
