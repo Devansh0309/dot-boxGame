@@ -138,6 +138,9 @@ function SquareGrid() {
                   col:3,
                   ...obj,
                   sel: "2*3",
+                  player1Score:0,
+                  player2Score:0,
+                  player:"1",
                   gridWidth: 320,
                   gridHeight: 240
                 },

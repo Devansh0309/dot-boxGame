@@ -229,6 +229,9 @@ function NewNavbar() {
                         col:col,
                         ...obj,
                         sel: selectValue,
+                        player1Score:0,
+                        player2Score:0,
+                        player:"1",
                         gridWidth: 80*(col+1),
                         gridHeight: 80*(row+1)
                      },
