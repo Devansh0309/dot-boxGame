@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef} from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import "./SquareGrid.css";
 import { GridContext } from "../Contexts";
 import background from "../background.jpg";
@@ -9,96 +9,102 @@ import {
   onSnapshot,
   query,
   deleteDoc,
+  updateDoc,
+  getDoc,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function SquareGrid() {
   const typeOfChange = useRef("");
-  const { state, dispatch, updateDocState, setStatesAfterSel } = useContext(GridContext);
+  const { state, dispatch, updateDocState, setStatesAfterSel } =
+    useContext(GridContext);
 
   const InitialRender1 = useRef(true); //Initial Render 1 for initial render of first useEffect and so on for others useEffect
   const InitialRender2 = useRef(true);
   const InitialRender0 = useRef(true);
   const dataFetched = useRef(false);
+  const navigate = useNavigate();
   let timeOut;
 
   // const audio2 = new Audio(ButtonSound2);
 
-  useEffect(
-    () => {
-      console.log("0");
-      // let interval;
-      if (!state.Routed && InitialRender0.current) {
-        InitialRender0.current = false;
-      } else if (!state.Routed && !InitialRender0.current) {
-        if (state.roomId || state.playerEnteredRoom) {
-          console.log("on line 88 for fetching real-time data");
-          // interval = setTimeout(() => {
-          let changes = [];
-          const q = query(collection(db, "users"));
-          // unsub=
-          onSnapshot(
-            //unsub = onSnapshot
-            q,
-            (querySnapshot) => {
-              changes = querySnapshot //changes is array of docs added or modified in collection
-                .docChanges();
-              let targetDoc;
-              for (let i = 0; i < changes.length; i++) {
-                // const idArr=changes[i]?.doc["_key"]?.path?.segments
-                const id = changes[i].doc.id;
-                if (id === (state.roomId || state.enterRoomId)) {
-                  targetDoc = changes[i].doc.data();
-                  typeOfChange.current = changes[i].type;
-                  // setTypeOfChange(changes[i].type)
-                  break;
-                }
+  useEffect(() => {
+    console.log("0");
+    // let interval;
+    if (!state.Routed && InitialRender0.current) {
+      InitialRender0.current = false;
+    } else if (!state.Routed && !InitialRender0.current) {
+      if (state.roomId || state.playerEnteredRoom) {
+        console.log("on line 88 for fetching real-time data");
+        // interval = setTimeout(() => {
+        let changes = [];
+        const q = query(collection(db, "users"));
+        // unsub=
+        onSnapshot(
+          //unsub = onSnapshot
+          q,
+          (querySnapshot) => {
+            changes = querySnapshot //changes is array of docs added or modified in collection
+              .docChanges();
+            let targetDoc;
+            for (let i = 0; i < changes.length; i++) {
+              // const idArr=changes[i]?.doc["_key"]?.path?.segments
+              const id = changes[i].doc.id;
+              if (id === (state.roomId || state.enterRoomId)) {
+                targetDoc = changes[i].doc.data();
+                typeOfChange.current = changes[i].type;
+                // setTypeOfChange(changes[i].type)
+                break;
               }
-              console.log("line 109 changes added= ", state.changesAdded);
-              if (!state.changesAdded && targetDoc && !targetDoc.playerRequesting) {
-                console.log("line 111", targetDoc, typeof targetDoc);
-                dispatch({
-                  type: "SetStates",
-                  payload: { ...targetDoc, changesAdded: true },
-                });
-              } else if (
-                typeOfChange.current === "modified" || typeOfChange.current === typeOfChange.current === "removed"
-              ) {
-                console.log("line 119", targetDoc, typeof targetDoc);
-                // setTypeOfChange("")
-                typeOfChange.current = "";
-                dispatch({ type: "SetStates", payload: targetDoc });
-                dataFetched.current = true;
-              }
-  
-              // console.log("line 124", changes[0]);
-              // console.log("changes", changes[0].doc.data());
-            },
-            (error) => {
-              console.log(error);
             }
-          );
-          // }, [2000]);
-        }
-      }
-      
-    },
-    [
-      state.horizontalButtons,
-      state.verticalButtons,
-      state.playerEnteredRoom,
-    ]
-  )
+            console.log("line 109 changes added= ", state.changesAdded);
+            if (
+              !state.changesAdded &&
+              targetDoc &&
+              !targetDoc.playerRequesting
+            ) {
+              console.log("line 111", targetDoc, typeof targetDoc);
+              dispatch({
+                type: "SetStates",
+                payload: { ...targetDoc, changesAdded: true },
+              });
+            } else if (
+              typeOfChange.current === "modified" ||
+              (typeOfChange.current === typeOfChange.current) === "removed"
+            ) {
+              console.log("line 119", targetDoc, typeof targetDoc);
+              // setTypeOfChange("")
+              typeOfChange.current = "";
+              dispatch({ type: "SetStates", payload: targetDoc });
+              dataFetched.current = true;
+            }
 
-  useEffect(()=>{
-    if((state.roomId || state.enterRoomId) &&  state.playerRequesting!==state.playerFixed){
+            // console.log("line 124", changes[0]);
+            // console.log("changes", changes[0].doc.data());
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+        // }, [2000]);
+      }
+    }
+  }, [state.horizontalButtons, state.verticalButtons, state.playerEnteredRoom]);
+
+  useEffect(() => {
+    if (
+      (state.roomId || state.enterRoomId) &&
+      state.playerRequesting !== state.playerFixed
+    ) {
       // let changeGame=confirm("Requesting for game change?")
       // updateDocState({changeGame:changeGame})
-      alert(`Player ${state.playerRequesting} exited game`)
+      alert(
+        `Player ${state.playerRequesting} exited game or has played max games allowed/day or players loby full. Please send this code to another friend.`
+      );
     }
-   
-  },[state.playerRequesting])
+  }, [state.playerRequesting]);
 
   useEffect(() => {
     console.log(3);
@@ -249,11 +255,38 @@ function SquareGrid() {
             console.log("line 314 newnavbar", state.enterRoomId);
             dispatch({
               type: "SetStates",
-              payload: { playerEnteredRoom: true, playerFixed: "2", modalShow:true },
+              payload: {
+                playerEnteredRoom: true,
+                playerFixed: "2",
+                modalShow: true,
+              },
             });
             updateDocState({
-              playerEnteredRoom: true
+              playerEnteredRoom: true,
             });
+            const updateAnotherDocState = async () => {
+              const dataFromLocal =
+                typeof window !== "undefined" && window.localStorage
+                  ? localStorage.getItem("player")
+                  : null;
+              const playerInfo = JSON.parse(dataFromLocal);
+              const docSnap = await getDoc(
+                doc(db, "games", "XhxrYcgKoKl9eLoCVFl2")
+              );
+
+              if (docSnap.exists()) {
+                const data = docSnap.data();
+                updateDoc(doc(db, "games", "XhxrYcgKoKl9eLoCVFl2"), {
+                  number_of_games_played_per_day:
+                    data.number_of_games_played_per_day + 1,
+                  players: {
+                    ...data.players,
+                    [playerInfo]: data?.players[playerInfo] + 1,
+                  },
+                });
+              }
+            };
+            updateAnotherDocState();
           }}
         >
           <input
@@ -274,46 +307,67 @@ function SquareGrid() {
       ) : state.roomId || state.enterRoomId ? (
         <p>Creating Room</p>
       ) : (
-        <button
-          type="button"
-          onClick={() => {
-            let obj = setStatesAfterSel(2, 3);
-            console.log("line 214", obj);
-            if (Object.keys(obj).length > 0) {
-              dispatch({
-                type: "SetStates",
-                payload: {
-                  Box: [],
-                  start: false,
+        <div>
+          <button
+            type="button"
+            onClick={() => {
+              let obj = setStatesAfterSel(2, 3);
+              console.log("line 214", obj);
+              if (Object.keys(obj).length > 0) {
+                dispatch({
+                  type: "SetStates",
+                  payload: {
+                    Box: [],
+                    start: false,
+                    row: 2,
+                    col: 3,
+                    ...obj,
+                    sel: "2*3",
+                    gridWidth: 320,
+                    gridHeight: 240,
+                  },
+                });
+              }
+              if (state.playerEnteredRoom)
+                updateDocState({
                   row: 2,
                   col: 3,
                   ...obj,
                   sel: "2*3",
                   gridWidth: 320,
                   gridHeight: 240,
-                },
+                });
+            }}
+            style={{
+              backgroundColor: "inherit",
+              fontSize: "large",
+              color: "#354dc1",
+              marginTop: "0.625rem",
+            }}
+            className="start-default"
+          >
+            Start 2 x 3 game
+          </button>
+          <br />
+          <button
+            style={{
+              backgroundColor: "inherit",
+              fontSize: "large",
+              color: "#354dc1",
+              marginTop: "0.625rem",
+            }}
+            onClick={() => {
+              navigate("/signIn");
+              dispatch({
+                type: "SetStates",
+                payload: { Routed: true },
               });
-            }
-            if (state.playerEnteredRoom)
-              updateDocState({
-                row: 2,
-                col: 3,
-                ...obj,
-                sel: "2*3",
-                gridWidth: 320,
-                gridHeight: 240,
-              });
-          }}
-          style={{
-            backgroundColor: "inherit",
-            fontSize: "large",
-            color: "#354dc1",
-            marginTop: "0.625rem",
-          }}
-          className="start-default"
-        >
-          Start 2 x 3 game
-        </button>
+            }}
+            // className="start-default"
+          >
+            SignIn
+          </button>
+        </div>
       )}
       {/* Idea for rendering square color on click of all neighbouring buttons: Create react components for four buttons surrounding innerbox or square which is to be colored and pass 'isClicked' prop to Button component i.e. <Button isClicked={}/> and from Button Component pass result of isClicked to a function in App.js whose result of allButtons clicked is passed as a prop to innerBox React component and then if allButtons clicked is true then change color of innerBox from innerBox react component there itself  */}
     </div>

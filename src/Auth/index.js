@@ -2,8 +2,9 @@ import React from "react";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import "./index.css";
 import { auth, db } from "../firebaseConfig";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+
 
 function Auth() {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ function Auth() {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
         // The signed-in user info.
-        const player = result.user;
+        const player = result.user.uid;
         //
         const docSnap = await getDoc(doc(db, "games", "XhxrYcgKoKl9eLoCVFl2"));
 
@@ -27,6 +28,7 @@ function Auth() {
         }
         //save player.uid something in place of JSON.stringify(player) in localStorageSetItem
         localStorage.setItem("player", JSON.stringify(player));
+        
         navigate("/");
       })
       .catch((error) => {

@@ -666,9 +666,7 @@ function Contexts(props) {
     }
   };
   const checkDocs = async (enterRoomId) => {
-    const q = query(collection(db, "users"));
-    const querySnapshot = await getDocs(q);
-    console.log("line 129", querySnapshot);
+    
     const docSnap = await getDoc(doc(db, "games", "XhxrYcgKoKl9eLoCVFl2"));
 
     if (docSnap.exists()) {
@@ -678,19 +676,24 @@ function Contexts(props) {
           ? localStorage.getItem("player")
           : null;
       const playerInfo = JSON.parse(dataFromLocal);
-      if(playerInfo && !data?.players[playerInfo] && !data?.players[playerInfo]===0){
+      if(playerInfo && data?.players[playerInfo]===11){
+        alert("Per day Limit reached!")
+        return false
+      }
+      else if(playerInfo && !data?.players[playerInfo] && !data?.players[playerInfo]===0){
         //add playerInfo or token or addplayer in db for this day
         await updateDoc(doc(db,"games", "XhxrYcgKoKl9eLoCVFl2"),{
           players:{...data.players,[playerInfo]:0}
         })
       }
       else if(!playerInfo){
-        navigate('/signIn')
+        alert("Please signIn")
+        return false
       }
 
       if (
-        data.number_of_games_played_per_day >= 70 ||
-        data.number_of_players >= 12
+        data?.number_of_games_played_per_day >= 70 ||
+        Object.keys(data?.players).length >= 12
       ) {
         alert(
           "Visit next day as max games played/day or number of players/day limit exceeded!"
@@ -699,6 +702,11 @@ function Contexts(props) {
       }
       // console.log("Document data:", docSnap.data());
     }
+
+    const q = query(collection(db, "users"));
+    const querySnapshot = await getDocs(q);
+    console.log("line 708", querySnapshot);
+
     if (querySnapshot.docs.length === 10) {
       //max 10 rooms allowed at a time in db
       alert("Wait for rooms to be available, try after some time!");

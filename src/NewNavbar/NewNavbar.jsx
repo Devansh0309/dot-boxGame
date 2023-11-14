@@ -102,6 +102,7 @@ function NewNavbar() {
     { title: "Home", icon: <HomeIcon /> },
     { title: "New Game", icon: <SportsEsportsIcon /> },
     { title: "How to Play?", icon: <LightbulbIcon /> },
+    { title: "SignIn", icon: <LogoutIcon /> },
     { title: "Options", icon: <SettingsIcon /> },
     { title: "Create Room", icon: <HomeIcon /> },
     { title: "Enter Room", icon: <HomeIcon /> },
@@ -172,6 +173,12 @@ function NewNavbar() {
       }
     } else if (title === "New Game" && state.sel === "Select size here") {
       alert("Select size or Start Game");
+    } else if (title === "SignIn") {
+      navigate("/signIn");
+      dispatch({
+        type: "SetStates",
+        payload: { Routed: true },
+      });
     } else if (title === "Home") {
       navigate("/");
     } else if (title === "Exit Online Room") {
@@ -260,7 +267,27 @@ function NewNavbar() {
       player1Live: true,
       player1Name: state.player1Name,
     }).then(() => {
-      
+      const updateAnotherDocState = async () => {
+        const dataFromLocal =
+          typeof window !== "undefined" && window.localStorage
+            ? localStorage.getItem("player")
+            : null;
+        const playerInfo = JSON.parse(dataFromLocal);
+        const docSnap = await getDoc(
+          doc(db, "games", "XhxrYcgKoKl9eLoCVFl2")
+        );
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          updateDoc(doc(db, "games", "XhxrYcgKoKl9eLoCVFl2"), {
+            players: {
+              ...data.players,
+              [playerInfo]: data?.players[playerInfo] + 1,
+            },
+          });
+        }
+      };
+      updateAnotherDocState();
       setRoomCreated(true);
     });
   };
@@ -513,24 +540,48 @@ function NewNavbar() {
 
                     if (docSnap.exists()) {
                       const data = docSnap.data();
-                      if (
-                        data.number_of_players < 12
+                      const dataFromLocal =
+                        typeof window !== "undefined" && window.localStorage
+                          ? localStorage.getItem("player")
+                          : null;
+                      const playerInfo = JSON.parse(dataFromLocal);
+                      if (playerInfo && data?.players[playerInfo] === 11) {
+                        alert("Per day Limit reached!");
+                        dispatch({
+                          type: "SetStates",
+                          payload: { playerFixed: "2" },
+                        });
+                        updateDocState({ playerRequesting: "2" });
+                      } else if (
+                        playerInfo &&
+                        !data?.players[playerInfo] &&
+                        !data?.players[playerInfo] === 0
                       ) {
+                        //add playerInfo or token or addplayer in db for this day
+                        await updateDoc(
+                          doc(db, "games", "XhxrYcgKoKl9eLoCVFl2"),
+                          {
+                            players: { ...data.players, [playerInfo]: 0 },
+                          }
+                        );
+                      } else if (!playerInfo) {
+                        alert("Please signIn");
+                        return
+                      }
+                      if (Object.keys(data?.players).length < 12) {
                         dispatch({
                           type: "SetStates",
                           payload: { enterRoom: true, sel: "Select size here" },
                         });
-                      }
-                      else{
+                      } else {
                         alert(
                           "Visit next day as max games played/day or number of players/day limit exceeded!"
                         );
                       }
                       // console.log("Document data:", docSnap.data());
                     }
-                    
                   };
-                  canEnterRoom()
+                  canEnterRoom();
 
                   audio2.play();
                 }}
