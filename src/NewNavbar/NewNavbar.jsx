@@ -545,13 +545,14 @@ function NewNavbar() {
                           ? localStorage.getItem("player")
                           : null;
                       const playerInfo = JSON.parse(dataFromLocal);
-                      if (playerInfo && data?.players[playerInfo] === 11) {
+                      if (playerInfo && data?.players[playerInfo] === 2) {
                         alert("Per day Limit reached!");
                         dispatch({
                           type: "SetStates",
                           payload: { playerFixed: "2" },
                         });
                         updateDocState({ playerRequesting: "2" });
+                        return
                       } else if (
                         playerInfo &&
                         !data?.players[playerInfo] &&
@@ -568,7 +569,7 @@ function NewNavbar() {
                         alert("Please signIn");
                         return
                       }
-                      if (Object.keys(data?.players).length < 12) {
+                      if (Object.keys(data?.players).length < 3) {
                         dispatch({
                           type: "SetStates",
                           payload: { enterRoom: true, sel: "Select size here" },

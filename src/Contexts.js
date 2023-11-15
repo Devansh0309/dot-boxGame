@@ -676,7 +676,7 @@ function Contexts(props) {
           ? localStorage.getItem("player")
           : null;
       const playerInfo = JSON.parse(dataFromLocal);
-      if(playerInfo && data?.players[playerInfo]===11){
+      if(playerInfo && data?.players[playerInfo]===2){
         alert("Per day Limit reached!")
         return false
       }
@@ -692,8 +692,8 @@ function Contexts(props) {
       }
 
       if (
-        data?.number_of_games_played_per_day >= 70 ||
-        Object.keys(data?.players).length >= 12
+        data?.number_of_games_played_per_day >= 3 ||
+        Object.keys(data?.players).length >= 3
       ) {
         alert(
           "Visit next day as max games played/day or number of players/day limit exceeded!"
